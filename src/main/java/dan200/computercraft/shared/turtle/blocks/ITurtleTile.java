@@ -16,17 +16,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 
 public interface ITurtleTile extends IComputerTile, IDirectionalTile {
-    public Colour getColour();
+    Colour getColour();
 
-    public ResourceLocation getOverlay();
+    ResourceLocation getOverlay();
 
-    public ITurtleUpgrade getUpgrade(TurtleSide side);
+    ITurtleUpgrade getUpgrade(TurtleSide side);
 
-    public ITurtleAccess getAccess();
+    ITurtleAccess getAccess();
 
-    public Vec3d getRenderOffset(float f);
+    Vec3d getRenderOffset(float f);
 
-    public float getRenderYaw(float f);
+    float getRenderYaw(float f);
 
-    public float getToolRenderAngle(TurtleSide side, float f);
+    float getToolRenderAngle(TurtleSide side, float f);
 }

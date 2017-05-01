@@ -45,8 +45,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class TileEntityTurtleRenderer extends TileEntitySpecialRenderer<TileTurtle> {
-    private static ModelResourceLocation NORMAL_TURTLE_MODEL = new ModelResourceLocation("computercraft:CC-Turtle", "inventory");
-    private static ModelResourceLocation ADVANCED_TURTLE_MODEL = new ModelResourceLocation("computercraft:CC-TurtleAdvanced", "inventory");
+    private static ModelResourceLocation NORMAL_TURTLE_MODEL = new ModelResourceLocation("computercraft:turtle", "inventory");
+    private static ModelResourceLocation ADVANCED_TURTLE_MODEL = new ModelResourceLocation("computercraft:turtle_advanced", "inventory");
     private static ModelResourceLocation[] COLOUR_TURTLE_MODELS = new ModelResourceLocation[]{
             new ModelResourceLocation("computercraft:turtle_black", "inventory"),
             new ModelResourceLocation("computercraft:turtle_red", "inventory"),
@@ -55,34 +55,34 @@ public class TileEntityTurtleRenderer extends TileEntitySpecialRenderer<TileTurt
             new ModelResourceLocation("computercraft:turtle_blue", "inventory"),
             new ModelResourceLocation("computercraft:turtle_purple", "inventory"),
             new ModelResourceLocation("computercraft:turtle_cyan", "inventory"),
-            new ModelResourceLocation("computercraft:turtle_lightGrey", "inventory"),
+            new ModelResourceLocation("computercraft:turtle_light_grey", "inventory"),
             new ModelResourceLocation("computercraft:turtle_grey", "inventory"),
             new ModelResourceLocation("computercraft:turtle_pink", "inventory"),
             new ModelResourceLocation("computercraft:turtle_lime", "inventory"),
             new ModelResourceLocation("computercraft:turtle_yellow", "inventory"),
-            new ModelResourceLocation("computercraft:turtle_lightBlue", "inventory"),
+            new ModelResourceLocation("computercraft:turtle_light_blue", "inventory"),
             new ModelResourceLocation("computercraft:turtle_magenta", "inventory"),
             new ModelResourceLocation("computercraft:turtle_orange", "inventory"),
             new ModelResourceLocation("computercraft:turtle_white", "inventory"),
     };
-    private static ModelResourceLocation BEGINNER_TURTLE_MODEL = new ModelResourceLocation("computercraftedu:CC-TurtleJunior", "inventory");
+    private static ModelResourceLocation BEGINNER_TURTLE_MODEL = new ModelResourceLocation("computercraftedu:turtle_junior", "inventory");
     private static ModelResourceLocation[] BEGINNER_TURTLE_COLOUR_MODELS = new ModelResourceLocation[]{
-            new ModelResourceLocation("computercraftedu:turtleJunior_black", "inventory"),
-            new ModelResourceLocation("computercraftedu:turtleJunior_red", "inventory"),
-            new ModelResourceLocation("computercraftedu:turtleJunior_green", "inventory"),
-            new ModelResourceLocation("computercraftedu:turtleJunior_brown", "inventory"),
-            new ModelResourceLocation("computercraftedu:turtleJunior_blue", "inventory"),
-            new ModelResourceLocation("computercraftedu:turtleJunior_purple", "inventory"),
-            new ModelResourceLocation("computercraftedu:turtleJunior_cyan", "inventory"),
-            new ModelResourceLocation("computercraftedu:turtleJunior_lightGrey", "inventory"),
-            new ModelResourceLocation("computercraftedu:turtleJunior_grey", "inventory"),
-            new ModelResourceLocation("computercraftedu:turtleJunior_pink", "inventory"),
-            new ModelResourceLocation("computercraftedu:turtleJunior_lime", "inventory"),
-            new ModelResourceLocation("computercraftedu:turtleJunior_yellow", "inventory"),
-            new ModelResourceLocation("computercraftedu:turtleJunior_lightBlue", "inventory"),
-            new ModelResourceLocation("computercraftedu:turtleJunior_magenta", "inventory"),
-            new ModelResourceLocation("computercraftedu:turtleJunior_orange", "inventory"),
-            new ModelResourceLocation("computercraftedu:turtleJunior_white", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_black", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_red", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_green", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_brown", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_blue", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_purple", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_cyan", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_light_grey", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_grey", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_pink", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_lime", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_yellow", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_light_blue", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_magenta", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_orange", "inventory"),
+            new ModelResourceLocation("computercraftedu:turtle_junior_white", "inventory"),
     };
     private static ModelResourceLocation ELF_OVERLAY_MODEL = new ModelResourceLocation("computercraft:turtle_elf_overlay", "inventory");
 

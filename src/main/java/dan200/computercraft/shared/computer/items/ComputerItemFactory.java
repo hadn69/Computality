@@ -10,6 +10,7 @@ import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.shared.computer.blocks.IComputerTile;
 import dan200.computercraft.shared.computer.core.ComputerFamily;
 import dan200.computercraft.shared.computer.core.IComputer;
+import dan200.computercraft.shared.media.items.ItemDiskExpanded;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

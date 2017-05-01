@@ -26,17 +26,15 @@ public class BlockAdvancedModem extends BlockPeripheralBase {
         setUnlocalizedName("computercraft:advanced_modem");
         setCreativeTab(ComputerCraft.mainCreativeTab);
         setDefaultState(this.blockState.getBaseState()
-                .withProperty(Properties.FACING, EnumFacing.NORTH)
+                .withProperty(Properties.FACING, EnumFacing.SOUTH)
                 .withProperty(Properties.ON, false)
         );
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{
-                Properties.FACING,
-                Properties.ON
-        });
+        return new BlockStateContainer(this, Properties.FACING,
+                Properties.ON);
     }
 
     @Override

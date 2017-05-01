@@ -44,14 +44,14 @@ public class ContainerDiskDrive extends Container {
             itemstack = itemstack1.copy();
             if (i == 0) {
                 if (!mergeItemStack(itemstack1, 1, 37, true)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else if (!mergeItemStack(itemstack1, 0, 1, false)) {
-                return null;
+                return ItemStack.EMPTY;
             }
 
             if (itemstack1.getCount() == 0) {
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
@@ -59,7 +59,7 @@ public class ContainerDiskDrive extends Container {
             if (itemstack1.getCount() != itemstack.getCount()) {
                 slot.onTake(player, itemstack1);
             } else {
-                return null;
+                return ItemStack.EMPTY;
             }
         }
         return itemstack;

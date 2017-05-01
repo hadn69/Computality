@@ -261,7 +261,7 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy {
 
         // Pocket computer
         ComputerCraft.Items.pocketComputer = new ItemPocketComputer();
-        ComputerCraft.Items.pocketComputer.setRegistryName("computer_pocket");
+        ComputerCraft.Items.pocketComputer.setRegistryName("pocket_computer");
         GameRegistry.register(ComputerCraft.Items.pocketComputer);
 
         // Recipe types

@@ -1,6 +1,6 @@
 [
     {
-        "modid" : "ComputerCraft",
+        "modid" : "computercraft",
         "name" : "ComputerCraft",
         "version" : "${version}",
         "mcversion" : "${mcversion}",
@@ -8,11 +8,12 @@
         "credits" : "Created by Daniel Ratcliffe (@DanTwoHundred)",
         "authors" : [
             "Daniel Ratcliffe",
-            "Aaron Mills"
+            "Aaron Mills",
+            "TheCodedOne"
         ],
         "description" : "ComputerCraft adds Computers, Programming and Robotics to Minecraft.",
         "logoFile" : "pack.png",
-        "updateUrl" : "http://www.computercraft.info",
+        "updateUrl" : "",
         "parent" : "",
         "screenshots": [
         ]

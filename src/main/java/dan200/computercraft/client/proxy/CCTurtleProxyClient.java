@@ -34,7 +34,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class CCTurtleProxyClient extends CCTurtleProxyCommon {
     public CCTurtleProxyClient() {
     }
@@ -56,11 +59,11 @@ public class CCTurtleProxyClient extends CCTurtleProxyCommon {
         };
         String[] turtleModelNames = new String[]{
                 "turtle_dynamic",
-                "CC-Turtle", "CC-TurtleAdvanced",
+                "turtle", "turtle_advanced",
                 "turtle_black", "turtle_red", "turtle_green", "turtle_brown",
-                "turtle_blue", "turtle_purple", "turtle_cyan", "turtle_lightGrey",
+                "turtle_blue", "turtle_purple", "turtle_cyan", "turtle_light_grey",
                 "turtle_grey", "turtle_pink", "turtle_lime", "turtle_yellow",
-                "turtle_lightBlue", "turtle_magenta", "turtle_orange", "turtle_white",
+                "turtle_light_blue", "turtle_magenta", "turtle_orange", "turtle_white",
                 "turtle_elf_overlay"
         };
         registerItemModel(ComputerCraft.Blocks.turtle, turtleMeshDefinition, turtleModelNames);
@@ -113,7 +116,7 @@ public class CCTurtleProxyClient extends CCTurtleProxyCommon {
 
         @SubscribeEvent
         public void onTextureStitchEvent(TextureStitchEvent.Pre event) {
-            event.getMap().registerSprite(new ResourceLocation("computercraft", "blocks/craftyUpgrade"));
+            event.getMap().registerSprite(new ResourceLocation("computercraft", "blocks/crafty_upgrade"));
         }
 
         @SubscribeEvent

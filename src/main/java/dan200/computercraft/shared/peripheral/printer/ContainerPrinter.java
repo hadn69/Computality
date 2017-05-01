@@ -88,7 +88,7 @@ public class ContainerPrinter extends Container {
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int i) {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(i);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
@@ -96,24 +96,24 @@ public class ContainerPrinter extends Container {
             if (i < 13) {
                 // Transfer from printer to inventory
                 if (!mergeItemStack(itemstack1, 13, 49, true)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else {
                 // Transfer from inventory to printer
                 if (itemstack1.getItem() == Items.DYE) {
                     if (!mergeItemStack(itemstack1, 0, 1, false)) {
-                        return null;
+                        return ItemStack.EMPTY;
                     }
                 } else //if is paper
                 {
                     if (!mergeItemStack(itemstack1, 1, 13, false)) {
-                        return null;
+                        return ItemStack.EMPTY;
                     }
                 }
             }
 
             if (itemstack1.getCount() == 0) {
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
@@ -121,7 +121,7 @@ public class ContainerPrinter extends Container {
             if (itemstack1.getCount() != itemstack.getCount()) {
                 slot.onTake(par1EntityPlayer, itemstack1);
             } else {
-                return null;
+                return ItemStack.EMPTY;
             }
         }
         return itemstack;

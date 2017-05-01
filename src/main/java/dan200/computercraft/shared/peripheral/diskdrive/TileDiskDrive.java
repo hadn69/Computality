@@ -1,11 +1,10 @@
-/**
- * This file is part of ComputerCraft - http://www.computercraft.info
- * Copyright Daniel Ratcliffe, 2011-2016. Do not distribute without permission.
- * Send enquiries to dratcliffe@gmail.com
- */
 
 package dan200.computercraft.shared.peripheral.diskdrive;
-
+/*
+  This file is part of ComputerCraft - http://www.computercraft.info
+  Copyright Daniel Ratcliffe, 2011-2016. Do not distribute without permission.
+  Send enquiries to dratcliffe@gmail.com
+ */
 import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.api.filesystem.IMount;
 import dan200.computercraft.api.filesystem.IWritableMount;
@@ -38,7 +37,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class TileDiskDrive extends TilePeripheralBase
-        implements IInventory, ITickable {
+        implements ITickable,IInventory {
     // Statics
 
     private static final int BLOCKEVENT_PLAY_RECORD = 0;
@@ -55,7 +54,7 @@ public class TileDiskDrive extends TilePeripheralBase
     public TileDiskDrive() {
         m_computers = new HashMap<IComputerAccess, MountInfo>();
 
-        m_diskStack = null;
+        m_diskStack = ItemStack.EMPTY;
         m_diskMount = null;
 
         m_recordQueued = false;
@@ -79,7 +78,7 @@ public class TileDiskDrive extends TilePeripheralBase
             // Try to put a disk into the drive
             if (!getWorld().isRemote) {
                 ItemStack disk = player.getHeldItem(EnumHand.MAIN_HAND);
-                if (disk != null && getStackInSlot(0) == null) {
+                if (!disk.isEmpty() && getStackInSlot(0) == null) {
                     if (ComputerCraft.getMedia(disk) != null) {
                         setInventorySlotContents(0, disk);
                         player.setHeldItem(EnumHand.MAIN_HAND, null);
@@ -180,7 +179,7 @@ public class TileDiskDrive extends TilePeripheralBase
     @Override
     public ItemStack removeStackFromSlot(int i) {
         ItemStack result = m_diskStack;
-        m_diskStack = null;
+        m_diskStack = ItemStack.EMPTY;
         m_diskMount = null;
 
         return result;
@@ -499,7 +498,7 @@ public class TileDiskDrive extends TilePeripheralBase
         if (nbttagcompound.hasKey("item")) {
             m_diskStack = new ItemStack(nbttagcompound.getCompoundTag("item"));
         } else {
-            m_diskStack = null;
+            m_diskStack = ItemStack.EMPTY;
         }
         updateBlock();
     }

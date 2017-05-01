@@ -11,10 +11,11 @@ import net.minecraft.world.World;
 
 /**
  * This interface is used to restrict where turtles can move or build
+ *
  * @see dan200.computercraft.api.ComputerCraftAPI#registerPermissionProvider(ITurtlePermissionProvider)
  */
-public interface ITurtlePermissionProvider
-{
-    public boolean isBlockEnterable( World world, BlockPos pos );
-    public boolean isBlockEditable( World world, BlockPos pos );
+public interface ITurtlePermissionProvider {
+    public boolean isBlockEnterable(World world, BlockPos pos);
+
+    public boolean isBlockEditable(World world, BlockPos pos);
 }

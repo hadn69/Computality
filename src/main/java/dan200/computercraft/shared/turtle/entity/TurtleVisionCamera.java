@@ -18,68 +18,58 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 
-public class TurtleVisionCamera extends EntityLivingBase
-{
+public class TurtleVisionCamera extends EntityLivingBase {
     private ITurtleAccess m_turtle;
     private ArrayList<ItemStack> m_armor;
 
-    public TurtleVisionCamera( World world, ITurtleAccess turtle )
-    {
-        super( world );
+    public TurtleVisionCamera(World world, ITurtleAccess turtle) {
+        super(world);
         m_turtle = turtle;
         m_armor = new ArrayList<ItemStack>();
         applyPos();
     }
 
-    public ITurtleAccess getTurtle()
-    {
+    public ITurtleAccess getTurtle() {
         return m_turtle;
     }
 
     @Override
-    public float getEyeHeight()
-    {
+    public float getEyeHeight() {
         return 0.0f;
     }
 
     @Override
-    public EnumHandSide getPrimaryHand()
-    {
+    public EnumHandSide getPrimaryHand() {
         return EnumHandSide.RIGHT;
     }
 
     @Override
-    public void onUpdate()
-    {
-        m_turtle = ((TurtleBrain)m_turtle).getFutureSelf();
+    public void onUpdate() {
+        m_turtle = ((TurtleBrain) m_turtle).getFutureSelf();
         applyPos();
     }
 
-    private void applyPos()
-    {
-        Vec3d prevPos = m_turtle.getVisualPosition( 0.0f );
+    private void applyPos() {
+        Vec3d prevPos = m_turtle.getVisualPosition(0.0f);
         this.lastTickPosX = this.prevPosX = prevPos.xCoord;
         this.lastTickPosY = this.prevPosY = prevPos.yCoord;
         this.lastTickPosZ = this.prevPosZ = prevPos.zCoord;
         this.prevRotationPitch = 0.0f;
-        this.prevRotationYaw = m_turtle.getVisualYaw( 0.0f );
+        this.prevRotationYaw = m_turtle.getVisualYaw(0.0f);
         this.prevCameraPitch = 0.0f;
 
-        Vec3d pos = m_turtle.getVisualPosition( 1.0f );
+        Vec3d pos = m_turtle.getVisualPosition(1.0f);
         this.posX = pos.xCoord;
         this.posY = pos.yCoord;
         this.posZ = pos.zCoord;
         this.rotationPitch = 0.0f;
-        this.rotationYaw = m_turtle.getVisualYaw( 1.0f );
+        this.rotationYaw = m_turtle.getVisualYaw(1.0f);
         this.cameraPitch = 0.0f;
 
         float yawDifference = this.rotationYaw - this.prevRotationYaw;
-        if( yawDifference > 180.0f )
-        {
+        if (yawDifference > 180.0f) {
             this.prevRotationYaw += 360.0f;
-        }
-        else if( yawDifference < -180.0f )
-        {
+        } else if (yawDifference < -180.0f) {
             this.prevRotationYaw -= 360.0f;
         }
     }
@@ -87,25 +77,21 @@ public class TurtleVisionCamera extends EntityLivingBase
     // EntityLivingBase overrides:
 
     @Override
-    public ItemStack getHeldItem( EnumHand hand )
-    {
+    public ItemStack getHeldItem(EnumHand hand) {
         return null;
     }
 
     @Override
-    public void setItemStackToSlot(EntityEquipmentSlot slot, ItemStack stack)
-    {
+    public void setItemStackToSlot(EntityEquipmentSlot slot, ItemStack stack) {
     }
 
     @Override
-    public ItemStack getItemStackFromSlot(EntityEquipmentSlot slot)
-    {
+    public ItemStack getItemStackFromSlot(EntityEquipmentSlot slot) {
         return null;
     }
 
     @Override
-    public Iterable<ItemStack> getArmorInventoryList()
-    {
+    public Iterable<ItemStack> getArmorInventoryList() {
         return m_armor;
     }
 }

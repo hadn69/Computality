@@ -6,8 +6,7 @@
 
 package dan200.computercraft.shared.computer.core;
 
-public enum ComputerFamily
-{
+public enum ComputerFamily {
     Normal,
     Advanced,
     Beginners,

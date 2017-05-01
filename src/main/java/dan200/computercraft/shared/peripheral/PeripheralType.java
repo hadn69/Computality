@@ -8,31 +8,30 @@ package dan200.computercraft.shared.peripheral;
 
 import net.minecraft.util.IStringSerializable;
 
-public enum PeripheralType implements IStringSerializable
-{
-    DiskDrive( "disk_drive" ),
-    Printer( "printer" ),
-    Monitor( "monitor" ),
-    AdvancedMonitor( "advanced_monitor" ),
-    WirelessModem( "wireless_modem" ),
-    WiredModem( "wired_modem" ),
-    Cable( "cable" ),
-    WiredModemWithCable( "wired_modem_with_cable" ),
-    AdvancedModem( "advanced_modem" );
+public enum PeripheralType implements IStringSerializable {
+    DiskDrive("disk_drive"),
+    Printer("printer"),
+    Monitor("monitor"),
+    AdvancedMonitor("advanced_monitor"),
+    WirelessModem("wireless_modem"),
+    WiredModem("wired_modem"),
+    Cable("cable"),
+    WiredModemWithCable("wired_modem_with_cable"),
+    AdvancedModem("advanced_modem");
 
     private String m_name;
 
-    private PeripheralType( String name )
-    {
+    private PeripheralType(String name) {
         m_name = name;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return m_name;
     }
 
     @Override
-    public String toString() { return getName(); }
+    public String toString() {
+        return getName();
+    }
 }

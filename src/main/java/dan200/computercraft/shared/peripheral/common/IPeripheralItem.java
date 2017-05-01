@@ -9,7 +9,6 @@ package dan200.computercraft.shared.peripheral.common;
 import dan200.computercraft.shared.peripheral.PeripheralType;
 import net.minecraft.item.ItemStack;
 
-public interface IPeripheralItem
-{
-    public PeripheralType getPeripheralType( ItemStack stack );
+public interface IPeripheralItem {
+    public PeripheralType getPeripheralType(ItemStack stack);
 }

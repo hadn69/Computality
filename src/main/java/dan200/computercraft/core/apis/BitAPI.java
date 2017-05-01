@@ -11,79 +11,65 @@ import dan200.computercraft.api.lua.LuaException;
 
 // Contributed by Nia
 // Based on LuaBit (http://luaforge.net/projects/bit)
- 
-public class BitAPI implements ILuaAPI
-{
-    private static final int BNOT                    = 0;
-    private static final int BAND                    = 1;
-    private static final int BOR                     = 2;
-    private static final int BXOR                    = 3;
-    private static final int BRSHIFT                  = 4;
-    private static final int BLSHIFT                  = 5;
-    private static final int BLOGIC_RSHIFT              = 6;
- 
-    private static int checkInt( Object o, int count ) throws LuaException
-    {
-        if( o instanceof Number )
-        {
-            return (int)(((Number)o).longValue());
-        }
-        else
-        {
-            if( count == 2 )
-            {
-                throw new LuaException( "Expected number, number" );
-            }
-            else
-            {
-                throw new LuaException( "Expected number" );
+
+public class BitAPI implements ILuaAPI {
+    private static final int BNOT = 0;
+    private static final int BAND = 1;
+    private static final int BOR = 2;
+    private static final int BXOR = 3;
+    private static final int BRSHIFT = 4;
+    private static final int BLSHIFT = 5;
+    private static final int BLOGIC_RSHIFT = 6;
+
+    public BitAPI(IAPIEnvironment _environment) {
+    }
+
+    private static int checkInt(Object o, int count) throws LuaException {
+        if (o instanceof Number) {
+            return (int) (((Number) o).longValue());
+        } else {
+            if (count == 2) {
+                throw new LuaException("Expected number, number");
+            } else {
+                throw new LuaException("Expected number");
             }
         }
     }
-    
-    public BitAPI( IAPIEnvironment _environment )
-    {
-    }
-    
+
     @Override
-    public String[] getNames()
-    {
-        return new String[] {
-            "bit"
+    public String[] getNames() {
+        return new String[]{
+                "bit"
         };
     }
 
     @Override
-    public void startup( )
-    {
+    public void startup() {
     }
 
     @Override
-    public void advance( double _dt )
-    {
+    public void advance(double _dt) {
     }
-    
+
     @Override
-    public void shutdown( )
-    {
+    public void shutdown() {
     }
-    
+
     @Override
     public String[] getMethodNames() {
-        return new String[] {
-            "bnot", "band", "bor", "bxor",
-            "brshift", "blshift", "blogic_rshift"
+        return new String[]{
+                "bnot", "band", "bor", "bxor",
+                "brshift", "blshift", "blogic_rshift"
         };
     }
-    
+
     @Override
-    public Object[] callMethod( ILuaContext context, int method, Object[] args ) throws LuaException
-    {
-        Object a = args.length>0?args[0]:null;
-        Object b = args.length>1?args[1]:null;
- 
+    public Object[] callMethod(ILuaContext context, int method, Object[] args) throws LuaException {
+        Object a = args.length > 0 ? args[0] : null;
+        Object b = args.length > 1 ? args[1] : null;
+
         int ret = 0;
-        switch(method) {
+        switch (method) {
             case BNOT:
                 ret = ~checkInt(a, 1);
                 break;
@@ -106,7 +92,7 @@ public class BitAPI implements ILuaAPI
                 ret = checkInt(a, 2) >>> checkInt(b, 2);
                 break;
         }
-        
-        return new Object[]{ ret&0xFFFFFFFFL };
+
+        return new Object[]{ret & 0xFFFFFFFFL};
     }
 }

@@ -8,7 +8,6 @@ package dan200.computercraft.shared.turtle.blocks;
 
 import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.shared.computer.blocks.BlockComputerBase;
-import dan200.computercraft.shared.computer.blocks.TileCommandComputer;
 import dan200.computercraft.shared.computer.blocks.TileComputerBase;
 import dan200.computercraft.shared.computer.core.ComputerFamily;
 import dan200.computercraft.shared.util.DirectionUtil;
@@ -22,156 +21,127 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockTurtle extends BlockComputerBase
-{
+public class BlockTurtle extends BlockComputerBase {
     // Statics
 
-    public static class Properties
-    {
-        public static final PropertyDirection FACING = PropertyDirection.create( "facing", EnumFacing.Plane.HORIZONTAL );
-        public static final PropertyEnum<BlockTurtleDyeVariant> DYE = PropertyEnum.<BlockTurtleDyeVariant>create( "dye", BlockTurtleDyeVariant.class );
+    public BlockTurtle() {
+        super(Material.IRON);
+        setHardness(2.5f);
+        setUnlocalizedName("computercraft:turtle");
+        setCreativeTab(ComputerCraft.mainCreativeTab);
+        setDefaultState(this.blockState.getBaseState()
+                .withProperty(Properties.FACING, EnumFacing.NORTH)
+                .withProperty(Properties.DYE, BlockTurtleDyeVariant.None)
+        );
     }
 
-    public static BlockTurtle createTurtleBlock()
-    {
+    public static BlockTurtle createTurtleBlock() {
         return new BlockTurtle();
     }
 
     // Members
 
-    public BlockTurtle()
-    {
-        super( Material.IRON );
-        setHardness( 2.5f );
-        setUnlocalizedName( "computercraft:turtle" );
-        setCreativeTab( ComputerCraft.mainCreativeTab );
-        setDefaultState( this.blockState.getBaseState()
-            .withProperty( Properties.FACING, EnumFacing.NORTH )
-            .withProperty( Properties.DYE, BlockTurtleDyeVariant.None )
-        );
-    }
-
     @Override
-    public EnumBlockRenderType getRenderType( IBlockState state )
-    {
+    public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }
 
     @Override
-    public boolean isOpaqueCube( IBlockState state )
-    {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean isFullCube( IBlockState state )
-    {
+    public boolean isFullCube(IBlockState state) {
         return false;
     }
 
     @Override
-    protected BlockStateContainer createBlockState()
-    {
-        return new BlockStateContainer(this, new IProperty[] {
-            Properties.FACING,
-            Properties.DYE
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, new IProperty[]{
+                Properties.FACING,
+                Properties.DYE
         });
     }
 
     @Override
-    public IBlockState getStateFromMeta( int meta )
-    {
+    public IBlockState getStateFromMeta(int meta) {
         return getDefaultState();
     }
 
     @Override
-    public int getMetaFromState( IBlockState state )
-    {
+    public int getMetaFromState(IBlockState state) {
         return 0;
     }
 
     @Override
-    public IBlockState getActualState( IBlockState state, IBlockAccess world, BlockPos pos )
-    {
-        state = state.withProperty( Properties.FACING, getDirection( world, pos ) );
-        TileEntity tile = world.getTileEntity( pos );
-        if( tile != null && tile instanceof ITurtleTile )
-        {
-            ITurtleTile turtle = (ITurtleTile)tile;
-            state = state.withProperty( Properties.DYE, BlockTurtleDyeVariant.fromColour( turtle.getColour() ) );
-        }
-        else
-        {
-            state = state.withProperty( Properties.DYE, BlockTurtleDyeVariant.None );
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        state = state.withProperty(Properties.FACING, getDirection(world, pos));
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile != null && tile instanceof ITurtleTile) {
+            ITurtleTile turtle = (ITurtleTile) tile;
+            state = state.withProperty(Properties.DYE, BlockTurtleDyeVariant.fromColour(turtle.getColour()));
+        } else {
+            state = state.withProperty(Properties.DYE, BlockTurtleDyeVariant.None);
         }
         return state;
     }
 
     @Override
-    protected IBlockState getDefaultBlockState( ComputerFamily family, EnumFacing placedSide )
-    {
+    protected IBlockState getDefaultBlockState(ComputerFamily family, EnumFacing placedSide) {
         return getDefaultState();
     }
 
-    private ComputerFamily getFamily()
-    {
-        if( this == ComputerCraft.Blocks.turtleAdvanced )
-        {
+    private ComputerFamily getFamily() {
+        if (this == ComputerCraft.Blocks.turtleAdvanced) {
             return ComputerFamily.Advanced;
-        }
-        else
-        {
+        } else {
             return ComputerFamily.Normal;
         }
     }
 
     @Override
-    public ComputerFamily getFamily( int damage )
-    {
+    public ComputerFamily getFamily(int damage) {
         return getFamily();
     }
 
     @Override
-    public ComputerFamily getFamily( IBlockState state )
-    {
+    public ComputerFamily getFamily(IBlockState state) {
         return getFamily();
     }
 
     @Override
-    protected TileComputerBase createTile( ComputerFamily family )
-    {
-        if( this == ComputerCraft.Blocks.turtleAdvanced )
-        {
+    protected TileComputerBase createTile(ComputerFamily family) {
+        if (this == ComputerCraft.Blocks.turtleAdvanced) {
             return new TileTurtleAdvanced();
-        }
-        else if( this == ComputerCraft.Blocks.turtleExpanded )
-        {
+        } else if (this == ComputerCraft.Blocks.turtleExpanded) {
             return new TileTurtleExpanded();
-        }
-        else
-        {
+        } else {
             return new TileTurtle();
         }
     }
 
     @Override
-    public void onBlockPlacedBy( World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack itemstack )
-    {
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack itemstack) {
         // Not sure why this is necessary
-        TileEntity tile = world.getTileEntity( pos );
-        if( tile != null && tile instanceof TileTurtle )
-        {
-            tile.setWorldObj( world ); // Not sure why this is necessary
-            tile.setPos( pos ); // Not sure why this is necessary
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile != null && tile instanceof TileTurtle) {
+            tile.setWorld(world); // Not sure why this is necessary
+            tile.setPos(pos); // Not sure why this is necessary
         }
 
         // Set direction
-        EnumFacing dir = DirectionUtil.fromEntityRot( player );
-        setDirection( world, pos, dir.getOpposite() );
+        EnumFacing dir = DirectionUtil.fromEntityRot(player);
+        setDirection(world, pos, dir.getOpposite());
+    }
+
+    public static class Properties {
+        public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+        public static final PropertyEnum<BlockTurtleDyeVariant> DYE = PropertyEnum.<BlockTurtleDyeVariant>create("dye", BlockTurtleDyeVariant.class);
     }
 }

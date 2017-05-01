@@ -12,40 +12,33 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-public class EmptyMount implements IMount
-{    
-    public EmptyMount()
-    {
+public class EmptyMount implements IMount {
+    public EmptyMount() {
     }
-    
+
     // IMount implementation
-    
+
     @Override
-    public boolean exists( String path ) throws IOException
-    {
+    public boolean exists(String path) throws IOException {
         return path.isEmpty();
     }
-    
+
     @Override
-    public boolean isDirectory( String path ) throws IOException
-    {
+    public boolean isDirectory(String path) throws IOException {
         return path.isEmpty();
     }
-    
+
     @Override
-    public void list( String path, List<String> contents ) throws IOException
-    {
+    public void list(String path, List<String> contents) throws IOException {
     }
-    
+
     @Override
-    public long getSize( String path ) throws IOException
-    {
+    public long getSize(String path) throws IOException {
         return 0;
     }
 
     @Override
-    public InputStream openForRead( String path ) throws IOException
-    {
+    public InputStream openForRead(String path) throws IOException {
         return null;
     }
 }

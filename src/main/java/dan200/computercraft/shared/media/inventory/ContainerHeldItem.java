@@ -12,30 +12,24 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 
-public class ContainerHeldItem extends Container
-{
+public class ContainerHeldItem extends Container {
     private final ItemStack m_stack;
     private final EnumHand m_hand;
 
-    public ContainerHeldItem( EntityPlayer player, EnumHand hand )
-    {
+    public ContainerHeldItem(EntityPlayer player, EnumHand hand) {
         m_hand = hand;
-        m_stack = InventoryUtil.copyItem( player.getHeldItem( hand ) );
+        m_stack = InventoryUtil.copyItem(player.getHeldItem(hand));
     }
 
-    public ItemStack getStack()
-    {
+    public ItemStack getStack() {
         return m_stack;
     }
 
     @Override
-    public boolean canInteractWith( EntityPlayer player )
-    {
-        if( player != null && player.isEntityAlive() )
-        {
-            ItemStack stack = player.getHeldItem( m_hand );
-            if( (stack == m_stack) || (stack != null && m_stack != null && stack.getItem() == m_stack.getItem()) )
-            {
+    public boolean canInteractWith(EntityPlayer player) {
+        if (player != null && player.isEntityAlive()) {
+            ItemStack stack = player.getHeldItem(m_hand);
+            if ((stack == m_stack) || (stack != null && m_stack != null && stack.getItem() == m_stack.getItem())) {
                 return true;
             }
         }

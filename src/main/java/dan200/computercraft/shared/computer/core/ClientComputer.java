@@ -16,8 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class ClientComputer extends ClientTerminal
-    implements IComputer, INetworkedThing
-{
+        implements IComputer, INetworkedThing {
     private final int m_instanceID;
 
     private int m_computerID;
@@ -29,9 +28,8 @@ public class ClientComputer extends ClientTerminal
 
     private boolean m_changedLastFrame;
 
-    public ClientComputer( int instanceID )
-    {
-        super( false );
+    public ClientComputer(int instanceID) {
+        super(false);
         m_instanceID = instanceID;
 
         m_computerID = -1;
@@ -44,118 +42,102 @@ public class ClientComputer extends ClientTerminal
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
         m_changedLastFrame = m_changed;
         m_changed = false;
     }
 
-    public boolean hasOutputChanged()
-    {
+    public boolean hasOutputChanged() {
         return m_changedLastFrame;
     }
 
-    public NBTTagCompound getUserData()
-    {
+    public NBTTagCompound getUserData() {
         return m_userData;
     }
 
-    public void requestState()
-    {
+    public void requestState() {
         // Request state from server
         ComputerCraftPacket packet = new ComputerCraftPacket();
         packet.m_packetType = ComputerCraftPacket.RequestComputerUpdate;
-        packet.m_dataInt = new int[] { getInstanceID() };
-        ComputerCraft.sendToServer( packet );
+        packet.m_dataInt = new int[]{getInstanceID()};
+        ComputerCraft.sendToServer(packet);
     }
 
     // IComputer
 
     @Override
-    public int getInstanceID()
-    {
+    public int getInstanceID() {
         return m_instanceID;
     }
 
     @Override
-    public int getID()
-    {
+    public int getID() {
         return m_computerID;
     }
 
     @Override
-    public String getLabel()
-    {
+    public String getLabel() {
         return m_label;
     }
 
     @Override
-    public boolean isOn()
-    {
+    public boolean isOn() {
         return m_on;
     }
 
     @Override
-    public boolean isCursorDisplayed()
-    {
+    public boolean isCursorDisplayed() {
         return m_on && m_blinking;
     }
 
     @Override
-    public void turnOn()
-    {
+    public void turnOn() {
         // Send turnOn to server
         ComputerCraftPacket packet = new ComputerCraftPacket();
         packet.m_packetType = ComputerCraftPacket.TurnOn;
-        packet.m_dataInt = new int[] { m_instanceID };
-        ComputerCraft.sendToServer( packet );
+        packet.m_dataInt = new int[]{m_instanceID};
+        ComputerCraft.sendToServer(packet);
     }
 
     @Override
-    public void shutdown()
-    {
+    public void shutdown() {
         // Send shutdown to server
         ComputerCraftPacket packet = new ComputerCraftPacket();
         packet.m_packetType = ComputerCraftPacket.Shutdown;
-        packet.m_dataInt = new int[] { m_instanceID };
-        ComputerCraft.sendToServer( packet );
+        packet.m_dataInt = new int[]{m_instanceID};
+        ComputerCraft.sendToServer(packet);
     }
 
     @Override
-    public void reboot()
-    {
+    public void reboot() {
         // Send reboot to server
         ComputerCraftPacket packet = new ComputerCraftPacket();
         packet.m_packetType = ComputerCraftPacket.Reboot;
-        packet.m_dataInt = new int[] { m_instanceID };
-        ComputerCraft.sendToServer( packet );
+        packet.m_dataInt = new int[]{m_instanceID};
+        ComputerCraft.sendToServer(packet);
     }
 
     @Override
-    public void queueEvent( String event )
-    {
-        queueEvent( event, null );
+    public void queueEvent(String event) {
+        queueEvent(event, null);
     }
 
     @Override
-    public void queueEvent( String event, Object[] arguments )
-    {
+    public void queueEvent(String event, Object[] arguments) {
         // Send event to server
         ComputerCraftPacket packet = new ComputerCraftPacket();
         packet.m_packetType = ComputerCraftPacket.QueueEvent;
-        packet.m_dataInt = new int[] { m_instanceID };
-        packet.m_dataString = new String[] { event };
-        if( arguments != null )
-        {
-            packet.m_dataNBT = NBTUtil.encodeObjects( arguments );
+        packet.m_dataInt = new int[]{m_instanceID};
+        packet.m_dataString = new String[]{event};
+        if (arguments != null) {
+            packet.m_dataNBT = NBTUtil.encodeObjects(arguments);
         }
-        ComputerCraft.sendToServer( packet );
+        ComputerCraft.sendToServer(packet);
     }
 
-    public void readDescription( NBTTagCompound nbttagcompound )
-    {
-        super.readDescription( nbttagcompound );
+    public void readDescription(NBTTagCompound nbttagcompound) {
+        super.readDescription(nbttagcompound);
 
         int oldID = m_computerID;
         String oldLabel = m_label;
@@ -163,33 +145,26 @@ public class ClientComputer extends ClientTerminal
         boolean oldBlinking = m_blinking;
         NBTTagCompound oldUserData = m_userData;
 
-        m_computerID = nbttagcompound.getInteger( "id" );
-        m_label = nbttagcompound.hasKey( "label" ) ? nbttagcompound.getString( "label" ) : null;
-        m_on = nbttagcompound.getBoolean( "on" );
-        m_blinking = nbttagcompound.getBoolean( "blinking" );
-        if( nbttagcompound.hasKey( "userData" ) )
-        {
-            m_userData = (NBTTagCompound)(nbttagcompound.getCompoundTag( "userData" )).copy();
-        }
-        else
-        {
+        m_computerID = nbttagcompound.getInteger("id");
+        m_label = nbttagcompound.hasKey("label") ? nbttagcompound.getString("label") : null;
+        m_on = nbttagcompound.getBoolean("on");
+        m_blinking = nbttagcompound.getBoolean("blinking");
+        if (nbttagcompound.hasKey("userData")) {
+            m_userData = (NBTTagCompound) (nbttagcompound.getCompoundTag("userData")).copy();
+        } else {
             m_userData = null;
         }
 
-        if( m_computerID != oldID || m_on != oldOn || m_blinking != oldBlinking || !Objects.equal( m_label, oldLabel ) || !Objects.equal( m_userData, oldUserData ) )
-        {
+        if (m_computerID != oldID || m_on != oldOn || m_blinking != oldBlinking || !Objects.equal(m_label, oldLabel) || !Objects.equal(m_userData, oldUserData)) {
             m_changed = true;
         }
     }
 
     @Override
-    public void handlePacket( ComputerCraftPacket packet, EntityPlayer sender )
-    {
-        switch( packet.m_packetType )
-        {
-            case ComputerCraftPacket.ComputerChanged:
-            {
-                readDescription( packet.m_dataNBT );
+    public void handlePacket(ComputerCraftPacket packet, EntityPlayer sender) {
+        switch (packet.m_packetType) {
+            case ComputerCraftPacket.ComputerChanged: {
+                readDescription(packet.m_dataNBT);
                 break;
             }
         }

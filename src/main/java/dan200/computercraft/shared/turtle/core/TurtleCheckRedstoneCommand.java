@@ -11,48 +11,38 @@ import dan200.computercraft.api.turtle.ITurtleCommand;
 import dan200.computercraft.api.turtle.TurtleCommandResult;
 import dan200.computercraft.core.apis.IAPIEnvironment;
 
-public class TurtleCheckRedstoneCommand implements ITurtleCommand
-{
+public class TurtleCheckRedstoneCommand implements ITurtleCommand {
     private final IAPIEnvironment m_environment;
     private final InteractDirection m_direction;
 
-    public TurtleCheckRedstoneCommand( IAPIEnvironment environment, InteractDirection direction )
-    {
+    public TurtleCheckRedstoneCommand(IAPIEnvironment environment, InteractDirection direction) {
         m_environment = environment;
         m_direction = direction;
     }
 
     @Override
-    public TurtleCommandResult execute( ITurtleAccess turtle )
-    {
+    public TurtleCommandResult execute(ITurtleAccess turtle) {
         // Do the checking
         int redstoneSide;
-        switch( m_direction )
-        {
+        switch (m_direction) {
             case Forward:
-            default:
-            {
+            default: {
                 redstoneSide = 3;
                 break;
             }
-            case Up:
-            {
+            case Up: {
                 redstoneSide = 1;
                 break;
             }
-            case Down:
-            {
+            case Down: {
                 redstoneSide = 2;
                 break;
             }
         }
-        int power = m_environment.getInput( redstoneSide );
-        if( power > 0 )
-        {
+        int power = m_environment.getInput(redstoneSide);
+        if (power > 0) {
             return TurtleCommandResult.success();
-        }
-        else
-        {
+        } else {
             return TurtleCommandResult.failure();
         }
     }

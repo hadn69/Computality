@@ -6,9 +6,7 @@
 
 package dan200.computercraft.shared.turtle.blocks;
 
-public class TileTurtleAdvanced extends TileTurtle
-{
-    public TileTurtleAdvanced()
-    {
+public class TileTurtleAdvanced extends TileTurtle {
+    public TileTurtleAdvanced() {
     }
 }

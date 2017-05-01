@@ -11,34 +11,25 @@ import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
-public class PacketHandler
-{
+public class PacketHandler {
     @SubscribeEvent
-    public void onClientPacket( FMLNetworkEvent.ClientCustomPacketEvent event )
-    {
-        try
-        {
+    public void onClientPacket(FMLNetworkEvent.ClientCustomPacketEvent event) {
+        try {
             ComputerCraftPacket packet = new ComputerCraftPacket();
-            packet.fromBytes( event.getPacket().payload() );
-            ComputerCraft.handlePacket( packet, null );
-        }
-        catch( Exception e )
-        {
+            packet.fromBytes(event.getPacket().payload());
+            ComputerCraft.handlePacket(packet, null);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @SubscribeEvent
-    public void onServerPacket( FMLNetworkEvent.ServerCustomPacketEvent event )
-    {
-        try
-        {
+    public void onServerPacket(FMLNetworkEvent.ServerCustomPacketEvent event) {
+        try {
             ComputerCraftPacket packet = new ComputerCraftPacket();
-            packet.fromBytes( event.getPacket().payload() );
-            ComputerCraft.handlePacket( packet, ((NetHandlerPlayServer)event.getHandler()).playerEntity );
-        }
-        catch( Exception e )
-        {
+            packet.fromBytes(event.getPacket().payload());
+            ComputerCraft.handlePacket(packet, ((NetHandlerPlayServer) event.getHandler()).player);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

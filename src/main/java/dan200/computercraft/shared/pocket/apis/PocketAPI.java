@@ -10,46 +10,38 @@ import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.core.apis.ILuaAPI;
 
-public class PocketAPI implements ILuaAPI
-{
-    public PocketAPI()
-    {
+public class PocketAPI implements ILuaAPI {
+    public PocketAPI() {
     }
 
     @Override
-    public String[] getNames()
-    {
-        return new String[] {
-            "pocket"
+    public String[] getNames() {
+        return new String[]{
+                "pocket"
         };
     }
 
     @Override
-    public void startup()
-    {
+    public void startup() {
     }
 
     @Override
-    public void advance( double dt )
-    {
+    public void advance(double dt) {
     }
 
     @Override
-    public void shutdown()
-    {
+    public void shutdown() {
     }
 
     @Override
-    public String[] getMethodNames()
-    {
-        return new String[] {
-            // TODO: Add some methods
+    public String[] getMethodNames() {
+        return new String[]{
+                // TODO: Add some methods
         };
     }
 
     @Override
-    public Object[] callMethod( ILuaContext context, int method, Object[] arguments ) throws LuaException
-    {
+    public Object[] callMethod(ILuaContext context, int method, Object[] arguments) throws LuaException {
         // TODO: Add some methods
         return null;
     }

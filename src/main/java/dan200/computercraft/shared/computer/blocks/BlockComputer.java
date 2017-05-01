@@ -22,133 +22,102 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockComputer extends BlockComputerBase
-{
-    // Statics
-    public static class Properties
-    {
-        public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-        public static final PropertyBool ADVANCED = PropertyBool.create("advanced");
-        public static final PropertyEnum<ComputerState> STATE = PropertyEnum.<ComputerState>create("state", ComputerState.class);
-    }
-
-    // Members
-    
-    public BlockComputer()
-    {
-        super( Material.ROCK );
-        setHardness( 2.0f );
-        setUnlocalizedName( "computercraft:computer" );
-        setCreativeTab( ComputerCraft.mainCreativeTab );
-        setDefaultState( this.blockState.getBaseState()
-            .withProperty( Properties.FACING, EnumFacing.NORTH )
-            .withProperty( Properties.ADVANCED, false )
-            .withProperty( Properties.STATE, ComputerState.Off )
+public class BlockComputer extends BlockComputerBase {
+    public BlockComputer() {
+        super(Material.ROCK);
+        setHardness(2.0f);
+        setUnlocalizedName("computercraft.computer");
+        setCreativeTab(ComputerCraft.mainCreativeTab);
+        setDefaultState(this.blockState.getBaseState()
+                .withProperty(Properties.FACING, EnumFacing.NORTH)
+                .withProperty(Properties.ADVANCED, false)
+                .withProperty(Properties.STATE, ComputerState.Off)
         );
     }
 
+    // Members
+
     @Override
-    protected BlockStateContainer createBlockState()
-    {
-        return new BlockStateContainer(this, new IProperty[] {
-            Properties.FACING,
-            Properties.ADVANCED,
-            Properties.STATE
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, new IProperty[]{
+                Properties.FACING,
+                Properties.ADVANCED,
+                Properties.STATE
         });
     }
 
     @Override
-    public IBlockState getStateFromMeta( int meta )
-    {
-        EnumFacing dir = EnumFacing.getFront( meta & 0x7 );
-        if( dir.getAxis() == EnumFacing.Axis.Y )
-        {
+    public IBlockState getStateFromMeta(int meta) {
+        EnumFacing dir = EnumFacing.getFront(meta & 0x7);
+        if (dir.getAxis() == EnumFacing.Axis.Y) {
             dir = EnumFacing.NORTH;
         }
 
-        IBlockState state = getDefaultState().withProperty( Properties.FACING, dir );
-        if( meta > 8 )
-        {
-            state = state.withProperty( Properties.ADVANCED, true );
-        }
-        else
-        {
-            state = state.withProperty( Properties.ADVANCED, false );
+        IBlockState state = getDefaultState().withProperty(Properties.FACING, dir);
+        if (meta > 8) {
+            state = state.withProperty(Properties.ADVANCED, true);
+        } else {
+            state = state.withProperty(Properties.ADVANCED, false);
         }
         return state;
     }
 
     @Override
-    public int getMetaFromState( IBlockState state )
-    {
-        int meta = ((EnumFacing)state.getValue( Properties.FACING )).getIndex();
-        if( (Boolean)state.getValue( Properties.ADVANCED ) )
-        {
+    public int getMetaFromState(IBlockState state) {
+        int meta = ((EnumFacing) state.getValue(Properties.FACING)).getIndex();
+        if ((Boolean) state.getValue(Properties.ADVANCED)) {
             meta += 8;
         }
         return meta;
     }
 
     @Override
-    protected IBlockState getDefaultBlockState( ComputerFamily family, EnumFacing placedSide )
-    {
+    protected IBlockState getDefaultBlockState(ComputerFamily family, EnumFacing placedSide) {
         IBlockState state = getDefaultState();
-        if( placedSide.getAxis() != EnumFacing.Axis.Y )
-        {
-            state = state.withProperty( Properties.FACING, placedSide );
+        if (placedSide.getAxis() != EnumFacing.Axis.Y) {
+            state = state.withProperty(Properties.FACING, placedSide);
         }
 
-        switch( family )
-        {
+        switch (family) {
             case Normal:
-            default:
-            {
-                return state.withProperty( Properties.ADVANCED, false );
+            default: {
+                return state.withProperty(Properties.ADVANCED, false);
             }
-            case Advanced:
-            {
-                return state.withProperty( Properties.ADVANCED, true );
+            case Advanced: {
+                return state.withProperty(Properties.ADVANCED, true);
             }
         }
     }
 
     @Override
-    public IBlockState getActualState( IBlockState state, IBlockAccess world, BlockPos pos )
-    {
-        TileEntity tile = world.getTileEntity( pos );
-        if( tile != null && tile instanceof IComputerTile )
-        {
-            IComputer computer = ((IComputerTile)tile).getComputer();
-            if( computer != null && computer.isOn() )
-            {
-                if( computer.isCursorDisplayed() )
-                {
-                    return state.withProperty( Properties.STATE, ComputerState.Blinking );
-                }
-                else
-                {
-                    return state.withProperty( Properties.STATE, ComputerState.On );
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile != null && tile instanceof IComputerTile) {
+            IComputer computer = ((IComputerTile) tile).getComputer();
+            if (computer != null && computer.isOn()) {
+                if (computer.isCursorDisplayed()) {
+                    return state.withProperty(Properties.STATE, ComputerState.Blinking);
+                } else {
+                    return state.withProperty(Properties.STATE, ComputerState.On);
                 }
             }
         }
-        return state.withProperty( Properties.STATE, ComputerState.Off );
+        return state.withProperty(Properties.STATE, ComputerState.Off);
     }
 
     @Override
-    public ComputerFamily getFamily( int damage )
-    {
-        return ((ItemComputer) Item.getItemFromBlock(this)).getFamily( damage );
+    public ComputerFamily getFamily(int damage) {
+        return ((ItemComputer) Item.getItemFromBlock(this)).getFamily(damage);
     }
 
     @Override
-    public ComputerFamily getFamily( IBlockState state )
-    {
-        if( (Boolean)state.getValue( Properties.ADVANCED ) ) {
+    public ComputerFamily getFamily(IBlockState state) {
+        if ((Boolean) state.getValue(Properties.ADVANCED)) {
             return ComputerFamily.Advanced;
         } else {
             return ComputerFamily.Normal;
@@ -156,24 +125,28 @@ public class BlockComputer extends BlockComputerBase
     }
 
     @Override
-    protected TileComputer createTile( ComputerFamily family )
-    {
+    protected TileComputer createTile(ComputerFamily family) {
         return new TileComputer();
     }
 
     @Override
-    public void onBlockPlacedBy( World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack stack )
-    {
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack stack) {
         // Not sure why this is necessary
-        TileEntity tile = world.getTileEntity( pos );
-        if( tile != null && tile instanceof TileComputer )
-        {
-            tile.setWorldObj( world ); // Not sure why this is necessary
-            tile.setPos( pos ); // Not sure why this is necessary
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile != null && tile instanceof TileComputer) {
+            tile.setWorld(world); // Not sure why this is necessary
+            tile.setPos(pos); // Not sure why this is necessary
         }
 
         // Set direction
-        EnumFacing dir = DirectionUtil.fromEntityRot( player );
-        setDirection( world, pos, dir );
+        EnumFacing dir = DirectionUtil.fromEntityRot(player);
+        setDirection(world, pos, dir);
+    }
+
+    // Statics
+    public static class Properties {
+        public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+        public static final PropertyBool ADVANCED = PropertyBool.create("advanced");
+        public static final PropertyEnum<ComputerState> STATE = PropertyEnum.<ComputerState>create("state", ComputerState.class);
     }
 }

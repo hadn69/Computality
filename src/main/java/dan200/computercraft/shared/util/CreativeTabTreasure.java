@@ -9,23 +9,16 @@ package dan200.computercraft.shared.util;
 import dan200.computercraft.ComputerCraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
-public class CreativeTabTreasure extends CreativeTabs
-{
-    public CreativeTabTreasure( int i )
-    {
-        super( i, "Treasure Disks" );
+public class CreativeTabTreasure extends CreativeTabs {
+    public CreativeTabTreasure(int i) {
+        super(i, "Treasure Disks");
     }
-    
+
     @Override
-    public Item getTabIconItem()
-    {
-        return ComputerCraft.Items.treasureDisk;
+    public ItemStack getTabIconItem() {
+       return new ItemStack(ComputerCraft.Items.treasureDisk);
     }
-    
-    @Override
-    public String getTranslatedTabLabel()
-    {
-        return getTabLabel();
-    }
+
 }

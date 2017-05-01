@@ -17,62 +17,51 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
-public class ItemTurtleLegacy extends ItemTurtleBase
-{
-    public ItemTurtleLegacy( Block block )
-    {
-        super( block );
-        setUnlocalizedName( "computercraft:turtle" );
-        setCreativeTab( ComputerCraft.mainCreativeTab );
+public class ItemTurtleLegacy extends ItemTurtleBase {
+    public ItemTurtleLegacy(Block block) {
+        super(block);
+        setUnlocalizedName("computercraft:turtle");
+        setCreativeTab(ComputerCraft.mainCreativeTab);
     }
 
     @Override
-    public ItemStack create( int id, String label, Colour colour, ITurtleUpgrade leftUpgrade, ITurtleUpgrade rightUpgrade, int fuelLevel, ResourceLocation overlay )
-    {
+    public ItemStack create(int id, String label, Colour colour, ITurtleUpgrade leftUpgrade, ITurtleUpgrade rightUpgrade, int fuelLevel, ResourceLocation overlay) {
         // Legacy turtles only support pickaxes and modems
-        if( (leftUpgrade != null && leftUpgrade != ComputerCraft.Upgrades.diamondPickaxe ) ||
-            (rightUpgrade != null && rightUpgrade != ComputerCraft.Upgrades.wirelessModem) ||
-            (colour != null) || (overlay != null) )
-        {
+        if ((leftUpgrade != null && leftUpgrade != ComputerCraft.Upgrades.diamondPickaxe) ||
+                (rightUpgrade != null && rightUpgrade != ComputerCraft.Upgrades.wirelessModem) ||
+                (colour != null) || (overlay != null)) {
             return null;
         }
 
         // Build the subtype
         int subType = 0;
-        if( leftUpgrade != null )
-        {
+        if (leftUpgrade != null) {
             subType = subType + 1;
         }
-        if( rightUpgrade != null )
-        {
+        if (rightUpgrade != null) {
             subType = subType + 2;
         }
 
         // Build the ID
         int damage = subType;
-        if( id >= 0 && id <= ItemComputer.HIGHEST_DAMAGE_VALUE_ID )
-        {
+        if (id >= 0 && id <= ItemComputer.HIGHEST_DAMAGE_VALUE_ID) {
             damage += ((id + 1) << 2);
         }
 
         // Build the stack
-        ItemStack stack = new ItemStack( this, 1, damage );
-        if( fuelLevel > 0 || id > ItemComputer.HIGHEST_DAMAGE_VALUE_ID )
-        {
+        ItemStack stack = new ItemStack(this, 1, damage);
+        if (fuelLevel > 0 || id > ItemComputer.HIGHEST_DAMAGE_VALUE_ID) {
             NBTTagCompound nbt = new NBTTagCompound();
-            if( fuelLevel > 0 )
-            {
-                nbt.setInteger( "fuelLevel", fuelLevel );
+            if (fuelLevel > 0) {
+                nbt.setInteger("fuelLevel", fuelLevel);
             }
-            if( id > ItemComputer.HIGHEST_DAMAGE_VALUE_ID )
-            {
-                nbt.setInteger( "computerID", id );
+            if (id > ItemComputer.HIGHEST_DAMAGE_VALUE_ID) {
+                nbt.setInteger("computerID", id);
             }
-            stack.setTagCompound( nbt );
+            stack.setTagCompound(nbt);
         }
-        if( label != null )
-        {
-            stack.setStackDisplayName( label );
+        if (label != null) {
+            stack.setStackDisplayName(label);
         }
 
         // Return the stack
@@ -82,45 +71,34 @@ public class ItemTurtleLegacy extends ItemTurtleBase
     // IComputerItem implementation
 
     @Override
-    public int getComputerID( ItemStack stack )
-    {
-        if( stack.hasTagCompound() && stack.getTagCompound().hasKey( "computerID" ) )
-        {
-            return  stack.getTagCompound().getInteger( "computerID" );
-        }
-        else
-        {
+    public int getComputerID(ItemStack stack) {
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("computerID")) {
+            return stack.getTagCompound().getInteger("computerID");
+        } else {
             int damage = stack.getItemDamage();
-            return ( ( damage & 0xfffc ) >> 2 ) - 1;
+            return ((damage & 0xfffc) >> 2) - 1;
         }
     }
 
     @Override
-    public ComputerFamily getFamily( int damage )
-    {
+    public ComputerFamily getFamily(int damage) {
         return ComputerFamily.Normal;
     }
 
     // ITurtleItem implementation
 
     @Override
-    public ITurtleUpgrade getUpgrade( ItemStack stack, TurtleSide side )
-    {
+    public ITurtleUpgrade getUpgrade(ItemStack stack, TurtleSide side) {
         int damage = stack.getItemDamage();
-        switch( side )
-        {
-            case Left:
-            {
-                if( (damage & 0x1) > 0 )
-                {
+        switch (side) {
+            case Left: {
+                if ((damage & 0x1) > 0) {
                     return ComputerCraft.Upgrades.diamondPickaxe;
                 }
                 break;
             }
-            case Right:
-            {
-                if( (damage & 0x2) > 0 )
-                {
+            case Right: {
+                if ((damage & 0x2) > 0) {
                     return ComputerCraft.Upgrades.wirelessModem;
                 }
                 break;
@@ -130,19 +108,18 @@ public class ItemTurtleLegacy extends ItemTurtleBase
     }
 
     @Override
-    public Colour getColour( ItemStack stack )
-    {
+    public Colour getColour(ItemStack stack) {
         return null;
     }
 
     @Override
-    public ResourceLocation getOverlay( ItemStack stack ) { return null; }
+    public ResourceLocation getOverlay(ItemStack stack) {
+        return null;
+    }
 
     @Override
-    public int getFuelLevel( ItemStack stack )
-    {
-        if( stack.hasTagCompound() )
-        {
+    public int getFuelLevel(ItemStack stack) {
+        if (stack.hasTagCompound()) {
             NBTTagCompound nbt = stack.getTagCompound();
             return nbt.getInteger("fuelLevel");
         }

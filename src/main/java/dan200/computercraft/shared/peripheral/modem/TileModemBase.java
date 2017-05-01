@@ -10,127 +10,102 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.shared.common.BlockGeneric;
 import dan200.computercraft.shared.peripheral.common.TilePeripheralBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 
-public abstract class TileModemBase extends TilePeripheralBase
-{
+public abstract class TileModemBase extends TilePeripheralBase {
     protected ModemPeripheral m_modem;
 
-    protected TileModemBase()
-    {
+    protected TileModemBase() {
         m_modem = createPeripheral();
     }
-    
+
     protected abstract ModemPeripheral createPeripheral();
-            
+
     @Override
-    public synchronized void destroy()
-    {
-        if( m_modem != null )
-        {
+    public synchronized void destroy() {
+        if (m_modem != null) {
             m_modem.destroy();
             m_modem = null;
         }
     }
 
     @Override
-    public boolean isSolidOnSide( int side )
-    {
+    public boolean isSolidOnSide(int side) {
         return false;
     }
 
     @Override
-    public void onNeighbourChange()
-    {
+    public void onNeighbourChange() {
         EnumFacing dir = getDirection();
-        if( !worldObj.isSideSolid(
-            getPos().offset( dir ),
-            dir.getOpposite()
-        ) )
-        {
+        if (!getWorld().isSideSolid(
+                getPos().offset(dir),
+                dir.getOpposite()
+        )) {
             // Drop everything and remove block
-            ((BlockGeneric)getBlockType()).dropAllItems( worldObj, getPos(), false );
-            worldObj.setBlockToAir( getPos() );
+            ((BlockGeneric) getBlockType()).dropAllItems(getWorld(), getPos(), false);
+            getWorld().setBlockToAir(getPos());
         }
     }
 
     @Override
-    public AxisAlignedBB getBounds()
-    {
-        switch( getDirection() )
-        {
+    public AxisAlignedBB getBounds() {
+        switch (getDirection()) {
             case UP:
-            default:
-            {
-                return new AxisAlignedBB( 0.125, 0.8125, 0.125, 0.875, 1.0, 0.875 );
+            default: {
+                return new AxisAlignedBB(0.125, 0.8125, 0.125, 0.875, 1.0, 0.875);
             }
-            case DOWN:
-            {
-                return new AxisAlignedBB( 0.125, 0.0, 0.125, 0.875, 0.1875, 0.875 );
+            case DOWN: {
+                return new AxisAlignedBB(0.125, 0.0, 0.125, 0.875, 0.1875, 0.875);
             }
-            case NORTH:
-            {
-                return new AxisAlignedBB( 0.125, 0.125, 0.0, 0.875, 0.875, 0.1875 );
+            case NORTH: {
+                return new AxisAlignedBB(0.125, 0.125, 0.0, 0.875, 0.875, 0.1875);
             }
-            case SOUTH:
-            {
-                return new AxisAlignedBB( 0.125, 0.125, 0.8125, 0.875, 0.875, 1.0 );
+            case SOUTH: {
+                return new AxisAlignedBB(0.125, 0.125, 0.8125, 0.875, 0.875, 1.0);
             }
-            case WEST:
-            {
-                return new AxisAlignedBB( 0.0, 0.125, 0.125, 0.1875, 0.875, 0.875 );
+            case WEST: {
+                return new AxisAlignedBB(0.0, 0.125, 0.125, 0.1875, 0.875, 0.875);
             }
-            case EAST:
-            {
-                return new AxisAlignedBB( 0.8125, 0.125, 0.125, 1.0, 0.875, 0.875 );
+            case EAST: {
+                return new AxisAlignedBB(0.8125, 0.125, 0.125, 1.0, 0.875, 0.875);
             }
         }
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        if( !worldObj.isRemote && m_modem.pollChanged() )
-        {
+        if (!getWorld().isRemote && m_modem.pollChanged()) {
             updateAnim();
         }
     }
-    
-    protected void updateAnim()
-    {
-        if( m_modem.isActive() )
-        {
+
+    protected void updateAnim() {
+        if (m_modem.isActive()) {
             setAnim(1);
-        }
-        else
-        {
+        } else {
             setAnim(0);
         }
     }
 
     @Override
-    public final void readDescription( NBTTagCompound nbttagcompound )
-    {
-        super.readDescription( nbttagcompound );
+    public final void readDescription(NBTTagCompound nbttagcompound) {
+        super.readDescription(nbttagcompound);
         updateBlock();
     }
 
     // IPeripheralTile implementation
 
     @Override
-    public IPeripheral getPeripheral( EnumFacing side )
-    {
-        if( side == getDirection() )
-        {
+    public IPeripheral getPeripheral(EnumFacing side) {
+        if (side == getDirection()) {
             return m_modem;
         }
         return null;
     }
 
-    protected boolean isAttached()
-    {
+    protected boolean isAttached() {
         return (m_modem != null) && (m_modem.getComputer() != null);
     }
 }

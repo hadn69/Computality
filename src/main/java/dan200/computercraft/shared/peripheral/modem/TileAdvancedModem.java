@@ -7,78 +7,66 @@
 package dan200.computercraft.shared.peripheral.modem;
 
 import dan200.computercraft.api.peripheral.IPeripheral;
-import dan200.computercraft.shared.peripheral.common.BlockPeripheral;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class TileAdvancedModem extends TileModemBase
-{
+public class TileAdvancedModem extends TileModemBase {
     // Statics
 
-    private static class Peripheral extends WirelessModemPeripheral
-    {
-        private TileModemBase m_entity;
-
-        public Peripheral( TileModemBase entity )
-        {
-            super( true );
-            m_entity = entity;
-        }
-
-        @Override
-        public World getWorld()
-        {
-            return m_entity.getWorld();
-        }
-
-        @Override
-        protected Vec3d getPosition()
-        {
-            BlockPos pos = m_entity.getPos().offset( m_entity.getDirection() );
-            return new Vec3d( (double)pos.getX(), (double)pos.getY(), (double)pos.getZ() );
-        }
-
-        @Override
-        public boolean equals( IPeripheral other )
-        {
-            if( other instanceof Peripheral )
-            {
-                Peripheral otherModem = (Peripheral)other;
-                return otherModem.m_entity == m_entity;
-            }
-            return false;
-        }
+    public TileAdvancedModem() {
     }
 
     // Members
 
-    public TileAdvancedModem()
-    {
-    }
-
     @Override
-    public EnumFacing getDirection()
-    {
+    public EnumFacing getDirection() {
         // Wireless Modem
         IBlockState state = getBlockState();
-        return (EnumFacing)state.getValue( BlockAdvancedModem.Properties.FACING );
+        return (EnumFacing) state.getValue(BlockAdvancedModem.Properties.FACING);
     }
 
     @Override
-    public void setDirection( EnumFacing dir )
-    {
+    public void setDirection(EnumFacing dir) {
         // Wireless Modem
-        setBlockState( getBlockState()
-            .withProperty( BlockAdvancedModem.Properties.FACING, dir )
+        setBlockState(getBlockState()
+                .withProperty(BlockAdvancedModem.Properties.FACING, dir)
         );
     }
 
     @Override
-    protected ModemPeripheral createPeripheral()
-    {
-        return new Peripheral( this );
+    protected ModemPeripheral createPeripheral() {
+        return new Peripheral(this);
+    }
+
+    private static class Peripheral extends WirelessModemPeripheral {
+        private TileModemBase m_entity;
+
+        public Peripheral(TileModemBase entity) {
+            super(true);
+            m_entity = entity;
+        }
+
+        @Override
+        public World getWorld() {
+            return m_entity.getWorld();
+        }
+
+        @Override
+        protected Vec3d getPosition() {
+            BlockPos pos = m_entity.getPos().offset(m_entity.getDirection());
+            return new Vec3d((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
+        }
+
+        @Override
+        public boolean equals(IPeripheral other) {
+            if (other instanceof Peripheral) {
+                Peripheral otherModem = (Peripheral) other;
+                return otherModem.m_entity == m_entity;
+            }
+            return false;
+        }
     }
 }

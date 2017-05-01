@@ -22,11 +22,10 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
-public class GuiComputer extends GuiContainer
-{
-    private static final ResourceLocation background = new ResourceLocation( "computercraft", "textures/gui/corners.png" );
-    private static final ResourceLocation backgroundAdvanced = new ResourceLocation( "computercraft", "textures/gui/corners2.png" );
-    private static final ResourceLocation backgroundCommand = new ResourceLocation( "computercraft", "textures/gui/cornersCommand.png" );
+public class GuiComputer extends GuiContainer {
+    private static final ResourceLocation background = new ResourceLocation("computercraft", "textures/gui/corners.png");
+    private static final ResourceLocation backgroundAdvanced = new ResourceLocation("computercraft", "textures/gui/corners2.png");
+    private static final ResourceLocation backgroundCommand = new ResourceLocation("computercraft", "textures/gui/cornersCommand.png");
 
     private final ComputerFamily m_family;
     private final IComputer m_computer;
@@ -34,9 +33,8 @@ public class GuiComputer extends GuiContainer
     private final int m_termHeight;
     private WidgetTerminal m_terminal;
 
-    protected GuiComputer( Container container, ComputerFamily family, IComputer computer, int termWidth, int termHeight )
-    {
-        super( container );
+    protected GuiComputer(Container container, ComputerFamily family, IComputer computer, int termWidth, int termHeight) {
+        super(container);
         m_family = family;
         m_computer = computer;
         m_termWidth = termWidth;
@@ -44,109 +42,92 @@ public class GuiComputer extends GuiContainer
         m_terminal = null;
     }
 
-    public GuiComputer( TileComputer computer )
-    {
+    public GuiComputer(TileComputer computer) {
         this(
-            new ContainerComputer( computer ),
-            computer.getFamily(),
-            computer.createComputer(),
-            ComputerCraft.terminalWidth_computer,
-            ComputerCraft.terminalHeight_computer
+                new ContainerComputer(computer),
+                computer.getFamily(),
+                computer.createComputer(),
+                ComputerCraft.terminalWidth_computer,
+                ComputerCraft.terminalHeight_computer
         );
     }
 
     @Override
-    public void initGui()
-    {
+    public void initGui() {
         super.initGui();
-        Keyboard.enableRepeatEvents( true );
+        Keyboard.enableRepeatEvents(true);
 
-        m_terminal = new WidgetTerminal( 0, 0, m_termWidth, m_termHeight, new IComputerContainer()
-        {
+        m_terminal = new WidgetTerminal(0, 0, m_termWidth, m_termHeight, new IComputerContainer() {
             @Override
-            public IComputer getComputer()
-            {
+            public IComputer getComputer() {
                 return m_computer;
             }
-        }, 2, 2, 2, 2 );
-        m_terminal.setAllowFocusLoss( false );
+        }, 2, 2, 2, 2);
+        m_terminal.setAllowFocusLoss(false);
         xSize = m_terminal.getWidth() + 24;
         ySize = m_terminal.getHeight() + 24;
     }
 
     @Override
-    public void onGuiClosed()
-    {
+    public void onGuiClosed() {
         super.onGuiClosed();
-        Keyboard.enableRepeatEvents( false );
+        Keyboard.enableRepeatEvents(false);
     }
 
     @Override
-    public boolean doesGuiPauseGame()
-    {
+    public boolean doesGuiPauseGame() {
         return false;
     }
 
     @Override
-    public void updateScreen()
-    {
+    public void updateScreen() {
         super.updateScreen();
         m_terminal.update();
     }
 
     @Override
-    protected void keyTyped(char c, int k) throws IOException
-    {
-        if( k == 1 )
-        {
-            super.keyTyped( c, k );
-        }
-        else
-        {
-            m_terminal.keyTyped( c, k );
+    protected void keyTyped(char c, int k) throws IOException {
+        if (k == 1) {
+            super.keyTyped(c, k);
+        } else {
+            m_terminal.keyTyped(c, k);
         }
     }
 
     @Override
-    protected void mouseClicked( int x, int y, int button )
-    {
+    protected void mouseClicked(int x, int y, int button) {
         int startX = (width - m_terminal.getWidth()) / 2;
         int startY = (height - m_terminal.getHeight()) / 2;
-        m_terminal.mouseClicked( x - startX, y - startY, button );
+        m_terminal.mouseClicked(x - startX, y - startY, button);
     }
 
     @Override
-    public void handleMouseInput() throws IOException
-    {
+    public void handleMouseInput() throws IOException {
         super.handleMouseInput();
 
         int x = Mouse.getEventX() * width / mc.displayWidth;
         int y = height - Mouse.getEventY() * height / mc.displayHeight - 1;
         int startX = (width - m_terminal.getWidth()) / 2;
         int startY = (height - m_terminal.getHeight()) / 2;
-        m_terminal.handleMouseInput( x - startX, y - startY );
+        m_terminal.handleMouseInput(x - startX, y - startY);
     }
 
     @Override
-    public void handleKeyboardInput() throws IOException
-    {
+    public void handleKeyboardInput() throws IOException {
         super.handleKeyboardInput();
         m_terminal.handleKeyboardInput();
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int par1, int par2)
-    {
+    protected void drawGuiContainerForegroundLayer(int par1, int par2) {
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer( float var1, int var2, int var3 )
-    {
+    protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
     }
 
     @Override
-    public void drawScreen( int mouseX, int mouseY, float f )
-    {
+    public void drawScreen(int mouseX, int mouseY, float f) {
         // Work out where to draw
         int startX = (width - m_terminal.getWidth()) / 2;
         int startY = (height - m_terminal.getHeight()) / 2;
@@ -156,27 +137,23 @@ public class GuiComputer extends GuiContainer
         // Draw background
         drawDefaultBackground();
 
-           // Draw terminal
-        m_terminal.draw( this.mc, startX, startY, mouseX, mouseY );
-        
+        // Draw terminal
+        m_terminal.draw(this.mc, startX, startY, mouseX, mouseY);
+
         // Draw a border around the terminal
-        GlStateManager.color( 1.0f, 1.0f, 1.0f, 1.0f );
-        switch( m_family )
-        {
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+        switch (m_family) {
             case Normal:
-            default:
-            {
-                this.mc.getTextureManager().bindTexture( background );
+            default: {
+                this.mc.getTextureManager().bindTexture(background);
                 break;
             }
-            case Advanced:
-            {
-                this.mc.getTextureManager().bindTexture( backgroundAdvanced );
+            case Advanced: {
+                this.mc.getTextureManager().bindTexture(backgroundAdvanced);
                 break;
             }
-            case Command:
-            {
-                this.mc.getTextureManager().bindTexture( backgroundCommand );
+            case Command: {
+                this.mc.getTextureManager().bindTexture(backgroundCommand);
                 break;
             }
         }
@@ -186,10 +163,10 @@ public class GuiComputer extends GuiContainer
         drawTexturedModalRect(endX, startY - 12, 24, 28, 12, 12);
         drawTexturedModalRect(endX, endY, 24, 40, 12, 16);
 
-        drawTexturedModalRect(startX, startY-12, 0, 0, endX - startX, 12);
+        drawTexturedModalRect(startX, startY - 12, 0, 0, endX - startX, 12);
         drawTexturedModalRect(startX, endY, 0, 12, endX - startX, 16);
 
-        drawTexturedModalRect(startX-12, startY, 0, 28, 12, endY - startY);
+        drawTexturedModalRect(startX - 12, startY, 0, 28, 12, endY - startY);
         drawTexturedModalRect(endX, startY, 36, 28, 12, endY - startY);
     }
 }

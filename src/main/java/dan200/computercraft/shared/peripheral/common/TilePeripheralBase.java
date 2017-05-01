@@ -12,14 +12,13 @@ import dan200.computercraft.shared.common.TileGeneric;
 import dan200.computercraft.shared.peripheral.PeripheralType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 
 import java.util.List;
 
 public abstract class TilePeripheralBase extends TileGeneric
-    implements IPeripheralTile, IDirectionalTile, ITickable
-{
+        implements IPeripheralTile, IDirectionalTile, ITickable {
     // Statics
 
     private EnumFacing m_dir;
@@ -28,8 +27,7 @@ public abstract class TilePeripheralBase extends TileGeneric
 
     private String m_label;
 
-    public TilePeripheralBase()
-    {
+    public TilePeripheralBase() {
         m_dir = EnumFacing.NORTH;
         m_anim = 0;
         m_changed = false;
@@ -39,155 +37,126 @@ public abstract class TilePeripheralBase extends TileGeneric
 
 
     @Override
-    public BlockPeripheralBase getBlock()
-    {
-        return (BlockPeripheralBase)super.getBlock();
+    public BlockPeripheralBase getBlock() {
+        return (BlockPeripheralBase) super.getBlock();
     }
 
     @Override
-    public void getDroppedItems( List<ItemStack> drops, boolean creative )
-    {
-        if( !creative )
-        {
-            drops.add( PeripheralItemFactory.create( this ) );
+    public void getDroppedItems(List<ItemStack> drops, boolean creative) {
+        if (!creative) {
+            drops.add(PeripheralItemFactory.create(this));
         }
     }
 
     @Override
-    public ItemStack getPickedItem()
-    {
-        return PeripheralItemFactory.create( this );
+    public ItemStack getPickedItem() {
+        return PeripheralItemFactory.create(this);
     }
 
     // IPeripheralTile implementation
 
     @Override
-    public final PeripheralType getPeripheralType()
-    {
-        return getBlock().getPeripheralType( getBlockState() );
+    public final PeripheralType getPeripheralType() {
+        return getBlock().getPeripheralType(getBlockState());
     }
 
     @Override
-    public IPeripheral getPeripheral( EnumFacing side )
-    {
+    public IPeripheral getPeripheral(EnumFacing side) {
         return null;
     }
 
     @Override
-    public String getLabel()
-    {
-        if( m_label != null && m_label.length() > 0 )
-        {
+    public String getLabel() {
+        if (m_label != null && m_label.length() > 0) {
             return m_label;
         }
         return null;
     }
 
-    public void setLabel( String label )
-    {
+    public void setLabel(String label) {
         m_label = label;
     }
 
     // IDirectionalTile implementation
 
     @Override
-    public EnumFacing getDirection()
-    {
+    public EnumFacing getDirection() {
         return m_dir;
     }
 
     @Override
-    public void setDirection( EnumFacing dir )
-    {
-        if( dir != m_dir )
-        {
+    public void setDirection(EnumFacing dir) {
+        if (dir != m_dir) {
             m_dir = dir;
             m_changed = true;
         }
     }
 
-    public synchronized int getAnim()
-    {
+    public synchronized int getAnim() {
         return m_anim;
     }
-    
-    public synchronized void setAnim( int anim )
-    {
-        if( anim != m_anim )
-        {
+
+    public synchronized void setAnim(int anim) {
+        if (anim != m_anim) {
             m_anim = anim;
             m_changed = true;
         }
     }
 
-    @Override    
-    public synchronized void update()
-    {
-        if( m_changed )
-        {
+    @Override
+    public synchronized void update() {
+        if (m_changed) {
             updateBlock();
             m_changed = false;
         }
     }
-            
-    @Override    
-    public void readFromNBT( NBTTagCompound nbttagcompound )
-    {
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbttagcompound) {
         // Read properties
         super.readFromNBT(nbttagcompound);
-        if( nbttagcompound.hasKey( "dir" ) )
-        {
-            m_dir = EnumFacing.getFront( nbttagcompound.getInteger( "dir" ) );
+        if (nbttagcompound.hasKey("dir")) {
+            m_dir = EnumFacing.getFront(nbttagcompound.getInteger("dir"));
         }
-        if( nbttagcompound.hasKey( "anim" ) )
-        {
-            m_anim = nbttagcompound.getInteger( "anim" );
+        if (nbttagcompound.hasKey("anim")) {
+            m_anim = nbttagcompound.getInteger("anim");
         }
-        if( nbttagcompound.hasKey( "label" ) )
-        {
-            m_label = nbttagcompound.getString( "label" );
+        if (nbttagcompound.hasKey("label")) {
+            m_label = nbttagcompound.getString("label");
         }
     }
 
-    @Override    
-    public NBTTagCompound writeToNBT( NBTTagCompound nbttagcompound )
-    {
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
         // Write properties
-        nbttagcompound = super.writeToNBT( nbttagcompound );
-        nbttagcompound.setInteger( "dir", m_dir.getIndex() );
-        nbttagcompound.setInteger( "anim", m_anim );
-        if( m_label != null )
-        {
-            nbttagcompound.setString( "label", m_label );
+        nbttagcompound = super.writeToNBT(nbttagcompound);
+        nbttagcompound.setInteger("dir", m_dir.getIndex());
+        nbttagcompound.setInteger("anim", m_anim);
+        if (m_label != null) {
+            nbttagcompound.setString("label", m_label);
         }
         return nbttagcompound;
     }
 
     @Override
-    public void readDescription( NBTTagCompound nbttagcompound )
-    {
-        super.readDescription( nbttagcompound );
-        m_dir = EnumFacing.getFront( nbttagcompound.getInteger( "dir" ) );
-        m_anim = nbttagcompound.getInteger( "anim" );
-        if( nbttagcompound.hasKey( "label" ) )
-        {
-            m_label = nbttagcompound.getString( "label" );
-        }
-        else
-        {
+    public void readDescription(NBTTagCompound nbttagcompound) {
+        super.readDescription(nbttagcompound);
+        m_dir = EnumFacing.getFront(nbttagcompound.getInteger("dir"));
+        m_anim = nbttagcompound.getInteger("anim");
+        if (nbttagcompound.hasKey("label")) {
+            m_label = nbttagcompound.getString("label");
+        } else {
             m_label = null;
         }
     }
 
     @Override
-    public void writeDescription( NBTTagCompound nbttagcompound )
-    {
-        super.writeDescription( nbttagcompound );
-        nbttagcompound.setInteger( "dir", m_dir.getIndex() );
-        nbttagcompound.setInteger( "anim", m_anim );
-        if( m_label != null )
-        {
-            nbttagcompound.setString( "label", m_label );
+    public void writeDescription(NBTTagCompound nbttagcompound) {
+        super.writeDescription(nbttagcompound);
+        nbttagcompound.setInteger("dir", m_dir.getIndex());
+        nbttagcompound.setInteger("anim", m_anim);
+        if (m_label != null) {
+            nbttagcompound.setString("label", m_label);
         }
     }
 }

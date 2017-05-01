@@ -10,35 +10,30 @@ import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.ITurtleCommand;
 import dan200.computercraft.api.turtle.TurtleCommandResult;
 import dan200.computercraft.shared.util.WorldUtil;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TurtleDetectCommand implements ITurtleCommand
-{
+public class TurtleDetectCommand implements ITurtleCommand {
     private final InteractDirection m_direction;
 
-    public TurtleDetectCommand( InteractDirection direction )
-    {
+    public TurtleDetectCommand(InteractDirection direction) {
         m_direction = direction;
     }
 
     @Override
-    public TurtleCommandResult execute( ITurtleAccess turtle )
-    {
+    public TurtleCommandResult execute(ITurtleAccess turtle) {
         // Get world direction from direction
-        EnumFacing direction = m_direction.toWorldDir( turtle );
+        EnumFacing direction = m_direction.toWorldDir(turtle);
 
         // Check if thing in front is air or not
         World world = turtle.getWorld();
         BlockPos oldPosition = turtle.getPosition();
-        BlockPos newPosition = oldPosition.offset( direction );
+        BlockPos newPosition = oldPosition.offset(direction);
 
-        if( WorldUtil.isBlockInWorld( world, newPosition ) )
-        {
-            if( !WorldUtil.isLiquidBlock( world, newPosition ) &&
-                !world.isAirBlock( newPosition ) )
-            {
+        if (WorldUtil.isBlockInWorld(world, newPosition)) {
+            if (!WorldUtil.isLiquidBlock(world, newPosition) &&
+                    !world.isAirBlock(newPosition)) {
                 return TurtleCommandResult.success();
             }
         }

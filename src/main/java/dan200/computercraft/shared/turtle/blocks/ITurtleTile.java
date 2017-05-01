@@ -15,14 +15,18 @@ import dan200.computercraft.shared.util.Colour;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 
-public interface ITurtleTile extends IComputerTile, IDirectionalTile
-{
+public interface ITurtleTile extends IComputerTile, IDirectionalTile {
     public Colour getColour();
+
     public ResourceLocation getOverlay();
-    public ITurtleUpgrade getUpgrade( TurtleSide side );
+
+    public ITurtleUpgrade getUpgrade(TurtleSide side);
+
     public ITurtleAccess getAccess();
 
-    public Vec3d getRenderOffset( float f );
-    public float getRenderYaw( float f );
-    public float getToolRenderAngle( TurtleSide side, float f );
+    public Vec3d getRenderOffset(float f);
+
+    public float getRenderYaw(float f);
+
+    public float getToolRenderAngle(TurtleSide side, float f);
 }

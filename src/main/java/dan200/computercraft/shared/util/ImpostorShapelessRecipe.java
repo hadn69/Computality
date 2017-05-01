@@ -14,22 +14,18 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ImpostorShapelessRecipe extends ShapelessRecipes
-{
-    public ImpostorShapelessRecipe( ItemStack result, Object[] ingredients )
-    {
-        super( result, new ArrayList(Arrays.asList( ingredients )));
+public class ImpostorShapelessRecipe extends ShapelessRecipes {
+    public ImpostorShapelessRecipe(ItemStack result, Object[] ingredients) {
+        super(result, new ArrayList(Arrays.asList(ingredients)));
     }
 
     @Override
-    public boolean matches( InventoryCrafting inv, World world )
-    {
+    public boolean matches(InventoryCrafting inv, World world) {
         return false;
     }
 
     @Override
-    public ItemStack getCraftingResult( InventoryCrafting _inventory )
-    {
+    public ItemStack getCraftingResult(InventoryCrafting _inventory) {
         return null;
     }
 }

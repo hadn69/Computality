@@ -11,9 +11,10 @@ import dan200.computercraft.shared.common.IDirectionalTile;
 import dan200.computercraft.shared.peripheral.PeripheralType;
 import net.minecraft.util.EnumFacing;
 
-public interface IPeripheralTile extends IDirectionalTile
-{
+public interface IPeripheralTile extends IDirectionalTile {
     public PeripheralType getPeripheralType();
-    public IPeripheral getPeripheral( EnumFacing side );
+
+    public IPeripheral getPeripheral(EnumFacing side);
+
     public String getLabel();
 }

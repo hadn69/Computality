@@ -15,76 +15,62 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
-public class TurtleEquipCommand implements ITurtleCommand
-{
+public class TurtleEquipCommand implements ITurtleCommand {
     private final TurtleSide m_side;
 
-    public TurtleEquipCommand( TurtleSide side )
-    {
+    public TurtleEquipCommand(TurtleSide side) {
         m_side = side;
     }
 
     @Override
-    public TurtleCommandResult execute( ITurtleAccess turtle )
-    {
+    public TurtleCommandResult execute(ITurtleAccess turtle) {
         // Determine the upgrade to equipLeft
         ITurtleUpgrade newUpgrade;
         ItemStack newUpgradeStack;
         IInventory inventory = turtle.getInventory();
-        ItemStack selectedStack = inventory.getStackInSlot( turtle.getSelectedSlot() );
-        if( selectedStack != null )
-        {
+        ItemStack selectedStack = inventory.getStackInSlot(turtle.getSelectedSlot());
+        if (selectedStack != null) {
             newUpgradeStack = selectedStack.copy();
-            newUpgrade = ComputerCraft.getTurtleUpgrade( newUpgradeStack );
-            if( newUpgrade == null || !CCTurtleProxyCommon.isUpgradeSuitableForFamily( ((TurtleBrain)turtle).getFamily(), newUpgrade ) )
-            {
-                return TurtleCommandResult.failure( "Not a valid upgrade" );
+            newUpgrade = ComputerCraft.getTurtleUpgrade(newUpgradeStack);
+            if (newUpgrade == null || !CCTurtleProxyCommon.isUpgradeSuitableForFamily(((TurtleBrain) turtle).getFamily(), newUpgrade)) {
+                return TurtleCommandResult.failure("Not a valid upgrade");
             }
-        }
-        else
-        {
+        } else {
             newUpgradeStack = null;
             newUpgrade = null;
         }
 
         // Determine the upgrade to replace
         ItemStack oldUpgradeStack;
-        ITurtleUpgrade oldUpgrade = turtle.getUpgrade( m_side );
-        if( oldUpgrade != null )
-        {
+        ITurtleUpgrade oldUpgrade = turtle.getUpgrade(m_side);
+        if (oldUpgrade != null) {
             ItemStack craftingItem = oldUpgrade.getCraftingItem();
             oldUpgradeStack = (craftingItem != null) ? craftingItem.copy() : null;
-        }
-        else
-        {
+        } else {
             oldUpgradeStack = null;
         }
 
         // Do the swapping:
-        if( newUpgradeStack != null )
-        {
+        if (newUpgradeStack != null) {
             // Consume new upgrades item
-            InventoryUtil.takeItems( 1, inventory, turtle.getSelectedSlot(), 1, turtle.getSelectedSlot() );
+            InventoryUtil.takeItems(1, inventory, turtle.getSelectedSlot(), 1, turtle.getSelectedSlot());
             inventory.markDirty();
         }
-        if( oldUpgradeStack != null )
-        {
+        if (oldUpgradeStack != null) {
             // Store old upgrades item
-            ItemStack remainder = InventoryUtil.storeItems( oldUpgradeStack, inventory, 0, inventory.getSizeInventory(), turtle.getSelectedSlot() );
-            if( remainder != null )
-            {
+            ItemStack remainder = InventoryUtil.storeItems(oldUpgradeStack, inventory, 0, inventory.getSizeInventory(), turtle.getSelectedSlot());
+            if (remainder != null) {
                 // If there's no room for the items, drop them
                 BlockPos position = turtle.getPosition();
-                WorldUtil.dropItemStack( remainder, turtle.getWorld(), position, turtle.getDirection() );
+                WorldUtil.dropItemStack(remainder, turtle.getWorld(), position, turtle.getDirection());
             }
             inventory.markDirty();
         }
-        turtle.setUpgrade( m_side, newUpgrade );
+        turtle.setUpgrade(m_side, newUpgrade);
 
         // Animate
-        if( newUpgrade != null || oldUpgrade != null )
-        {
-            turtle.playAnimation( TurtleAnimation.Wait );
+        if (newUpgrade != null || oldUpgrade != null) {
+            turtle.playAnimation(TurtleAnimation.Wait);
         }
 
         return TurtleCommandResult.success();

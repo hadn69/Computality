@@ -8,28 +8,24 @@ package dan200.computercraft.shared.computer.blocks;
 
 import net.minecraft.util.IStringSerializable;
 
-public enum ComputerState implements IStringSerializable
-{
-    Off( "off" ),
-    On( "on" ),
-    Blinking( "blinking" );
+public enum ComputerState implements IStringSerializable {
+    Off("off"),
+    On("on"),
+    Blinking("blinking");
 
     private String m_name;
 
-    private ComputerState( String name )
-    {
+    private ComputerState(String name) {
         m_name = name;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return m_name;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return getName();
     }
 }

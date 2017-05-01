@@ -9,16 +9,13 @@ package dan200.computercraft.shared.turtle.upgrades;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
-public class TurtleAxe extends TurtleTool
-{
-    public TurtleAxe( ResourceLocation id, int legacyId, String adjective, Item item )
-    {
-        super( id, legacyId, adjective, item );
+public class TurtleAxe extends TurtleTool {
+    public TurtleAxe(ResourceLocation id, int legacyId, String adjective, Item item) {
+        super(id, legacyId, adjective, item);
     }
 
     @Override
-    protected float getDamageMultiplier()
-    {
+    protected float getDamageMultiplier() {
         return 6.0f;
     }
 }

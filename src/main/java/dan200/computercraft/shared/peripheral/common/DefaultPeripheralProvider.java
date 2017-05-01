@@ -12,43 +12,33 @@ import dan200.computercraft.shared.computer.blocks.ComputerPeripheral;
 import dan200.computercraft.shared.computer.blocks.TileComputerBase;
 import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class DefaultPeripheralProvider implements IPeripheralProvider
-{
-    public DefaultPeripheralProvider()
-    {
+public class DefaultPeripheralProvider implements IPeripheralProvider {
+    public DefaultPeripheralProvider() {
     }
 
     @Override
-    public IPeripheral getPeripheral( World world, BlockPos pos, EnumFacing side )
-    {
-        TileEntity tile = world.getTileEntity( pos );
-        if( tile != null )
-        {
+    public IPeripheral getPeripheral(World world, BlockPos pos, EnumFacing side) {
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile != null) {
             // Handle our peripherals
-            if( tile instanceof IPeripheralTile )
-            {
-                IPeripheralTile peripheralTile = (IPeripheralTile)tile;
-                return peripheralTile.getPeripheral( side );
+            if (tile instanceof IPeripheralTile) {
+                IPeripheralTile peripheralTile = (IPeripheralTile) tile;
+                return peripheralTile.getPeripheral(side);
             }
 
             // Handle our computers
-            if( tile instanceof TileComputerBase )
-            {
-                TileComputerBase computerTile = (TileComputerBase)tile;
-                if( tile instanceof TileTurtle )
-                {
-                    if( !((TileTurtle)tile).hasMoved() )
-                    {
-                        return new ComputerPeripheral( "turtle", computerTile.createServerComputer() );
+            if (tile instanceof TileComputerBase) {
+                TileComputerBase computerTile = (TileComputerBase) tile;
+                if (tile instanceof TileTurtle) {
+                    if (!((TileTurtle) tile).hasMoved()) {
+                        return new ComputerPeripheral("turtle", computerTile.createServerComputer());
                     }
-                }
-                else
-                {
-                    return new ComputerPeripheral( "computer", computerTile.createServerComputer() );
+                } else {
+                    return new ComputerPeripheral("computer", computerTile.createServerComputer());
                 }
             }
         }

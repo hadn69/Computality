@@ -8,6 +8,7 @@ package dan200.computercraft.shared.proxy;
 
 import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.api.ComputerCraftAPI;
+import dan200.computercraft.core.computer.Computer;
 import dan200.computercraft.core.computer.MainThread;
 import dan200.computercraft.shared.common.DefaultBundledRedstoneProvider;
 import dan200.computercraft.shared.common.TileGeneric;
@@ -82,23 +83,19 @@ import net.minecraftforge.oredict.RecipeSorter;
 
 import java.io.File;
 
-public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
-{
-    public ComputerCraftProxyCommon()
-    {
+public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy {
+    public ComputerCraftProxyCommon() {
     }
 
     // IComputerCraftProxy implementation
 
     @Override
-    public void preInit()
-    {
+    public void preInit() {
         registerItems();
     }
 
     @Override
-    public void init()
-    {
+    public void init() {
         registerTileEntities();
         registerForgeHandlers();
     }
@@ -113,76 +110,65 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
     public abstract long getRenderFrame();
 
     @Override
-    public void deleteDisplayLists( int list, int range )
-    {
+    public void deleteDisplayLists(int list, int range) {
     }
 
     @Override
     public abstract Object getFixedWidthFontRenderer();
 
     @Override
-    public String getRecordInfo( ItemStack recordStack )
-    {
+    public String getRecordInfo(ItemStack recordStack) {
         Item item = recordStack.getItem();
-        if (item instanceof ItemRecord)
-        {
+        if (item instanceof ItemRecord) {
             ItemRecord record = (ItemRecord) item;
-            String key = ObfuscationReflectionHelper.getPrivateValue( ItemRecord.class, record, "field_185077_c" );
-            return I18n.translateToLocal( key );
+            String key = ObfuscationReflectionHelper.getPrivateValue(ItemRecord.class, record, "field_185077_c");
+            return I18n.translateToLocal(key);
         }
         return null;
     }
 
     @Override
-    public abstract void playRecord( SoundEvent record, String recordInfo, World world, BlockPos pos );
+    public abstract void playRecord(SoundEvent record, String recordInfo, World world, BlockPos pos);
 
     @Override
-    public abstract Object getDiskDriveGUI( InventoryPlayer inventory, TileDiskDrive drive );
+    public abstract Object getDiskDriveGUI(InventoryPlayer inventory, TileDiskDrive drive);
 
     @Override
-    public abstract Object getComputerGUI( TileComputer computer );
+    public abstract Object getComputerGUI(TileComputer computer);
 
     @Override
-    public abstract Object getPrinterGUI( InventoryPlayer inventory, TilePrinter printer );
+    public abstract Object getPrinterGUI(InventoryPlayer inventory, TilePrinter printer);
 
     @Override
-    public abstract Object getTurtleGUI( InventoryPlayer inventory, TileTurtle turtle );
+    public abstract Object getTurtleGUI(InventoryPlayer inventory, TileTurtle turtle);
 
     @Override
-    public abstract Object getPrintoutGUI( EntityPlayer player, EnumHand hand );
+    public abstract Object getPrintoutGUI(EntityPlayer player, EnumHand hand);
 
     @Override
-    public abstract Object getPocketComputerGUI( EntityPlayer player, EnumHand hand );
+    public abstract Object getPocketComputerGUI(EntityPlayer player, EnumHand hand);
 
-    public abstract File getWorldDir( World world );
+    public abstract File getWorldDir(World world);
 
     @Override
-    public void handlePacket( final ComputerCraftPacket packet, final EntityPlayer player )
-    {
+    public void handlePacket(final ComputerCraftPacket packet, final EntityPlayer player) {
         IThreadListener listener = player.getServer();
-        if (listener != null)
-        {
-            if (listener.isCallingFromMinecraftThread())
-            {
-                processPacket( packet, player );
-            } else
-            {
-                listener.addScheduledTask( new Runnable()
-                {
+        if (listener != null) {
+            if (listener.isCallingFromMinecraftThread()) {
+                processPacket(packet, player);
+            } else {
+                listener.addScheduledTask(new Runnable() {
                     @Override
-                    public void run()
-                    {
-                        processPacket( packet, player );
+                    public void run() {
+                        processPacket(packet, player);
                     }
-                } );
+                });
             }
         }
     }
 
-    private void processPacket( ComputerCraftPacket packet, EntityPlayer player )
-    {
-        switch (packet.m_packetType)
-        {
+    private void processPacket(ComputerCraftPacket packet, EntityPlayer player) {
+        switch (packet.m_packetType) {
             ///////////////////////////////////
             // Packets from Client to Server //
             ///////////////////////////////////
@@ -191,31 +177,26 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
             case ComputerCraftPacket.Reboot:
             case ComputerCraftPacket.QueueEvent:
             case ComputerCraftPacket.RequestComputerUpdate:
-            case ComputerCraftPacket.SetLabel:
-            {
+            case ComputerCraftPacket.SetLabel: {
                 int instance = packet.m_dataInt[0];
-                ServerComputer computer = ComputerCraft.serverComputerRegistry.get( instance );
-                if (computer != null)
-                {
-                    computer.handlePacket( packet, player );
+                ServerComputer computer = ComputerCraft.serverComputerRegistry.get(instance);
+                if (computer != null) {
+                    computer.handlePacket(packet, player);
                 }
                 break;
             }
-            case ComputerCraftPacket.RequestTileEntityUpdate:
-            {
+            case ComputerCraftPacket.RequestTileEntityUpdate: {
                 int x = packet.m_dataInt[0];
                 int y = packet.m_dataInt[1];
                 int z = packet.m_dataInt[2];
-                BlockPos pos = new BlockPos( x, y, z );
+                BlockPos pos = new BlockPos(x, y, z);
                 World world = player.getEntityWorld();
-                TileEntity tileEntity = world.getTileEntity( pos );
-                if (tileEntity != null && tileEntity instanceof TileGeneric)
-                {
+                TileEntity tileEntity = world.getTileEntity(pos);
+                if (tileEntity != null && tileEntity instanceof TileGeneric) {
                     TileGeneric generic = (TileGeneric) tileEntity;
                     Packet description = generic.getUpdatePacket();
-                    if (description != null)
-                    {
-                        ((EntityPlayerMP) player).connection.sendPacket( description );
+                    if (description != null) {
+                        ((EntityPlayerMP) player).connection.sendPacket(description);
                     }
                 }
                 break;
@@ -223,63 +204,77 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
         }
     }
 
-    private void registerItems()
-    {
+    private void registerItems() {
         // Creative tab
-        ComputerCraft.mainCreativeTab = new CreativeTabMain( CreativeTabs.getNextID() );
+        ComputerCraft.mainCreativeTab = new CreativeTabMain(CreativeTabs.getNextID());
 
         // Blocks
         // Computer
         ComputerCraft.Blocks.computer = new BlockComputer();
-        GameRegistry.registerBlock( ComputerCraft.Blocks.computer, ItemComputer.class, "CC-Computer" );
+        ComputerCraft.Blocks.computer.setRegistryName("computer");
+        GameRegistry.register(ComputerCraft.Blocks.computer);
+        GameRegistry.register(new ItemComputer(ComputerCraft.Blocks.computer).setRegistryName("computer"));
 
         // Peripheral
         ComputerCraft.Blocks.peripheral = new BlockPeripheral();
-        GameRegistry.registerBlock( ComputerCraft.Blocks.peripheral, ItemPeripheral.class, "CC-Peripheral" );
+        ComputerCraft.Blocks.peripheral.setRegistryName("peripheral");
+        GameRegistry.register(ComputerCraft.Blocks.peripheral);
+        GameRegistry.register(new ItemPeripheral(ComputerCraft.Blocks.peripheral).setRegistryName("peripheral"));
 
         // Cable
         ComputerCraft.Blocks.cable = new BlockCable();
-        GameRegistry.registerBlock( ComputerCraft.Blocks.cable, ItemCable.class, "CC-Cable" );
+        ComputerCraft.Blocks.cable.setRegistryName("cable");
+        GameRegistry.register(ComputerCraft.Blocks.cable);
+        GameRegistry.register(new ItemCable(ComputerCraft.Blocks.cable).setRegistryName("cable"));
 
         // Command Computer
         ComputerCraft.Blocks.commandComputer = new BlockCommandComputer();
-        GameRegistry.registerBlock( ComputerCraft.Blocks.commandComputer, ItemCommandComputer.class, "command_computer" );
+        ComputerCraft.Blocks.commandComputer.setRegistryName("command_computer");
+        GameRegistry.register(ComputerCraft.Blocks.commandComputer);
+        GameRegistry.register(new ItemCommandComputer(ComputerCraft.Blocks.commandComputer).setRegistryName("command_computer"));
 
         // Command Computer
         ComputerCraft.Blocks.advancedModem = new BlockAdvancedModem();
-        GameRegistry.registerBlock( ComputerCraft.Blocks.advancedModem, ItemAdvancedModem.class, "advanced_modem" );
+        ComputerCraft.Blocks.advancedModem.setRegistryName("advanced_modem");
+        GameRegistry.register(ComputerCraft.Blocks.advancedModem);
+        GameRegistry.register(new ItemAdvancedModem(ComputerCraft.Blocks.advancedModem).setRegistryName("advanced_modem"));
 
         // Items
         // Floppy Disk
         ComputerCraft.Items.disk = new ItemDiskLegacy();
-        GameRegistry.registerItem( ComputerCraft.Items.disk, "disk" );
+        ComputerCraft.Items.disk.setRegistryName("disk");
+        GameRegistry.register(ComputerCraft.Items.disk);
 
         ComputerCraft.Items.diskExpanded = new ItemDiskExpanded();
-        GameRegistry.registerItem( ComputerCraft.Items.diskExpanded, "diskExpanded" );
+        ComputerCraft.Items.diskExpanded.setRegistryName("disk_expanded");
+        GameRegistry.register(ComputerCraft.Items.diskExpanded);
 
         // Treasure Disk
         ComputerCraft.Items.treasureDisk = new ItemTreasureDisk();
-        GameRegistry.registerItem( ComputerCraft.Items.treasureDisk, "treasureDisk" );
+        ComputerCraft.Items.treasureDisk.setRegistryName("disk_treasure");
+        GameRegistry.register(ComputerCraft.Items.treasureDisk);
 
         // Printout
         ComputerCraft.Items.printout = new ItemPrintout();
-        GameRegistry.registerItem( ComputerCraft.Items.printout, "printout" );
+        ComputerCraft.Items.printout.setRegistryName("printout");
+        GameRegistry.register(ComputerCraft.Items.printout);
 
         // Pocket computer
         ComputerCraft.Items.pocketComputer = new ItemPocketComputer();
-        GameRegistry.registerItem( ComputerCraft.Items.pocketComputer, "pocketComputer" );
+        ComputerCraft.Items.pocketComputer.setRegistryName("computer_pocket");
+        GameRegistry.register(ComputerCraft.Items.pocketComputer);
 
         // Recipe types
-        RecipeSorter.register( "computercraft:impostor", ImpostorRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shapeless" );
-        RecipeSorter.register( "computercraft:impostor_shapeless", ImpostorShapelessRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless" );
-        RecipeSorter.register( "computercraft:disk", DiskRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless" );
-        RecipeSorter.register( "computercraft:printout", PrintoutRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless" );
-        RecipeSorter.register( "computercraft:pocket_computer_upgrade", PocketComputerUpgradeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless" );
+        RecipeSorter.register("computercraft:impostor", ImpostorRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shapeless");
+        RecipeSorter.register("computercraft:impostor_shapeless", ImpostorShapelessRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+        RecipeSorter.register("computercraft:disk", DiskRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+        RecipeSorter.register("computercraft:printout", PrintoutRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+        RecipeSorter.register("computercraft:pocket_computer_upgrade", PocketComputerUpgradeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 
         // Recipes
         // Computer
-        ItemStack computer = ComputerItemFactory.create( -1, null, ComputerFamily.Normal );
-        GameRegistry.addRecipe( computer,
+        ItemStack computer = ComputerItemFactory.create(-1, null, ComputerFamily.Normal);
+        GameRegistry.addRecipe(computer,
                 "XXX", "XYX", "XZX",
                 'X', Blocks.STONE,
                 'Y', Items.REDSTONE,
@@ -287,8 +282,8 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
         );
 
         // Advanced Computer
-        ItemStack advancedComputer = ComputerItemFactory.create( -1, null, ComputerFamily.Advanced );
-        GameRegistry.addRecipe( advancedComputer,
+        ItemStack advancedComputer = ComputerItemFactory.create(-1, null, ComputerFamily.Advanced);
+        GameRegistry.addRecipe(advancedComputer,
                 "XXX", "XYX", "XZX",
                 'X', Items.GOLD_INGOT,
                 'Y', Items.REDSTONE,
@@ -296,65 +291,65 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
         );
 
         // Disk Drive
-        ItemStack diskDrive = PeripheralItemFactory.create( PeripheralType.DiskDrive, null, 1 );
-        GameRegistry.addRecipe( diskDrive,
+        ItemStack diskDrive = PeripheralItemFactory.create(PeripheralType.DiskDrive, null, 1);
+        GameRegistry.addRecipe(diskDrive,
                 "XXX", "XYX", "XYX",
                 'X', Blocks.STONE,
                 'Y', Items.REDSTONE
         );
 
         // Wireless Modem
-        ItemStack wirelessModem = PeripheralItemFactory.create( PeripheralType.WirelessModem, null, 1 );
-        GameRegistry.addRecipe( wirelessModem,
+        ItemStack wirelessModem = PeripheralItemFactory.create(PeripheralType.WirelessModem, null, 1);
+        GameRegistry.addRecipe(wirelessModem,
                 "XXX", "XYX", "XXX",
                 'X', Blocks.STONE,
                 'Y', Items.ENDER_PEARL
         );
 
         // Monitor
-        ItemStack monitor = PeripheralItemFactory.create( PeripheralType.Monitor, null, 1 );
-        GameRegistry.addRecipe( monitor,
+        ItemStack monitor = PeripheralItemFactory.create(PeripheralType.Monitor, null, 1);
+        GameRegistry.addRecipe(monitor,
                 "XXX", "XYX", "XXX",
                 'X', Blocks.STONE,
                 'Y', Blocks.GLASS_PANE
         );
 
         // PrinterEmpty
-        ItemStack printer = PeripheralItemFactory.create( PeripheralType.Printer, null, 1 );
-        GameRegistry.addRecipe( printer,
+        ItemStack printer = PeripheralItemFactory.create(PeripheralType.Printer, null, 1);
+        GameRegistry.addRecipe(printer,
                 "XXX", "XYX", "XZX",
                 'X', Blocks.STONE,
                 'Y', Items.REDSTONE,
-                'Z', new ItemStack( Items.DYE, 1, 0 ) // 0 = Black
+                'Z', new ItemStack(Items.DYE, 1, 0) // 0 = Black
         );
 
         // Advanced Monitor
-        ItemStack advancedMonitors = PeripheralItemFactory.create( PeripheralType.AdvancedMonitor, null, 4 );
-        GameRegistry.addRecipe( advancedMonitors,
+        ItemStack advancedMonitors = PeripheralItemFactory.create(PeripheralType.AdvancedMonitor, null, 4);
+        GameRegistry.addRecipe(advancedMonitors,
                 "XXX", "XYX", "XXX",
                 'X', Items.GOLD_INGOT,
                 'Y', Blocks.GLASS_PANE
         );
 
         // Networking Cable
-        ItemStack cable = PeripheralItemFactory.create( PeripheralType.Cable, null, 6 );
-        GameRegistry.addRecipe( cable,
+        ItemStack cable = PeripheralItemFactory.create(PeripheralType.Cable, null, 6);
+        GameRegistry.addRecipe(cable,
                 " X ", "XYX", " X ",
                 'X', Blocks.STONE,
                 'Y', Items.REDSTONE
         );
 
         // Wired Modem
-        ItemStack wiredModem = PeripheralItemFactory.create( PeripheralType.WiredModem, null, 1 );
-        GameRegistry.addRecipe( wiredModem,
+        ItemStack wiredModem = PeripheralItemFactory.create(PeripheralType.WiredModem, null, 1);
+        GameRegistry.addRecipe(wiredModem,
                 "XXX", "XYX", "XXX",
                 'X', Blocks.STONE,
                 'Y', Items.REDSTONE
         );
 
         // Computer
-        ItemStack commandComputer = ComputerItemFactory.create( -1, null, ComputerFamily.Command );
-        GameRegistry.addRecipe( commandComputer,
+        ItemStack commandComputer = ComputerItemFactory.create(-1, null, ComputerFamily.Command);
+        GameRegistry.addRecipe(commandComputer,
                 "XXX", "XYX", "XZX",
                 'X', Blocks.STONE,
                 'Y', Blocks.COMMAND_BLOCK,
@@ -362,58 +357,55 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
         );
 
         // Advanced Modem
-        ItemStack advancedModem = PeripheralItemFactory.create( PeripheralType.AdvancedModem, null, 1 );
-        GameRegistry.addRecipe( advancedModem,
+        ItemStack advancedModem = PeripheralItemFactory.create(PeripheralType.AdvancedModem, null, 1);
+        GameRegistry.addRecipe(advancedModem,
                 "XXX", "XYX", "XXX",
                 'X', Items.GOLD_INGOT,
                 'Y', Items.ENDER_EYE
         );
 
         // Disk
-        GameRegistry.addRecipe( new DiskRecipe() );
+        GameRegistry.addRecipe(new DiskRecipe());
 
         // Impostor Disk recipes (to fool NEI)
-        ItemStack paper = new ItemStack( Items.PAPER, 1 );
-        ItemStack redstone = new ItemStack( Items.REDSTONE, 1 );
-        ItemStack basicDisk = ItemDiskLegacy.createFromIDAndColour( -1, null, Colour.Blue.getHex() );
-        GameRegistry.addRecipe( new ImpostorShapelessRecipe( basicDisk, new Object[]{redstone, paper} ) );
+        ItemStack paper = new ItemStack(Items.PAPER, 1);
+        ItemStack redstone = new ItemStack(Items.REDSTONE, 1);
+        ItemStack basicDisk = ItemDiskLegacy.createFromIDAndColour(-1, null, Colour.Blue.getHex());
+        GameRegistry.addRecipe(new ImpostorShapelessRecipe(basicDisk, new Object[]{redstone, paper}));
 
-        for (int colour = 0; colour < 16; ++colour)
-        {
-            ItemStack disk = ItemDiskLegacy.createFromIDAndColour( -1, null, Colour.values()[colour].getHex() );
-            ItemStack dye = new ItemStack( Items.DYE, 1, colour );
-            for (int otherColour = 0; otherColour < 16; ++otherColour)
-            {
-                if (colour != otherColour)
-                {
-                    ItemStack otherDisk = ItemDiskLegacy.createFromIDAndColour( -1, null, Colour.values()[colour].getHex() );
-                    GameRegistry.addRecipe( new ImpostorShapelessRecipe( disk, new Object[]{
+        for (int colour = 0; colour < 16; ++colour) {
+            ItemStack disk = ItemDiskLegacy.createFromIDAndColour(-1, null, Colour.values()[colour].getHex());
+            ItemStack dye = new ItemStack(Items.DYE, 1, colour);
+            for (int otherColour = 0; otherColour < 16; ++otherColour) {
+                if (colour != otherColour) {
+                    ItemStack otherDisk = ItemDiskLegacy.createFromIDAndColour(-1, null, Colour.values()[colour].getHex());
+                    GameRegistry.addRecipe(new ImpostorShapelessRecipe(disk, new Object[]{
                             otherDisk, dye
-                    } ) );
+                    }));
                 }
             }
-            GameRegistry.addRecipe( new ImpostorShapelessRecipe( disk, new Object[]{
+            GameRegistry.addRecipe(new ImpostorShapelessRecipe(disk, new Object[]{
                     redstone, paper, dye
-            } ) );
+            }));
         }
 
         // Printout
-        GameRegistry.addRecipe( new PrintoutRecipe() );
+        GameRegistry.addRecipe(new PrintoutRecipe());
 
-        ItemStack singlePrintout = ItemPrintout.createSingleFromTitleAndText( null, null, null );
-        ItemStack multiplePrintout = ItemPrintout.createMultipleFromTitleAndText( null, null, null );
-        ItemStack bookPrintout = ItemPrintout.createBookFromTitleAndText( null, null, null );
+        ItemStack singlePrintout = ItemPrintout.createSingleFromTitleAndText(null, null, null);
+        ItemStack multiplePrintout = ItemPrintout.createMultipleFromTitleAndText(null, null, null);
+        ItemStack bookPrintout = ItemPrintout.createBookFromTitleAndText(null, null, null);
 
         // Impostor Printout recipes (to fool NEI)
-        ItemStack string = new ItemStack( Items.STRING, 1, 0 );
-        GameRegistry.addRecipe( new ImpostorShapelessRecipe( multiplePrintout, new Object[]{singlePrintout, singlePrintout, string} ) );
+        ItemStack string = new ItemStack(Items.STRING, 1, 0);
+        GameRegistry.addRecipe(new ImpostorShapelessRecipe(multiplePrintout, new Object[]{singlePrintout, singlePrintout, string}));
 
-        ItemStack leather = new ItemStack( Items.LEATHER, 1, 0 );
-        GameRegistry.addRecipe( new ImpostorShapelessRecipe( bookPrintout, new Object[]{leather, singlePrintout, string} ) );
+        ItemStack leather = new ItemStack(Items.LEATHER, 1, 0);
+        GameRegistry.addRecipe(new ImpostorShapelessRecipe(bookPrintout, new Object[]{leather, singlePrintout, string}));
 
         // Pocket Computer
-        ItemStack pocketComputer = PocketComputerItemFactory.create( -1, null, ComputerFamily.Normal, false );
-        GameRegistry.addRecipe( pocketComputer,
+        ItemStack pocketComputer = PocketComputerItemFactory.create(-1, null, ComputerFamily.Normal, false);
+        GameRegistry.addRecipe(pocketComputer,
                 "XXX", "XYX", "XZX",
                 'X', Blocks.STONE,
                 'Y', Items.GOLDEN_APPLE,
@@ -421,8 +413,8 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
         );
 
         // Advanced Pocket Computer
-        ItemStack advancedPocketComputer = PocketComputerItemFactory.create( -1, null, ComputerFamily.Advanced, false );
-        GameRegistry.addRecipe( advancedPocketComputer,
+        ItemStack advancedPocketComputer = PocketComputerItemFactory.create(-1, null, ComputerFamily.Advanced, false);
+        GameRegistry.addRecipe(advancedPocketComputer,
                 "XXX", "XYX", "XZX",
                 'X', Items.GOLD_INGOT,
                 'Y', Items.GOLDEN_APPLE,
@@ -430,185 +422,156 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
         );
 
         // Wireless Pocket Computer
-        ItemStack wirelessPocketComputer = PocketComputerItemFactory.create( -1, null, ComputerFamily.Normal, true );
-        GameRegistry.addRecipe( new PocketComputerUpgradeRecipe() );
+        ItemStack wirelessPocketComputer = PocketComputerItemFactory.create(-1, null, ComputerFamily.Normal, true);
+        GameRegistry.addRecipe(new PocketComputerUpgradeRecipe());
 
         // Advanced Wireless Pocket Computer
-        ItemStack advancedWirelessPocketComputer = PocketComputerItemFactory.create( -1, null, ComputerFamily.Advanced, true );
+        ItemStack advancedWirelessPocketComputer = PocketComputerItemFactory.create(-1, null, ComputerFamily.Advanced, true);
 
         // Impostor Pocket Computer recipes (to fool NEI)
-        GameRegistry.addRecipe( new ImpostorRecipe( 1, 2, new ItemStack[]{wirelessModem, pocketComputer}, wirelessPocketComputer ) );
-        GameRegistry.addRecipe( new ImpostorRecipe( 1, 2, new ItemStack[]{wirelessModem, advancedPocketComputer}, advancedWirelessPocketComputer ) );
+        GameRegistry.addRecipe(new ImpostorRecipe(1, 2, new ItemStack[]{wirelessModem, pocketComputer}, wirelessPocketComputer));
+        GameRegistry.addRecipe(new ImpostorRecipe(1, 2, new ItemStack[]{wirelessModem, advancedPocketComputer}, advancedWirelessPocketComputer));
 
         // Skulls (Easter Egg)
         // Dan
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setString( "SkullOwner", "dan200" );
-        ItemStack danHead = new ItemStack( Items.SKULL, 1, 3 );
-        danHead.setTagCompound( tag );
-        GameRegistry.addShapelessRecipe( danHead, computer, new ItemStack( Items.SKULL, 1, 1 ) );
+        tag.setString("SkullOwner", "dan200");
+        ItemStack danHead = new ItemStack(Items.SKULL, 1, 3);
+        danHead.setTagCompound(tag);
+        GameRegistry.addShapelessRecipe(danHead, computer, new ItemStack(Items.SKULL, 1, 1));
 
         // Cloudy
         tag = new NBTTagCompound();
-        tag.setString( "SkullOwner", "Cloudhunter" );
-        ItemStack cloudyHead = new ItemStack( Items.SKULL, 1, 3 );
-        cloudyHead.setTagCompound( tag );
-        GameRegistry.addShapelessRecipe( cloudyHead, monitor, new ItemStack( Items.SKULL, 1, 1 ) );
+        tag.setString("SkullOwner", "Cloudhunter");
+        ItemStack cloudyHead = new ItemStack(Items.SKULL, 1, 3);
+        cloudyHead.setTagCompound(tag);
+        GameRegistry.addShapelessRecipe(cloudyHead, monitor, new ItemStack(Items.SKULL, 1, 1));
     }
 
-    private void registerTileEntities()
-    {
+    private void registerTileEntities() {
         // Tile Entities
-        GameRegistry.registerTileEntity( TileComputer.class, "computer" );
-        GameRegistry.registerTileEntity( TileDiskDrive.class, "diskdrive" );
-        GameRegistry.registerTileEntity( TileWirelessModem.class, "wirelessmodem" );
-        GameRegistry.registerTileEntity( TileMonitor.class, "monitor" );
-        GameRegistry.registerTileEntity( TilePrinter.class, "ccprinter" );
-        GameRegistry.registerTileEntity( TileCable.class, "wiredmodem" );
-        GameRegistry.registerTileEntity( TileCommandComputer.class, "command_computer" );
-        GameRegistry.registerTileEntity( TileAdvancedModem.class, "advanced_modem" );
+        GameRegistry.registerTileEntity(TileComputer.class, "computer");
+        GameRegistry.registerTileEntity(TileDiskDrive.class, "diskdrive");
+        GameRegistry.registerTileEntity(TileWirelessModem.class, "wirelessmodem");
+        GameRegistry.registerTileEntity(TileMonitor.class, "monitor");
+        GameRegistry.registerTileEntity(TilePrinter.class, "ccprinter");
+        GameRegistry.registerTileEntity(TileCable.class, "wiredmodem");
+        GameRegistry.registerTileEntity(TileCommandComputer.class, "command_computer");
+        GameRegistry.registerTileEntity(TileAdvancedModem.class, "advanced_modem");
 
         // Register peripheral providers
-        ComputerCraftAPI.registerPeripheralProvider( new DefaultPeripheralProvider() );
-        if (ComputerCraft.enableCommandBlock)
-        {
-            ComputerCraftAPI.registerPeripheralProvider( new CommandBlockPeripheralProvider() );
+        ComputerCraftAPI.registerPeripheralProvider(new DefaultPeripheralProvider());
+        if (ComputerCraft.enableCommandBlock) {
+            ComputerCraftAPI.registerPeripheralProvider(new CommandBlockPeripheralProvider());
         }
 
         // Register bundled power providers
-        ComputerCraftAPI.registerBundledRedstoneProvider( new DefaultBundledRedstoneProvider() );
+        ComputerCraftAPI.registerBundledRedstoneProvider(new DefaultBundledRedstoneProvider());
 
         // Register media providers
-        ComputerCraftAPI.registerMediaProvider( new DefaultMediaProvider() );
+        ComputerCraftAPI.registerMediaProvider(new DefaultMediaProvider());
     }
 
-    private void registerForgeHandlers()
-    {
+    private void registerForgeHandlers() {
         ForgeHandlers handlers = new ForgeHandlers();
-        MinecraftForge.EVENT_BUS.register( handlers );
-        NetworkRegistry.INSTANCE.registerGuiHandler( ComputerCraft.instance, handlers );
+        MinecraftForge.EVENT_BUS.register(handlers);
+        NetworkRegistry.INSTANCE.registerGuiHandler(ComputerCraft.instance, handlers);
     }
 
     public class ForgeHandlers implements
-            IGuiHandler
-    {
-        private ForgeHandlers()
-        {
+            IGuiHandler {
+        private ForgeHandlers() {
         }
 
         // IGuiHandler implementation
 
         @Override
-        public Object getServerGuiElement( int id, EntityPlayer player, World world, int x, int y, int z )
-        {
-            BlockPos pos = new BlockPos( x, y, z );
-            switch (id)
-            {
-                case ComputerCraft.diskDriveGUIID:
-                {
-                    TileEntity tile = world.getTileEntity( pos );
-                    if (tile != null && tile instanceof TileDiskDrive)
-                    {
+        public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+            BlockPos pos = new BlockPos(x, y, z);
+            switch (id) {
+                case ComputerCraft.diskDriveGUIID: {
+                    TileEntity tile = world.getTileEntity(pos);
+                    if (tile != null && tile instanceof TileDiskDrive) {
                         TileDiskDrive drive = (TileDiskDrive) tile;
-                        return new ContainerDiskDrive( player.inventory, drive );
+                        return new ContainerDiskDrive(player.inventory, drive);
                     }
                     break;
                 }
-                case ComputerCraft.computerGUIID:
-                {
-                    TileEntity tile = world.getTileEntity( pos );
-                    if (tile != null && tile instanceof TileComputer)
-                    {
+                case ComputerCraft.computerGUIID: {
+                    TileEntity tile = world.getTileEntity(pos);
+                    if (tile != null && tile instanceof TileComputer) {
                         TileComputer computer = (TileComputer) tile;
-                        return new ContainerComputer( computer );
+                        return new ContainerComputer(computer);
                     }
                     break;
                 }
-                case ComputerCraft.printerGUIID:
-                {
-                    TileEntity tile = world.getTileEntity( pos );
-                    if (tile != null && tile instanceof TilePrinter)
-                    {
+                case ComputerCraft.printerGUIID: {
+                    TileEntity tile = world.getTileEntity(pos);
+                    if (tile != null && tile instanceof TilePrinter) {
                         TilePrinter printer = (TilePrinter) tile;
-                        return new ContainerPrinter( player.inventory, printer );
+                        return new ContainerPrinter(player.inventory, printer);
                     }
                     break;
                 }
-                case ComputerCraft.turtleGUIID:
-                {
-                    TileEntity tile = world.getTileEntity( pos );
-                    if (tile != null && tile instanceof TileTurtle)
-                    {
+                case ComputerCraft.turtleGUIID: {
+                    TileEntity tile = world.getTileEntity(pos);
+                    if (tile != null && tile instanceof TileTurtle) {
                         TileTurtle turtle = (TileTurtle) tile;
-                        return new ContainerTurtle( player.inventory, turtle.getAccess() );
+                        return new ContainerTurtle(player.inventory, turtle.getAccess());
                     }
                     break;
                 }
-                case ComputerCraft.printoutGUIID:
-                {
-                    return new ContainerHeldItem( player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.MAIN_HAND );
+                case ComputerCraft.printoutGUIID: {
+                    return new ContainerHeldItem(player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.MAIN_HAND);
                 }
-                case ComputerCraft.pocketComputerGUIID:
-                {
-                    return new ContainerHeldItem( player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND );
+                case ComputerCraft.pocketComputerGUIID: {
+                    return new ContainerHeldItem(player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                 }
             }
             return null;
         }
 
         @Override
-        public Object getClientGuiElement( int id, EntityPlayer player, World world, int x, int y, int z )
-        {
-            BlockPos pos = new BlockPos( x, y, z );
-            switch (id)
-            {
-                case ComputerCraft.diskDriveGUIID:
-                {
-                    TileEntity tile = world.getTileEntity( pos );
-                    if (tile != null && tile instanceof TileDiskDrive)
-                    {
+        public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+            BlockPos pos = new BlockPos(x, y, z);
+            switch (id) {
+                case ComputerCraft.diskDriveGUIID: {
+                    TileEntity tile = world.getTileEntity(pos);
+                    if (tile != null && tile instanceof TileDiskDrive) {
                         TileDiskDrive drive = (TileDiskDrive) tile;
-                        return getDiskDriveGUI( player.inventory, drive );
+                        return getDiskDriveGUI(player.inventory, drive);
                     }
                     break;
                 }
-                case ComputerCraft.computerGUIID:
-                {
-                    TileEntity tile = world.getTileEntity( pos );
-                    if (tile != null && tile instanceof TileComputer)
-                    {
+                case ComputerCraft.computerGUIID: {
+                    TileEntity tile = world.getTileEntity(pos);
+                    if (tile != null && tile instanceof TileComputer) {
                         TileComputer computer = (TileComputer) tile;
-                        return getComputerGUI( computer );
+                        return getComputerGUI(computer);
                     }
                     break;
                 }
-                case ComputerCraft.printerGUIID:
-                {
-                    TileEntity tile = world.getTileEntity( pos );
-                    if (tile != null && tile instanceof TilePrinter)
-                    {
+                case ComputerCraft.printerGUIID: {
+                    TileEntity tile = world.getTileEntity(pos);
+                    if (tile != null && tile instanceof TilePrinter) {
                         TilePrinter printer = (TilePrinter) tile;
-                        return getPrinterGUI( player.inventory, printer );
+                        return getPrinterGUI(player.inventory, printer);
                     }
                     break;
                 }
-                case ComputerCraft.turtleGUIID:
-                {
-                    TileEntity tile = world.getTileEntity( pos );
-                    if (tile != null && tile instanceof TileTurtle)
-                    {
+                case ComputerCraft.turtleGUIID: {
+                    TileEntity tile = world.getTileEntity(pos);
+                    if (tile != null && tile instanceof TileTurtle) {
                         TileTurtle turtle = (TileTurtle) tile;
-                        return getTurtleGUI( player.inventory, turtle );
+                        return getTurtleGUI(player.inventory, turtle);
                     }
                     break;
                 }
-                case ComputerCraft.printoutGUIID:
-                {
-                    return getPrintoutGUI( player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND );
+                case ComputerCraft.printoutGUIID: {
+                    return getPrintoutGUI(player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                 }
-                case ComputerCraft.pocketComputerGUIID:
-                {
-                    return getPocketComputerGUI( player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND );
+                case ComputerCraft.pocketComputerGUIID: {
+                    return getPocketComputerGUI(player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                 }
             }
             return null;
@@ -617,44 +580,36 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
         // Event handlers
 
         @SubscribeEvent
-        public void onConnectionOpened( FMLNetworkEvent.ClientConnectedToServerEvent event )
-        {
+        public void onConnectionOpened(FMLNetworkEvent.ClientConnectedToServerEvent event) {
             ComputerCraft.clientComputerRegistry.reset();
         }
 
         @SubscribeEvent
-        public void onConnectionClosed( FMLNetworkEvent.ClientDisconnectionFromServerEvent event )
-        {
+        public void onConnectionClosed(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
             ComputerCraft.clientComputerRegistry.reset();
         }
 
         @SubscribeEvent
-        public void onClientTick( TickEvent.ClientTickEvent event )
-        {
-            if (event.phase == TickEvent.Phase.START)
-            {
+        public void onClientTick(TickEvent.ClientTickEvent event) {
+            if (event.phase == TickEvent.Phase.START) {
                 ComputerCraft.clientComputerRegistry.update();
             }
         }
 
         @SubscribeEvent
-        public void onServerTick( TickEvent.ServerTickEvent event )
-        {
-            if (event.phase == TickEvent.Phase.START)
-            {
+        public void onServerTick(TickEvent.ServerTickEvent event) {
+            if (event.phase == TickEvent.Phase.START) {
                 MainThread.executePendingTasks();
                 ComputerCraft.serverComputerRegistry.update();
             }
         }
 
         @SubscribeEvent
-        public void onWorldLoad( WorldEvent.Load event )
-        {
+        public void onWorldLoad(WorldEvent.Load event) {
         }
 
         @SubscribeEvent
-        public void onWorldUnload( WorldEvent.Unload event )
-        {
+        public void onWorldUnload(WorldEvent.Unload event) {
         }
     }
 }

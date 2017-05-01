@@ -19,93 +19,80 @@ import net.minecraft.util.EnumFacing;
 
 import java.util.List;
 
-public class TileComputer extends TileComputerBase
-{
+public class TileComputer extends TileComputerBase {
     // Statics
 
     // Members
 
-    public TileComputer()
-    {
+    // For legacy reasons, computers invert the meaning of "left" and "right"
+    private static final int[] s_remapSide = {0, 1, 2, 3, 5, 4};
+
+    public TileComputer() {
     }
 
     @Override
-    protected ServerComputer createComputer( int instanceID, int id )
-    {
+    protected ServerComputer createComputer(int instanceID, int id) {
         ComputerFamily family = getFamily();
         ServerComputer computer = new ServerComputer(
-            worldObj,
-            id,
-            m_label,
-            instanceID,
-            family,
-            ComputerCraft.terminalWidth_computer,
-            ComputerCraft.terminalHeight_computer
+                getWorld(),
+                id,
+                m_label,
+                instanceID,
+                family,
+                ComputerCraft.terminalWidth_computer,
+                ComputerCraft.terminalHeight_computer
         );
-        computer.setPosition( getPos() );
+        computer.setPosition(getPos());
         return computer;
     }
 
     @Override
-    public void getDroppedItems( List<ItemStack> drops, boolean creative )
-    {
+    public void getDroppedItems(List<ItemStack> drops, boolean creative) {
         IComputer computer = getComputer();
-        if( !creative || (computer != null && computer.getLabel() != null) )
-        {
-            drops.add( ComputerItemFactory.create( this ) );
+        if (!creative || (computer != null && computer.getLabel() != null)) {
+            drops.add(ComputerItemFactory.create(this));
         }
     }
 
     @Override
-    public ItemStack getPickedItem()
-    {
-        return ComputerItemFactory.create( this );
+    public ItemStack getPickedItem() {
+        return ComputerItemFactory.create(this);
     }
 
     @Override
-    public void openGUI( EntityPlayer player )
-    {
-        ComputerCraft.openComputerGUI( player, this );
+    public void openGUI(EntityPlayer player) {
+        ComputerCraft.openComputerGUI(player, this);
     }
 
     @Override
-    public final void readDescription( NBTTagCompound nbttagcompound )
-    {
-        super.readDescription( nbttagcompound );
+    public final void readDescription(NBTTagCompound nbttagcompound) {
+        super.readDescription(nbttagcompound);
         updateBlock();
-    }
-
-    public boolean isUseableByPlayer( EntityPlayer player )
-    {
-        return isUsable( player, false );
     }
 
     // IDirectionalTile
 
-    @Override
-    public EnumFacing getDirection()
-    {
-        IBlockState state = getBlockState();
-        return (EnumFacing)state.getValue( BlockComputer.Properties.FACING );
+    public boolean isUseableByPlayer(EntityPlayer player) {
+        return isUsable(player, false);
     }
 
     @Override
-    public void setDirection( EnumFacing dir )
-    {
-        if( dir.getAxis() == EnumFacing.Axis.Y )
-        {
+    public EnumFacing getDirection() {
+        IBlockState state = getBlockState();
+        return (EnumFacing) state.getValue(BlockComputer.Properties.FACING);
+    }
+
+    @Override
+    public void setDirection(EnumFacing dir) {
+        if (dir.getAxis() == EnumFacing.Axis.Y) {
             dir = EnumFacing.NORTH;
         }
-        setBlockState( getBlockState().withProperty( BlockComputer.Properties.FACING, dir ) );
+        setBlockState(getBlockState().withProperty(BlockComputer.Properties.FACING, dir));
         updateInput();
     }
 
-    // For legacy reasons, computers invert the meaning of "left" and "right"
-    private static final int[] s_remapSide = { 0, 1, 2, 3, 5, 4 };
-
     @Override
-    protected int remapLocalSide( int localSide )
-    {
-        return s_remapSide[ localSide ];
+    protected int remapLocalSide(int localSide) {
+        return s_remapSide[localSide];
     }
 }

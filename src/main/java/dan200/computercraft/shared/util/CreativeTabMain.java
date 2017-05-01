@@ -9,23 +9,15 @@ package dan200.computercraft.shared.util;
 import dan200.computercraft.ComputerCraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
-public class CreativeTabMain extends CreativeTabs
-{
-    public CreativeTabMain( int i )
-    {
-        super( i, "ComputerCraft" );
+public class CreativeTabMain extends CreativeTabs {
+    public CreativeTabMain(int i) {
+        super(i, "ComputerCraft");
     }
-    
+
     @Override
-    public Item getTabIconItem()
-    {
-        return Item.getItemFromBlock( ComputerCraft.Blocks.computer );
-    }
-    
-    @Override
-    public String getTranslatedTabLabel()
-    {
-        return getTabLabel();
+    public ItemStack getTabIconItem() {
+        return new ItemStack(Item.getItemFromBlock(ComputerCraft.Blocks.computer));
     }
 }

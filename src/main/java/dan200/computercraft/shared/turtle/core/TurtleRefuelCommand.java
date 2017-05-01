@@ -14,77 +14,63 @@ import dan200.computercraft.shared.util.InventoryUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 
-public class TurtleRefuelCommand implements ITurtleCommand
-{
+public class TurtleRefuelCommand implements ITurtleCommand {
     private final int m_limit;
 
-    public TurtleRefuelCommand( int limit )
-    {
+    public TurtleRefuelCommand(int limit) {
         m_limit = limit;
     }
 
     @Override
-    public TurtleCommandResult execute( ITurtleAccess turtle )
-    {
-        if( m_limit == 0 )
-        {
+    public TurtleCommandResult execute(ITurtleAccess turtle) {
+        if (m_limit == 0) {
             // If limit is zero, just check the item is combustible
-            ItemStack dummyStack = turtle.getInventory().getStackInSlot( turtle.getSelectedSlot() );
-            if( dummyStack != null )
-            {
-                return refuel( turtle, dummyStack, true );
+            ItemStack dummyStack = turtle.getInventory().getStackInSlot(turtle.getSelectedSlot());
+            if (dummyStack != null) {
+                return refuel(turtle, dummyStack, true);
             }
-        }
-        else
-        {
+        } else {
             // Otherwise, refuel for real
             // Remove items from inventory
-            ItemStack stack = InventoryUtil.takeItems( m_limit, turtle.getInventory(), turtle.getSelectedSlot(), 1, turtle.getSelectedSlot() );
-            if( stack != null )
-            {
-                TurtleCommandResult result = refuel( turtle, stack, false );
-                if( !result.isSuccess() )
-                {
+            ItemStack stack = InventoryUtil.takeItems(m_limit, turtle.getInventory(), turtle.getSelectedSlot(), 1, turtle.getSelectedSlot());
+            if (stack != null) {
+                TurtleCommandResult result = refuel(turtle, stack, false);
+                if (!result.isSuccess()) {
                     // If the items weren't burnt, put them back
-                    InventoryUtil.storeItems( stack, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot() );
+                    InventoryUtil.storeItems(stack, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot());
                 }
                 return result;
             }
         }
-        return TurtleCommandResult.failure( "No items to combust" );
+        return TurtleCommandResult.failure("No items to combust");
     }
 
-    private int getFuelPerItem( ItemStack stack )
-    {
-        return (TileEntityFurnace.getItemBurnTime( stack ) * 5) / 100;
+    private int getFuelPerItem(ItemStack stack) {
+        return (TileEntityFurnace.getItemBurnTime(stack) * 5) / 100;
     }
 
-    private TurtleCommandResult refuel( ITurtleAccess turtle, ItemStack stack, boolean testOnly )
-    {
+    private TurtleCommandResult refuel(ITurtleAccess turtle, ItemStack stack, boolean testOnly) {
         // Check if item is fuel
-        int fuelPerItem = getFuelPerItem( stack );
-        if( fuelPerItem <= 0 )
-        {
-            return TurtleCommandResult.failure( "Items not combustible" );
+        int fuelPerItem = getFuelPerItem(stack);
+        if (fuelPerItem <= 0) {
+            return TurtleCommandResult.failure("Items not combustible");
         }
 
-        if( !testOnly )
-        {
+        if (!testOnly) {
             // Determine fuel to give and replacement item to leave behind
-            int fuelToGive = fuelPerItem * stack.stackSize;
-            ItemStack replacementStack = stack.getItem().getContainerItem( stack );
+            int fuelToGive = fuelPerItem * stack.getCount();
+            ItemStack replacementStack = stack.getItem().getContainerItem(stack);
 
             // Update fuel level
-            turtle.addFuel( fuelToGive );
+            turtle.addFuel(fuelToGive);
 
             // Store the replacement item in the inventory
-            if( replacementStack != null )
-            {
-                InventoryUtil.storeItems( replacementStack, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot() );
+            if (replacementStack != null) {
+                InventoryUtil.storeItems(replacementStack, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot());
             }
 
             // Animate
-            turtle.playAnimation( TurtleAnimation.Wait );
+            turtle.playAnimation(TurtleAnimation.Wait);
         }
 
         return TurtleCommandResult.success();

@@ -8,36 +8,30 @@ package dan200.computercraft.shared.common;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public abstract class BlockDirectional extends BlockGeneric
-{
-    protected BlockDirectional( Material material )
-    {
-        super( material );
+public abstract class BlockDirectional extends BlockGeneric {
+    protected BlockDirectional(Material material) {
+        super(material);
     }
 
-    public EnumFacing getDirection( IBlockAccess world, BlockPos pos )
-    {
-        TileEntity tile = world.getTileEntity( pos );
-        if( tile != null && tile instanceof IDirectionalTile )
-        {
-            IDirectionalTile directional = (IDirectionalTile)tile;
+    public EnumFacing getDirection(IBlockAccess world, BlockPos pos) {
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile != null && tile instanceof IDirectionalTile) {
+            IDirectionalTile directional = (IDirectionalTile) tile;
             return directional.getDirection();
         }
         return EnumFacing.NORTH;
     }
 
-    public void setDirection( World world, BlockPos pos, EnumFacing dir )
-    {
-        TileEntity tile = world.getTileEntity( pos );
-        if( tile != null && tile instanceof IDirectionalTile )
-        {
-            IDirectionalTile directional = (IDirectionalTile)tile;
-            directional.setDirection( dir );
+    public void setDirection(World world, BlockPos pos, EnumFacing dir) {
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile != null && tile instanceof IDirectionalTile) {
+            IDirectionalTile directional = (IDirectionalTile) tile;
+            directional.setDirection(dir);
         }
     }
 }

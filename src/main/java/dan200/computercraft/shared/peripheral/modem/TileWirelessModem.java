@@ -12,116 +12,95 @@ import dan200.computercraft.shared.peripheral.PeripheralType;
 import dan200.computercraft.shared.peripheral.common.BlockPeripheral;
 import dan200.computercraft.shared.peripheral.common.BlockPeripheralVariant;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class TileWirelessModem extends TileModemBase
-{
+public class TileWirelessModem extends TileModemBase {
     // Statics
 
-    private static class Peripheral extends WirelessModemPeripheral
-    {
-        private TileModemBase m_entity;
-        
-        public Peripheral( TileModemBase entity )
-        {
-            super( false );
-            m_entity = entity;
-        }
-
-        @Override
-        protected World getWorld()
-        {
-            return m_entity.getWorld();
-        }
-        
-        @Override
-        protected Vec3d getPosition()
-        {
-            BlockPos pos = m_entity.getPos().offset( m_entity.getDirection() );
-            return new Vec3d( (double)pos.getX(), (double)pos.getY(), (double)pos.getZ() );
-        }
-
-        @Override
-        public boolean equals( IPeripheral other )
-        {
-            if( other instanceof Peripheral )
-            {
-                Peripheral otherModem = (Peripheral)other;
-                return otherModem.m_entity == m_entity;
-            }
-            return false;
-        }
+    public TileWirelessModem() {
     }
 
     // Members
 
-    public TileWirelessModem()
-    {
-    }
-
     @Override
-    public EnumFacing getDirection()
-    {
+    public EnumFacing getDirection() {
         // Wireless Modem
         IBlockState state = getBlockState();
-        switch( (BlockPeripheralVariant)state.getValue( BlockPeripheral.Properties.VARIANT ) )
-        {
+        switch ((BlockPeripheralVariant) state.getValue(BlockPeripheral.Properties.VARIANT)) {
             case WirelessModemDownOff:
-            case WirelessModemDownOn:
-            {
+            case WirelessModemDownOn: {
                 return EnumFacing.DOWN;
             }
             case WirelessModemUpOff:
-            case WirelessModemUpOn:
-            {
+            case WirelessModemUpOn: {
                 return EnumFacing.UP;
             }
-            default:
-            {
-                return (EnumFacing)state.getValue( BlockPeripheral.Properties.FACING );
+            default: {
+                return (EnumFacing) state.getValue(BlockPeripheral.Properties.FACING);
             }
         }
     }
 
     @Override
-    public void setDirection( EnumFacing dir )
-    {
+    public void setDirection(EnumFacing dir) {
         // Wireless Modem
-        if( dir == EnumFacing.UP )
-        {
-            setBlockState( getBlockState()
-                .withProperty( BlockPeripheral.Properties.VARIANT, BlockPeripheralVariant.WirelessModemUpOff )
-                .withProperty( BlockPeripheral.Properties.FACING, EnumFacing.NORTH )
+        if (dir == EnumFacing.UP) {
+            setBlockState(getBlockState()
+                    .withProperty(BlockPeripheral.Properties.VARIANT, BlockPeripheralVariant.WirelessModemUpOff)
+                    .withProperty(BlockPeripheral.Properties.FACING, EnumFacing.NORTH)
             );
-        }
-        else if( dir == EnumFacing.DOWN )
-        {
-            setBlockState( getBlockState()
-                .withProperty( BlockPeripheral.Properties.VARIANT, BlockPeripheralVariant.WirelessModemDownOff )
-                .withProperty( BlockPeripheral.Properties.FACING, EnumFacing.NORTH )
+        } else if (dir == EnumFacing.DOWN) {
+            setBlockState(getBlockState()
+                    .withProperty(BlockPeripheral.Properties.VARIANT, BlockPeripheralVariant.WirelessModemDownOff)
+                    .withProperty(BlockPeripheral.Properties.FACING, EnumFacing.NORTH)
             );
-        }
-        else
-        {
-            setBlockState( getBlockState()
-                .withProperty( BlockPeripheral.Properties.VARIANT, BlockPeripheralVariant.WirelessModemOff )
-                .withProperty( BlockPeripheral.Properties.FACING, dir )
+        } else {
+            setBlockState(getBlockState()
+                    .withProperty(BlockPeripheral.Properties.VARIANT, BlockPeripheralVariant.WirelessModemOff)
+                    .withProperty(BlockPeripheral.Properties.FACING, dir)
             );
         }
     }
 
     @Override
-    protected ModemPeripheral createPeripheral()
-    {
-        return new Peripheral( this );
+    protected ModemPeripheral createPeripheral() {
+        return new Peripheral(this);
     }
 
     @Override
-    public boolean shouldRefresh( World world, BlockPos pos, IBlockState oldState, IBlockState newState )
-    {
-        return super.shouldRefresh( world, pos, oldState, newState ) || ComputerCraft.Blocks.peripheral.getPeripheralType( newState ) != PeripheralType.WirelessModem;
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        return super.shouldRefresh(world, pos, oldState, newState) || ComputerCraft.Blocks.peripheral.getPeripheralType(newState) != PeripheralType.WirelessModem;
+    }
+
+    private static class Peripheral extends WirelessModemPeripheral {
+        private TileModemBase m_entity;
+
+        public Peripheral(TileModemBase entity) {
+            super(false);
+            m_entity = entity;
+        }
+
+        @Override
+        protected World getWorld() {
+            return m_entity.getWorld();
+        }
+
+        @Override
+        protected Vec3d getPosition() {
+            BlockPos pos = m_entity.getPos().offset(m_entity.getDirection());
+            return new Vec3d((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
+        }
+
+        @Override
+        public boolean equals(IPeripheral other) {
+            if (other instanceof Peripheral) {
+                Peripheral otherModem = (Peripheral) other;
+                return otherModem.m_entity == m_entity;
+            }
+            return false;
+        }
     }
 }

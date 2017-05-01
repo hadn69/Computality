@@ -5,42 +5,38 @@
  */
 
 package dan200.computercraft.shared.turtle.upgrades;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TurtleSword extends TurtleTool
-{
-    public TurtleSword( ResourceLocation id, int legacyId, String adjective, Item item )
-    {
-        super( id, legacyId, adjective, item );
+public class TurtleSword extends TurtleTool {
+    public TurtleSword(ResourceLocation id, int legacyId, String adjective, Item item) {
+        super(id, legacyId, adjective, item);
     }
 
     @Override
-    protected boolean canBreakBlock( World world, BlockPos pos )
-    {
-        if( super.canBreakBlock( world, pos ) )
-        {
-            IBlockState state = world.getBlockState( pos );
+    protected boolean canBreakBlock(World world, BlockPos pos) {
+        if (super.canBreakBlock(world, pos)) {
+            IBlockState state = world.getBlockState(pos);
             Block block = state.getBlock();
-            Material material = block.getMaterial( state );
+            Material material = block.getMaterial(state);
             return
                     material == Material.PLANTS ||
-                    material == Material.LEAVES ||
-                    material == Material.VINE ||
-                    material == Material.CLOTH ||
-                    material == Material.WEB;
+                            material == Material.LEAVES ||
+                            material == Material.VINE ||
+                            material == Material.CLOTH ||
+                            material == Material.WEB;
         }
         return false;
     }
 
     @Override
-    protected float getDamageMultiplier()
-    {
+    protected float getDamageMultiplier() {
         return 9.0f;
     }
 }

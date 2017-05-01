@@ -8,33 +8,27 @@ package dan200.computercraft.shared.common;
 
 import dan200.computercraft.api.redstone.IBundledRedstoneProvider;
 import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class DefaultBundledRedstoneProvider implements IBundledRedstoneProvider
-{
-    public DefaultBundledRedstoneProvider()
-    {
+public class DefaultBundledRedstoneProvider implements IBundledRedstoneProvider {
+    public DefaultBundledRedstoneProvider() {
     }
 
-    @Override
-    public int getBundledRedstoneOutput( World world, BlockPos pos, EnumFacing side )
-    {
-        return getDefaultBundledRedstoneOutput( world, pos, side );
-    }
-
-    public static int getDefaultBundledRedstoneOutput( World world, BlockPos pos, EnumFacing side )
-    {
-        Block block = world.getBlockState( pos ).getBlock();
-        if( block != null && block instanceof BlockGeneric )
-        {
-            BlockGeneric generic = (BlockGeneric)block;
-            if( generic.getBundledRedstoneConnectivity( world, pos, side ) )
-            {
-                return generic.getBundledRedstoneOutput( world, pos, side );
+    public static int getDefaultBundledRedstoneOutput(World world, BlockPos pos, EnumFacing side) {
+        Block block = world.getBlockState(pos).getBlock();
+        if (block != null && block instanceof BlockGeneric) {
+            BlockGeneric generic = (BlockGeneric) block;
+            if (generic.getBundledRedstoneConnectivity(world, pos, side)) {
+                return generic.getBundledRedstoneOutput(world, pos, side);
             }
         }
         return -1;
+    }
+
+    @Override
+    public int getBundledRedstoneOutput(World world, BlockPos pos, EnumFacing side) {
+        return getDefaultBundledRedstoneOutput(world, pos, side);
     }
 }

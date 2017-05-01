@@ -18,40 +18,33 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 
-public class TurtleCraftCommand implements ITurtleCommand
-{
+public class TurtleCraftCommand implements ITurtleCommand {
     private final int m_limit;
 
-    public TurtleCraftCommand( int limit )
-    {
+    public TurtleCraftCommand(int limit) {
         m_limit = limit;
     }
 
     @Override
-    public TurtleCommandResult execute( ITurtleAccess turtle )
-    {
+    public TurtleCommandResult execute(ITurtleAccess turtle) {
         // Craft the item
-        TurtleInventoryCrafting crafting = new TurtleInventoryCrafting( turtle );
-        ArrayList<ItemStack> results = crafting.doCrafting( turtle.getWorld(), m_limit );
-        if( results != null )
-        {
+        TurtleInventoryCrafting crafting = new TurtleInventoryCrafting(turtle);
+        ArrayList<ItemStack> results = crafting.doCrafting(turtle.getWorld(), m_limit);
+        if (results != null) {
             // Store the results
-            for( int i=0; i<results.size(); ++i )
-            {
-                ItemStack stack = results.get( i );
-                ItemStack remainder = InventoryUtil.storeItems( stack, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot() );
-                if( remainder != null )
-                {
+            for (int i = 0; i < results.size(); ++i) {
+                ItemStack stack = results.get(i);
+                ItemStack remainder = InventoryUtil.storeItems(stack, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot());
+                if (remainder != null) {
                     // Drop the remainder
                     BlockPos position = turtle.getPosition();
-                    WorldUtil.dropItemStack( remainder, turtle.getWorld(), position, turtle.getDirection() );
+                    WorldUtil.dropItemStack(remainder, turtle.getWorld(), position, turtle.getDirection());
                 }
             }
 
-            if( results.size() > 0 )
-            {
+            if (results.size() > 0) {
                 // Animate
-                turtle.playAnimation( TurtleAnimation.Wait );
+                turtle.playAnimation(TurtleAnimation.Wait);
             }
 
             // Succeed
@@ -59,6 +52,6 @@ public class TurtleCraftCommand implements ITurtleCommand
         }
 
         // Fail
-        return TurtleCommandResult.failure( "No matching recipes" );
+        return TurtleCommandResult.failure("No matching recipes");
     }
 }

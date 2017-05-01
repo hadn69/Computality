@@ -14,81 +14,66 @@ import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.shared.turtle.core.TurtleCraftCommand;
 
 public class CraftingTablePeripheral
-    implements IPeripheral
-{
+        implements IPeripheral {
     private final ITurtleAccess m_turtle;
 
-    public CraftingTablePeripheral( ITurtleAccess turtle )
-    {
+    public CraftingTablePeripheral(ITurtleAccess turtle) {
         m_turtle = turtle;
     }
-            
+
     // IPeripheral implementation
 
     @Override
-    public String getType()
-    {
+    public String getType() {
         return "workbench";
     }
-       
+
     @Override
-    public String[] getMethodNames()
-    {
-        return new String[] {
-            "craft",
+    public String[] getMethodNames() {
+        return new String[]{
+                "craft",
         };
     }
-        
-    private int parseCount( Object[] arguments ) throws LuaException
-    {
-        if( arguments.length < 1 )
-        {
+
+    private int parseCount(Object[] arguments) throws LuaException {
+        if (arguments.length < 1) {
             return 64;
         }
-        
-        if( !(arguments[0] instanceof Number) )
-        {
-            throw new LuaException( "Expected number" );
+
+        if (!(arguments[0] instanceof Number)) {
+            throw new LuaException("Expected number");
         }
-        int count = ((Number)arguments[0]).intValue();
-        if( count < 0 || count > 64 )
-        {
-            throw new LuaException( "Crafting count " + count + " out of range" );
+        int count = ((Number) arguments[0]).intValue();
+        if (count < 0 || count > 64) {
+            throw new LuaException("Crafting count " + count + " out of range");
         }
         return count;
     }
-    
+
     @Override
-    public Object[] callMethod( IComputerAccess computer, ILuaContext context, int method, Object[] arguments ) throws LuaException, InterruptedException
-    {
-        switch( method )
-        {
-            case 0:
-            {
+    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws LuaException, InterruptedException {
+        switch (method) {
+            case 0: {
                 // craft
-                final int limit = parseCount( arguments );
-                return m_turtle.executeCommand( context, new TurtleCraftCommand( limit ) );
+                final int limit = parseCount(arguments);
+                return m_turtle.executeCommand(context, new TurtleCraftCommand(limit));
             }
-            default:
-            {
+            default: {
                 return null;
             }
         }
     }
-    
+
     @Override
-    public void attach( IComputerAccess computer )
-    {
-    }
-    
-    @Override
-    public void detach( IComputerAccess computer )
-    {
+    public void attach(IComputerAccess computer) {
     }
 
     @Override
-    public boolean equals( IPeripheral other )
-    {
+    public void detach(IComputerAccess computer) {
+    }
+
+    @Override
+    public boolean equals(IPeripheral other) {
         return (other != null && other.getClass() == this.getClass());
     }
 }

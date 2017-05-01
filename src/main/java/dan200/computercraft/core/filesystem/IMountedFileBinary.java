@@ -10,7 +10,10 @@ import java.io.IOException;
 
 public interface IMountedFileBinary extends IMountedFile {
     public int read() throws IOException;
+
     public void write(int i) throws IOException;
+
     public void close() throws IOException;
+
     public void flush() throws IOException;
 }

@@ -26,30 +26,26 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
 
 public class ServerComputer extends ServerTerminal
-    implements IComputer, IComputerEnvironment, INetworkedThing
-{
+        implements IComputer, IComputerEnvironment, INetworkedThing {
     private final int m_instanceID;
-
+    private final Computer m_computer;
     private World m_world;
     private BlockPos m_position;
-
-    private final Computer m_computer;
     private NBTTagCompound m_userData;
     private boolean m_changed;
 
     private boolean m_changedLastFrame;
     private int m_ticksSincePing;
 
-    public ServerComputer( World world, int computerID, String label, int instanceID, ComputerFamily family, int terminalWidth, int terminalHeight )
-    {
-        super( family != ComputerFamily.Normal, terminalWidth, terminalHeight );
+    public ServerComputer(World world, int computerID, String label, int instanceID, ComputerFamily family, int terminalWidth, int terminalHeight) {
+        super(family != ComputerFamily.Normal, terminalWidth, terminalHeight);
         m_instanceID = instanceID;
 
         m_world = world;
         m_position = null;
 
-        m_computer = new Computer( this, getTerminal(), computerID );
-        m_computer.setLabel( label );
+        m_computer = new Computer(this, getTerminal(), computerID);
+        m_computer.setLabel(label);
         m_userData = null;
         m_changed = false;
 
@@ -57,36 +53,30 @@ public class ServerComputer extends ServerTerminal
         m_ticksSincePing = 0;
     }
 
-    public World getWorld()
-    {
+    public World getWorld() {
         return m_world;
     }
 
-    public void setWorld( World world )
-    {
+    public void setWorld(World world) {
         m_world = world;
     }
 
-    public BlockPos getPosition()
-    {
+    public BlockPos getPosition() {
         return m_position;
     }
 
-    public void setPosition( BlockPos pos )
-    {
-        m_position = new BlockPos( pos );
+    public void setPosition(BlockPos pos) {
+        m_position = new BlockPos(pos);
     }
 
-    public IAPIEnvironment getAPIEnvironment()
-    {
+    public IAPIEnvironment getAPIEnvironment() {
         return m_computer.getAPIEnvironment();
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        m_computer.advance( 0.05 );
+        m_computer.advance(0.05);
 
         m_changedLastFrame = m_changed || m_computer.pollChanged();
         m_computer.clearChanged();
@@ -95,306 +85,256 @@ public class ServerComputer extends ServerTerminal
         m_ticksSincePing++;
     }
 
-    public void keepAlive()
-    {
+    public void keepAlive() {
         m_ticksSincePing = 0;
     }
 
-    public boolean hasTimedOut()
-    {
+    public boolean hasTimedOut() {
         return m_ticksSincePing > 100;
     }
 
-    public boolean hasOutputChanged()
-    {
+    public boolean hasOutputChanged() {
         return m_changedLastFrame;
     }
 
-    public void unload()
-    {
+    public void unload() {
         m_computer.unload();
     }
 
-    public NBTTagCompound getUserData()
-    {
-        if( m_userData == null )
-        {
+    public NBTTagCompound getUserData() {
+        if (m_userData == null) {
             m_userData = new NBTTagCompound();
         }
         return m_userData;
     }
 
-    public void updateUserData()
-    {
+    public void updateUserData() {
         m_changed = true;
     }
 
-    public void broadcastState()
-    {
+    public void broadcastState() {
         // Send state to client
         ComputerCraftPacket packet = new ComputerCraftPacket();
         packet.m_packetType = ComputerCraftPacket.ComputerChanged;
-        packet.m_dataInt = new int[] { getInstanceID() };
+        packet.m_dataInt = new int[]{getInstanceID()};
         packet.m_dataNBT = new NBTTagCompound();
-        writeDescription( packet.m_dataNBT );
-        ComputerCraft.sendToAllPlayers( packet );
+        writeDescription(packet.m_dataNBT);
+        ComputerCraft.sendToAllPlayers(packet);
     }
 
-    public void sendState( EntityPlayer player )
-    {
+    public void sendState(EntityPlayer player) {
         // Send state to client
         ComputerCraftPacket packet = new ComputerCraftPacket();
         packet.m_packetType = ComputerCraftPacket.ComputerChanged;
-        packet.m_dataInt = new int[] { getInstanceID() };
+        packet.m_dataInt = new int[]{getInstanceID()};
         packet.m_dataNBT = new NBTTagCompound();
-        writeDescription( packet.m_dataNBT );
-        ComputerCraft.sendToPlayer( player, packet );
+        writeDescription(packet.m_dataNBT);
+        ComputerCraft.sendToPlayer(player, packet);
     }
 
-    public void broadcastDelete()
-    {
+    public void broadcastDelete() {
         // Send deletion to client
         ComputerCraftPacket packet = new ComputerCraftPacket();
         packet.m_packetType = ComputerCraftPacket.ComputerDeleted;
-        packet.m_dataInt = new int[] { getInstanceID() };
-        ComputerCraft.sendToAllPlayers( packet );
+        packet.m_dataInt = new int[]{getInstanceID()};
+        ComputerCraft.sendToAllPlayers(packet);
     }
 
-    public IWritableMount getRootMount()
-    {
+    public IWritableMount getRootMount() {
         return m_computer.getRootMount();
     }
 
-    public int assignID()
-    {
+    public int assignID() {
         return m_computer.assignID();
     }
 
-    public void setID( int id )
-    {
-        m_computer.setID( id );
+    @Override
+    public int getInstanceID() {
+        return m_instanceID;
     }
 
     // IComputer
 
     @Override
-    public int getInstanceID()
-    {
-        return m_instanceID;
-    }
-
-    @Override
-    public int getID()
-    {
+    public int getID() {
         return m_computer.getID();
     }
 
-    @Override
-    public String getLabel()
-    {
-        return m_computer.getLabel();
+    public void setID(int id) {
+        m_computer.setID(id);
     }
 
     @Override
-    public boolean isOn()
-    {
+    public String getLabel() {
+        return m_computer.getLabel();
+    }
+
+    public void setLabel(String label) {
+        m_computer.setLabel(label);
+    }
+
+    @Override
+    public boolean isOn() {
         return m_computer.isOn();
     }
 
     @Override
-    public boolean isCursorDisplayed()
-    {
+    public boolean isCursorDisplayed() {
         return m_computer.isOn() && m_computer.isBlinking();
     }
 
     @Override
-    public void turnOn()
-    {
+    public void turnOn() {
         // Turn on
         m_computer.turnOn();
     }
 
     @Override
-    public void shutdown()
-    {
+    public void shutdown() {
         // Shutdown
         m_computer.shutdown();
     }
 
     @Override
-    public void reboot()
-    {
+    public void reboot() {
         // Reboot
         m_computer.reboot();
     }
 
     @Override
-    public void queueEvent( String event )
-    {
+    public void queueEvent(String event) {
         // Queue event
-        queueEvent( event, null );
+        queueEvent(event, null);
     }
 
     @Override
-    public void queueEvent( String event, Object[] arguments )
-    {
+    public void queueEvent(String event, Object[] arguments) {
         // Queue event
-        m_computer.queueEvent( event, arguments );
+        m_computer.queueEvent(event, arguments);
     }
 
-    public int getRedstoneOutput( int side )
-    {
-        return m_computer.getRedstoneOutput( side );
+    public int getRedstoneOutput(int side) {
+        return m_computer.getRedstoneOutput(side);
     }
 
-    public void setRedstoneInput( int side, int level )
-    {
-        m_computer.setRedstoneInput( side, level );
+    public void setRedstoneInput(int side, int level) {
+        m_computer.setRedstoneInput(side, level);
     }
 
-    public int getBundledRedstoneOutput( int side )
-    {
-        return m_computer.getBundledRedstoneOutput( side );
+    public int getBundledRedstoneOutput(int side) {
+        return m_computer.getBundledRedstoneOutput(side);
     }
 
-    public void setBundledRedstoneInput( int side, int combination )
-    {
-        m_computer.setBundledRedstoneInput( side, combination );
+    public void setBundledRedstoneInput(int side, int combination) {
+        m_computer.setBundledRedstoneInput(side, combination);
     }
 
-    public void addAPI( ILuaAPI api )
-    {
-        m_computer.addAPI( api );
+    public void addAPI(ILuaAPI api) {
+        m_computer.addAPI(api);
     }
 
-    public void setPeripheral( int side, IPeripheral peripheral )
-    {
-        m_computer.setPeripheral( side, peripheral );
+    public void setPeripheral(int side, IPeripheral peripheral) {
+        m_computer.setPeripheral(side, peripheral);
     }
 
-    public IPeripheral getPeripheral( int side )
-    {
-        return m_computer.getPeripheral( side );
-    }
-
-    public void setLabel( String label )
-    {
-        m_computer.setLabel( label );
+    public IPeripheral getPeripheral(int side) {
+        return m_computer.getPeripheral(side);
     }
 
     // IComputerEnvironment implementation
 
     @Override
-    public double getTimeOfDay()
-    {
-        return (double)((m_world.getWorldTime() + 6000) % 24000) / 1000.0;
+    public double getTimeOfDay() {
+        return (double) ((m_world.getWorldTime() + 6000) % 24000) / 1000.0;
     }
 
     @Override
-    public int getDay()
-    {
-        return (int)((m_world.getWorldTime() + 6000) / 24000) + 1;
+    public int getDay() {
+        return (int) ((m_world.getWorldTime() + 6000) / 24000) + 1;
     }
 
     @Override
-    public IWritableMount createSaveDirMount( String subPath, long capacity )
-    {
-        return ComputerCraftAPI.createSaveDirMount( m_world, subPath, capacity );
+    public IWritableMount createSaveDirMount(String subPath, long capacity) {
+        return ComputerCraftAPI.createSaveDirMount(m_world, subPath, capacity);
     }
 
     @Override
-    public IMount createResourceMount( String domain, String subPath )
-    {
-        return ComputerCraftAPI.createResourceMount( ComputerCraft.class, domain, subPath );
+    public IMount createResourceMount(String domain, String subPath) {
+        return ComputerCraftAPI.createResourceMount(ComputerCraft.class, domain, subPath);
     }
 
     @Override
-    public long getComputerSpaceLimit()
-    {
+    public long getComputerSpaceLimit() {
         return ComputerCraft.computerSpaceLimit;
     }
 
     @Override
-    public String getHostString()
-    {
+    public String getHostString() {
         return "ComputerCraft ${version} (Minecraft " + Loader.MC_VERSION + ")";
     }
 
     @Override
-    public int assignNewID()
-    {
-        return ComputerCraft.createUniqueNumberedSaveDir( m_world, "computer" );
+    public int assignNewID() {
+        return ComputerCraft.createUniqueNumberedSaveDir(m_world, "computer");
     }
 
     // Networking stuff
 
-    public void writeDescription( NBTTagCompound nbttagcompound )
-    {
-        super.writeDescription( nbttagcompound );
+    public void writeDescription(NBTTagCompound nbttagcompound) {
+        super.writeDescription(nbttagcompound);
 
-        nbttagcompound.setInteger( "id", m_computer.getID() );
+        nbttagcompound.setInteger("id", m_computer.getID());
         String label = m_computer.getLabel();
-        if( label != null )
-        {
-            nbttagcompound.setString( "label", label );
+        if (label != null) {
+            nbttagcompound.setString("label", label);
         }
-        nbttagcompound.setBoolean( "on", m_computer.isOn() );
-        nbttagcompound.setBoolean( "blinking", m_computer.isBlinking() );
-        if( m_userData != null )
-        {
-            nbttagcompound.setTag( "userData", m_userData.copy() );
+        nbttagcompound.setBoolean("on", m_computer.isOn());
+        nbttagcompound.setBoolean("blinking", m_computer.isBlinking());
+        if (m_userData != null) {
+            nbttagcompound.setTag("userData", m_userData.copy());
         }
     }
 
     // INetworkedThing
 
     @Override
-    public void handlePacket( ComputerCraftPacket packet, EntityPlayer sender )
-    {
+    public void handlePacket(ComputerCraftPacket packet, EntityPlayer sender) {
         // Receive packets sent from the client to the server
-        switch( packet.m_packetType )
-        {
-            case ComputerCraftPacket.TurnOn:
-            {
+        switch (packet.m_packetType) {
+            case ComputerCraftPacket.TurnOn: {
                 // A player has turned the computer on
                 turnOn();
                 break;
             }
-            case ComputerCraftPacket.Reboot:
-            {
+            case ComputerCraftPacket.Reboot: {
                 // A player has held down ctrl+r
                 reboot();
                 break;
             }
-            case ComputerCraftPacket.Shutdown:
-            {
+            case ComputerCraftPacket.Shutdown: {
                 // A player has held down ctrl+s
                 shutdown();
                 break;
             }
-            case ComputerCraftPacket.QueueEvent:
-            {
+            case ComputerCraftPacket.QueueEvent: {
                 // A player has caused a UI event to be fired
                 String event = packet.m_dataString[0];
                 Object[] arguments = null;
-                if( packet.m_dataNBT != null )
-                {
-                    arguments = NBTUtil.decodeObjects( packet.m_dataNBT );
+                if (packet.m_dataNBT != null) {
+                    arguments = NBTUtil.decodeObjects(packet.m_dataNBT);
                 }
-                queueEvent( event, arguments );
+                queueEvent(event, arguments);
                 break;
             }
-            case ComputerCraftPacket.SetLabel:
-            {
+            case ComputerCraftPacket.SetLabel: {
                 // A player wants to relabel a computer
                 String label = (packet.m_dataString != null && packet.m_dataString.length >= 1) ? packet.m_dataString[0] : null;
-                setLabel( label );
+                setLabel(label);
                 break;
             }
-            case ComputerCraftPacket.RequestComputerUpdate:
-            {
+            case ComputerCraftPacket.RequestComputerUpdate: {
                 // A player asked for an update on the state of the terminal
-                sendState( sender );
+                sendState(sender);
                 break;
             }
         }

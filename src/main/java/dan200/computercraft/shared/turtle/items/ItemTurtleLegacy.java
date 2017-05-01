@@ -20,7 +20,7 @@ import net.minecraft.util.ResourceLocation;
 public class ItemTurtleLegacy extends ItemTurtleBase {
     public ItemTurtleLegacy(Block block) {
         super(block);
-        setUnlocalizedName("computercraft:turtle");
+        setUnlocalizedName("computercraft.turtle");
         setCreativeTab(ComputerCraft.mainCreativeTab);
     }
 

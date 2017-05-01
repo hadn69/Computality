@@ -25,7 +25,7 @@ import java.util.List;
 public class ItemCable extends ItemPeripheralBase {
     public ItemCable(Block block) {
         super(block);
-        setUnlocalizedName("computercraft:cable");
+        setUnlocalizedName("computercraft.cable");
         setCreativeTab(ComputerCraft.mainCreativeTab);
     }
 

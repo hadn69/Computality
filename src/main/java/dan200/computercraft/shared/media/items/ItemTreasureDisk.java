@@ -30,7 +30,7 @@ public class ItemTreasureDisk extends Item
     public ItemTreasureDisk() {
         setMaxStackSize(1);
         setHasSubtypes(true);
-        setUnlocalizedName("computercraft:treasure_disk");
+        setUnlocalizedName("computercraft.treasure_disk");
     }
 
     public static ItemStack create(String subPath, int colourIndex) {

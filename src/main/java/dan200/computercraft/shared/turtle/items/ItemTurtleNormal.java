@@ -20,7 +20,7 @@ import net.minecraftforge.common.util.Constants;
 public class ItemTurtleNormal extends ItemTurtleBase {
     public ItemTurtleNormal(Block block) {
         super(block);
-        setUnlocalizedName("computercraft:turtle");
+        setUnlocalizedName("computercraft.turtle");
         setCreativeTab(ComputerCraft.mainCreativeTab);
     }
 

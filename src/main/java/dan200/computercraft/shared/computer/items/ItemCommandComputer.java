@@ -22,7 +22,7 @@ public class ItemCommandComputer extends ItemComputer {
         super(block);
         setMaxStackSize(64);
         setHasSubtypes(true);
-        setUnlocalizedName("computercraft:command_computer");
+        setUnlocalizedName("computercraft.command_computer");
         setCreativeTab(ComputerCraft.mainCreativeTab);
     }
 

@@ -33,7 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockPeripheral extends BlockPeripheralBase {
     public BlockPeripheral() {
         setHardness(2.0f);
-        setUnlocalizedName("computercraft:peripheral");
+        setUnlocalizedName("computercraft.peripheral");
         setCreativeTab(ComputerCraft.mainCreativeTab);
         setDefaultState(this.blockState.getBaseState()
                 .withProperty(Properties.FACING, EnumFacing.NORTH)

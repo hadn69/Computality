@@ -38,7 +38,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
     public ItemPocketComputer() {
         setMaxStackSize(1);
         setHasSubtypes(true);
-        setUnlocalizedName("computercraft:pocket_computer");
+        setUnlocalizedName("computercraft.pocket_computer");
         setCreativeTab(ComputerCraft.mainCreativeTab);
     }
 
@@ -152,10 +152,10 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
         switch (getFamily(stack)) {
             case Normal:
             default: {
-                return "item.computercraft:pocket_computer";
+                return "item.computercraft.pocket_computer";
             }
             case Advanced: {
-                return "item.computercraft:advanced_pocket_computer";
+                return "item.computercraft.advanced_pocket_computer";
             }
         }
     }
@@ -167,7 +167,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
         if (modem) {
             return I18n.translateToLocalFormatted(
                     baseString + ".upgraded.name",
-                    I18n.translateToLocal("upgrade.computercraft:wireless_modem.adjective")
+                    I18n.translateToLocal("upgrade.computercraft.wireless_modem.adjective")
             );
         } else {
             return I18n.translateToLocal(baseString + ".name");

@@ -28,7 +28,7 @@ public class ItemDiskLegacy extends Item
     public ItemDiskLegacy() {
         setMaxStackSize(1);
         setHasSubtypes(true);
-        setUnlocalizedName("computercraft:disk");
+        setUnlocalizedName("computercraft.disk");
         setCreativeTab(ComputerCraft.mainCreativeTab);
     }
 

@@ -415,7 +415,7 @@ public class TileTurtle extends TileComputerBase
                 return label;
             }
         }
-        return "tile.computercraft:turtle.name";
+        return "tile.computercraft.turtle.name";
     }
 
     @Override

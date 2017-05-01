@@ -28,7 +28,7 @@ public class ItemPrintout extends Item {
     public ItemPrintout() {
         setMaxStackSize(1);
         setHasSubtypes(true);
-        setUnlocalizedName("computercraft:page");
+        setUnlocalizedName("computercraft.page");
         setCreativeTab(ComputerCraft.mainCreativeTab);
     }
 
@@ -173,13 +173,13 @@ public class ItemPrintout extends Item {
         switch (type) {
             case Single:
             default: {
-                return "item.computercraft:page";
+                return "item.computercraft.page";
             }
             case Multiple: {
-                return "item.computercraft:pages";
+                return "item.computercraft.pages";
             }
             case Book: {
-                return "item.computercraft:book";
+                return "item.computercraft.book";
             }
         }
     }

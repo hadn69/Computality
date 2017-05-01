@@ -31,7 +31,7 @@ public class ItemComputer extends ItemComputerBase {
         super(block);
         setMaxStackSize(64);
         setHasSubtypes(true);
-        setUnlocalizedName("computercraft:computer");
+        setUnlocalizedName("computercraft.computer");
         setCreativeTab(ComputerCraft.mainCreativeTab);
     }
 
@@ -101,13 +101,13 @@ public class ItemComputer extends ItemComputerBase {
         switch (getFamily(stack)) {
             case Normal:
             default: {
-                return "tile.computercraft:computer";
+                return "tile.computercraft.computer";
             }
             case Advanced: {
-                return "tile.computercraft:advanced_computer";
+                return "tile.computercraft.advanced_computer";
             }
             case Command: {
-                return "tile.computercraft:command_computer";
+                return "tile.computercraft.command_computer";
             }
         }
     }

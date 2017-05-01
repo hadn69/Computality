@@ -269,7 +269,7 @@ public class TileDiskDrive extends TilePeripheralBase
         if (label != null) {
             return label;
         } else {
-            return "tile.computercraft:drive.name";
+            return "tile.computercraft.drive.name";
         }
     }
 

@@ -60,9 +60,9 @@ public class TurtleModem implements ITurtleUpgrade {
     @Override
     public String getUnlocalisedAdjective() {
         if (m_advanced) {
-            return "upgrade.computercraft:advanced_modem.adjective";
+            return "upgrade.computercraft.advanced_modem.adjective";
         } else {
-            return "upgrade.computercraft:wireless_modem.adjective";
+            return "upgrade.computercraft.wireless_modem.adjective";
         }
     }
 

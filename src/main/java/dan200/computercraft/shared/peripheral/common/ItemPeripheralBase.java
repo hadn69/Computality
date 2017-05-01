@@ -54,29 +54,29 @@ public abstract class ItemPeripheralBase extends ItemBlock implements IPeriphera
         switch (type) {
             case DiskDrive:
             default: {
-                return "tile.computercraft:drive";
+                return "tile.computercraft.drive";
             }
             case Printer: {
-                return "tile.computercraft:printer";
+                return "tile.computercraft.printer";
             }
             case Monitor: {
-                return "tile.computercraft:monitor";
+                return "tile.computercraft.monitor";
             }
             case AdvancedMonitor: {
-                return "tile.computercraft:advanced_monitor";
+                return "tile.computercraft.advanced_monitor";
             }
             case WirelessModem: {
-                return "tile.computercraft:wireless_modem";
+                return "tile.computercraft.wireless_modem";
             }
             case WiredModem:
             case WiredModemWithCable: {
-                return "tile.computercraft:wired_modem";
+                return "tile.computercraft.wired_modem";
             }
             case Cable: {
-                return "tile.computercraft:cable";
+                return "tile.computercraft.cable";
             }
             case AdvancedModem: {
-                return "tile.computercraft:advanced_modem";
+                return "tile.computercraft.advanced_modem";
             }
         }
     }

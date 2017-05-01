@@ -31,7 +31,7 @@ public class BlockCommandComputer extends BlockComputerBase {
         super(Material.IRON);
         setBlockUnbreakable();
         setResistance(6000000.0F);
-        setUnlocalizedName("computercraft:command_computer");
+        setUnlocalizedName("computercraft.command_computer");
         setCreativeTab(ComputerCraft.mainCreativeTab);
         setDefaultState(this.blockState.getBaseState()
                 .withProperty(Properties.FACING, EnumFacing.NORTH)

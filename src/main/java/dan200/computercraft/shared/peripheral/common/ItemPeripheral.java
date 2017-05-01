@@ -19,7 +19,7 @@ import java.util.List;
 public class ItemPeripheral extends ItemPeripheralBase {
     public ItemPeripheral(Block block) {
         super(block);
-        setUnlocalizedName("computercraft:peripheral");
+        setUnlocalizedName("computercraft.peripheral");
         setCreativeTab(ComputerCraft.mainCreativeTab);
     }
 

@@ -47,126 +47,124 @@ public class HTTPRequest {
         m_result = null;
         m_responseCode = -1;
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // Connect to the URL
-                    HttpURLConnection connection = (HttpURLConnection) m_url.openConnection();
+        Thread thread = new Thread(() -> {
+            try {
+                // Connect to the URL
+                HttpURLConnection connection = (HttpURLConnection) m_url.openConnection();
 
-                    if (postText != null) {
-                        connection.setRequestMethod("POST");
-                        connection.setDoOutput(true);
-                    } else {
-                        connection.setRequestMethod("GET");
-                    }
+                if (postText != null) {
+                    connection.setRequestMethod("POST");
+                    connection.setDoOutput(true);
+                } else {
+                    connection.setRequestMethod("GET");
+                }
 
-                    // Set headers
-                    connection.setRequestProperty("accept-charset", "UTF-8");
-                    if (postText != null) {
-                        connection.setRequestProperty("content-type", "application/x-www-form-urlencoded; charset=utf-8");
-                        connection.setRequestProperty("content-encoding", "UTF-8");
+                // Set headers
+                connection.setRequestProperty("accept-charset", "UTF-8");
+                if (postText != null) {
+                    connection.setRequestProperty("content-type", "application/x-www-form-urlencoded; charset=utf-8");
+                    connection.setRequestProperty("content-encoding", "UTF-8");
+                }
+                if (headers != null) {
+                    for (Map.Entry<String, String> header : headers.entrySet()) {
+                        connection.setRequestProperty(header.getKey(), header.getValue());
                     }
-                    if (headers != null) {
-                        for (Map.Entry<String, String> header : headers.entrySet()) {
-                            connection.setRequestProperty(header.getKey(), header.getValue());
-                        }
-                    }
+                }
 
-                    // Send POST text
-                    if (postText != null) {
-                        OutputStream os = connection.getOutputStream();
-                        OutputStreamWriter osw;
-                        try {
-                            osw = new OutputStreamWriter(os, "UTF-8");
-                        } catch (UnsupportedEncodingException e) {
-                            osw = new OutputStreamWriter(os);
-                        }
-                        BufferedWriter writer = new BufferedWriter(osw);
-                        writer.write(postText, 0, postText.length());
-                        writer.close();
-                    }
-
-                    // Read response
-                    InputStream is;
-                    int code = connection.getResponseCode();
-                    boolean responseSuccess;
-                    if (code >= 200 && code < 400) {
-                        is = connection.getInputStream();
-                        responseSuccess = true;
-                    } else {
-                        is = connection.getErrorStream();
-                        responseSuccess = false;
-                    }
-                    InputStreamReader isr;
+                // Send POST text
+                if (postText != null) {
+                    OutputStream os = connection.getOutputStream();
+                    OutputStreamWriter osw;
                     try {
-                        String contentEncoding = connection.getContentEncoding();
-                        if (contentEncoding != null) {
-                            try {
-                                isr = new InputStreamReader(is, contentEncoding);
-                            } catch (UnsupportedEncodingException e) {
-                                isr = new InputStreamReader(is, "UTF-8");
-                            }
-                        } else {
+                        osw = new OutputStreamWriter(os, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        osw = new OutputStreamWriter(os);
+                    }
+                    BufferedWriter writer = new BufferedWriter(osw);
+                    writer.write(postText, 0, postText.length());
+                    writer.close();
+                }
+
+                // Read response
+                InputStream is;
+                int code = connection.getResponseCode();
+                boolean responseSuccess;
+                if (code >= 200 && code < 400) {
+                    is = connection.getInputStream();
+                    responseSuccess = true;
+                } else {
+                    is = connection.getErrorStream();
+                    responseSuccess = false;
+                }
+                InputStreamReader isr;
+                try {
+                    String contentEncoding = connection.getContentEncoding();
+                    if (contentEncoding != null) {
+                        try {
+                            isr = new InputStreamReader(is, contentEncoding);
+                        } catch (UnsupportedEncodingException e) {
                             isr = new InputStreamReader(is, "UTF-8");
                         }
-                    } catch (UnsupportedEncodingException e) {
-                        isr = new InputStreamReader(is);
+                    } else {
+                        isr = new InputStreamReader(is, "UTF-8");
                     }
+                } catch (UnsupportedEncodingException e) {
+                    isr = new InputStreamReader(is);
+                }
 
-                    // Download the contents
-                    BufferedReader reader = new BufferedReader(isr);
-                    StringBuilder result = new StringBuilder();
-                    while (true) {
-                        synchronized (m_lock) {
-                            if (m_cancelled) {
-                                break;
-                            }
-                        }
-
-                        String line = reader.readLine();
-                        if (line == null) {
-                            break;
-                        }
-                        result.append(line);
-                        result.append('\n');
-                    }
-                    reader.close();
-
+                // Download the contents
+                BufferedReader reader = new BufferedReader(isr);
+                StringBuilder result = new StringBuilder();
+                while (true) {
                     synchronized (m_lock) {
                         if (m_cancelled) {
-                            // We cancelled
-                            m_complete = true;
-                            m_success = false;
-                            m_result = null;
-                        } else {
-                            // We completed
-                            m_complete = true;
-                            m_success = responseSuccess;
-                            m_result = result.toString();
-                            m_responseCode = connection.getResponseCode();
-
-                            Joiner joiner = Joiner.on(',');
-                            Map<String, String> headers = m_responseHeaders = new HashMap<String, String>();
-                            for (Map.Entry<String, List<String>> header : connection.getHeaderFields().entrySet()) {
-                                headers.put(header.getKey(), joiner.join(header.getValue()));
-                            }
+                            break;
                         }
                     }
 
-                    connection.disconnect(); // disconnect
+                    String line = reader.readLine();
+                    if (line == null) {
+                        break;
+                    }
+                    result.append(line);
+                    result.append('\n');
+                }
+                reader.close();
 
-                } catch (IOException e) {
-                    synchronized (m_lock) {
-                        // There was an error
+                synchronized (m_lock) {
+                    if (m_cancelled) {
+                        // We cancelled
                         m_complete = true;
                         m_success = false;
                         m_result = null;
+                    } else {
+                        // We completed
+                        m_complete = true;
+                        m_success = responseSuccess;
+                        m_result = result.toString();
+                        m_responseCode = connection.getResponseCode();
+
+                        Joiner joiner = Joiner.on(',');
+                        Map<String, String> headers1 = m_responseHeaders = new HashMap<String, String>();
+                        for (Map.Entry<String, List<String>> header : connection.getHeaderFields().entrySet()) {
+                            headers1.put(header.getKey(), joiner.join(header.getValue()));
+                        }
                     }
+                }
+
+                connection.disconnect(); // disconnect
+
+            } catch (IOException e) {
+                synchronized (m_lock) {
+                    // There was an error
+                    m_complete = true;
+                    m_success = false;
+                    m_result = null;
                 }
             }
         });
 
+        thread.setDaemon(true);
         thread.start();
     }
 

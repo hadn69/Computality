@@ -51,7 +51,7 @@ public class TurtleCraftingTable implements ITurtleUpgrade {
 
     @Override
     public String getUnlocalisedAdjective() {
-        return "upgrade.minecraft:crafting_table.adjective";
+        return "upgrade.minecraft.crafting_table.adjective";
     }
 
     @Override

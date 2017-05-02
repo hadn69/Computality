@@ -32,6 +32,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -60,11 +61,7 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy {
     }
 
     public static boolean isUpgradeSuitableForFamily(ComputerFamily family, ITurtleUpgrade upgrade) {
-        if (family == ComputerFamily.Beginners) {
-            return upgrade.getType() == TurtleUpgradeType.Tool;
-        } else {
-            return true;
-        }
+        return family != ComputerFamily.Beginners || upgrade.getType() == TurtleUpgradeType.Tool;
     }
 
     @Override
@@ -108,8 +105,7 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy {
                 if (InventoryUtil.areItemsStackable(upgradeStack, stack)) {
                     return upgrade;
                 }
-            } catch (Exception e) {
-                continue;
+            } catch (Exception ignored) {
             }
         }
         return null;
@@ -152,13 +148,13 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy {
                     Entity.class,
                     entity,
                     "captureDrops"
-            ).booleanValue();
+            );
 
             if (!captured) {
                 ObfuscationReflectionHelper.setPrivateValue(
                         Entity.class,
                         entity,
-                        new Boolean(true),
+                        true,
                         "captureDrops"
                 );
 
@@ -188,7 +184,7 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy {
                 ObfuscationReflectionHelper.setPrivateValue(
                         Entity.class,
                         entity,
-                        new Boolean(false),
+                        false,
                         "captureDrops"
                 );
 
@@ -236,7 +232,7 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy {
         // Add a bunch of impostor recipes
         if (isUpgradeVanilla(upgrade)) {
             // Add fake recipes to fool NEI
-            List recipeList = CraftingManager.getInstance().getRecipeList();
+            List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
             ItemStack craftingItem = upgrade.getCraftingItem();
 
             // A turtle just containing this upgrade
@@ -344,19 +340,19 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy {
         ComputerCraft.Upgrades.craftingTable = new TurtleCraftingTable(2);
         registerTurtleUpgradeInternal(ComputerCraft.Upgrades.craftingTable);
 
-        ComputerCraft.Upgrades.diamondSword = new TurtleSword(new ResourceLocation("minecraft", "diamond_sword"), 3, "upgrade.minecraft:diamond_sword.adjective", Items.DIAMOND_SWORD);
+        ComputerCraft.Upgrades.diamondSword = new TurtleSword(new ResourceLocation("minecraft", "diamond_sword"), 3, "upgrade.minecraft.diamond_sword.adjective", Items.DIAMOND_SWORD);
         registerTurtleUpgradeInternal(ComputerCraft.Upgrades.diamondSword);
 
-        ComputerCraft.Upgrades.diamondShovel = new TurtleShovel(new ResourceLocation("minecraft", "diamond_shovel"), 4, "upgrade.minecraft:diamond_shovel.adjective", Items.DIAMOND_SHOVEL);
+        ComputerCraft.Upgrades.diamondShovel = new TurtleShovel(new ResourceLocation("minecraft", "diamond_shovel"), 4, "upgrade.minecraft.diamond_shovel.adjective", Items.DIAMOND_SHOVEL);
         registerTurtleUpgradeInternal(ComputerCraft.Upgrades.diamondShovel);
 
-        ComputerCraft.Upgrades.diamondPickaxe = new TurtleTool(new ResourceLocation("minecraft", "diamond_pickaxe"), 5, "upgrade.minecraft:diamond_pickaxe.adjective", Items.DIAMOND_PICKAXE);
+        ComputerCraft.Upgrades.diamondPickaxe = new TurtleTool(new ResourceLocation("minecraft", "diamond_pickaxe"), 5, "upgrade.minecraft.diamond_pickaxe.adjective", Items.DIAMOND_PICKAXE);
         registerTurtleUpgradeInternal(ComputerCraft.Upgrades.diamondPickaxe);
 
-        ComputerCraft.Upgrades.diamondAxe = new TurtleAxe(new ResourceLocation("minecraft", "diamond_axe"), 6, "upgrade.minecraft:diamond_axe.adjective", Items.DIAMOND_AXE);
+        ComputerCraft.Upgrades.diamondAxe = new TurtleAxe(new ResourceLocation("minecraft", "diamond_axe"), 6, "upgrade.minecraft.diamond_axe.adjective", Items.DIAMOND_AXE);
         registerTurtleUpgradeInternal(ComputerCraft.Upgrades.diamondAxe);
 
-        ComputerCraft.Upgrades.diamondHoe = new TurtleHoe(new ResourceLocation("minecraft", "diamond_hoe"), 7, "upgrade.minecraft:diamond_hoe.adjective", Items.DIAMOND_HOE);
+        ComputerCraft.Upgrades.diamondHoe = new TurtleHoe(new ResourceLocation("minecraft", "diamond_hoe"), 7, "upgrade.minecraft.diamond_hoe.adjective", Items.DIAMOND_HOE);
         registerTurtleUpgradeInternal(ComputerCraft.Upgrades.diamondHoe);
 
         ComputerCraft.Upgrades.advancedModem = new TurtleModem(true, new ResourceLocation("computercraft", "advanced_modem"), -1);
@@ -379,9 +375,7 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy {
         IEntityDropConsumer consumer = m_dropConsumers.get(entity);
         if (consumer != null) {
             // All checks have passed, lets dispatch the drops
-            Iterator<EntityItem> it = drops.iterator();
-            while (it.hasNext()) {
-                EntityItem entityItem = (EntityItem) it.next();
+            for (EntityItem entityItem : drops) {
                 consumer.consumeDrop(entity, entityItem.getEntityItem());
             }
             drops.clear();

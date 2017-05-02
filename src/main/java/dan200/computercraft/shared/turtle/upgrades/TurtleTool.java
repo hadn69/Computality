@@ -161,7 +161,7 @@ public class TurtleTool implements ITurtleUpgrade {
                 @Override
                 public void consumeDrop(Entity entity, ItemStack drop) {
                     ItemStack remainder = InventoryUtil.storeItems(drop, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot());
-                    if (remainder != null) {
+                    if (!remainder.isEmpty()) {
                         WorldUtil.dropItemStack(remainder, world, position, turtle.getDirection().getOpposite());
                     }
                 }
@@ -230,7 +230,7 @@ public class TurtleTool implements ITurtleUpgrade {
                 if (items.size() > 0) {
                     for (ItemStack stack : items) {
                         ItemStack remainder = InventoryUtil.storeItems(stack, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot());
-                        if (remainder != null) {
+                        if (!remainder.isEmpty()) {
                             // If there's no room for the items, drop them
                             WorldUtil.dropItemStack(remainder, world, position, direction);
                         }

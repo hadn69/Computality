@@ -240,18 +240,12 @@ public class ComputerCraft {
 
     public static boolean canPlayerUseCommands(EntityPlayer player) {
         MinecraftServer server = player.getServer();
-        if (server != null) {
-            return server.getPlayerList().canSendCommands(player.getGameProfile());
-        }
-        return false;
+        return server != null && server.getPlayerList().canSendCommands(player.getGameProfile());
     }
 
     public static boolean isPlayerOpped(EntityPlayer player) {
         MinecraftServer server = player.getServer();
-        if (server != null) {
-            return server.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile()) != null;
-        }
-        return false;
+        return server != null && server.getPlayerList().getOppedPlayers().getPermissionLevel(player.getGameProfile()) > 0;
     }
 
     public static void registerPermissionProvider(ITurtlePermissionProvider provider) {
@@ -268,8 +262,7 @@ public class ComputerCraft {
             }
         }
 
-        for (int i = 0; i < permissionProviders.size(); ++i) {
-            ITurtlePermissionProvider provider = permissionProviders.get(i);
+        for (ITurtlePermissionProvider provider : permissionProviders) {
             if (!provider.isBlockEnterable(world, pos)) {
                 return false;
             }
@@ -285,8 +278,7 @@ public class ComputerCraft {
             }
         }
 
-        for (int i = 0; i < permissionProviders.size(); ++i) {
-            ITurtlePermissionProvider provider = permissionProviders.get(i);
+        for (ITurtlePermissionProvider provider : permissionProviders) {
             if (!provider.isBlockEditable(world, pos)) {
                 return false;
             }
@@ -314,10 +306,9 @@ public class ComputerCraft {
 
     public static IPeripheral getPeripheralAt(World world, BlockPos pos, EnumFacing side) {
         // Try the handlers in order:
-        Iterator<IPeripheralProvider> it = peripheralProviders.iterator();
-        while (it.hasNext()) {
+        for (IPeripheralProvider peripheralProvider : peripheralProviders) {
             try {
-                IPeripheralProvider handler = it.next();
+                IPeripheralProvider handler = peripheralProvider;
                 IPeripheral peripheral = handler.getPeripheral(world, pos, side);
                 if (peripheral != null) {
                     return peripheral;
@@ -344,10 +335,9 @@ public class ComputerCraft {
 
         // Try the handlers in order:
         int combinedSignal = -1;
-        Iterator<IBundledRedstoneProvider> it = bundledRedstoneProviders.iterator();
-        while (it.hasNext()) {
+        for (IBundledRedstoneProvider bundledRedstoneProvider : bundledRedstoneProviders) {
             try {
-                IBundledRedstoneProvider handler = it.next();
+                IBundledRedstoneProvider handler = bundledRedstoneProvider;
                 int signal = handler.getBundledRedstoneOutput(world, pos, side);
                 if (signal >= 0) {
                     if (combinedSignal < 0) {
@@ -366,10 +356,9 @@ public class ComputerCraft {
     public static IMedia getMedia(ItemStack stack) {
         if (stack != null) {
             // Try the handlers in order:
-            Iterator<IMediaProvider> it = mediaProviders.iterator();
-            while (it.hasNext()) {
+            for (IMediaProvider mediaProvider : mediaProviders) {
                 try {
-                    IMediaProvider handler = it.next();
+                    IMediaProvider handler = mediaProvider;
                     IMedia media = handler.getMedia(stack);
                     if (media != null) {
                         return media;
@@ -425,23 +414,25 @@ public class ComputerCraft {
         File resourcePackDir = getResourcePackDir();
         if (resourcePackDir.exists() && resourcePackDir.isDirectory()) {
             String[] resourcePacks = resourcePackDir.list();
-            for (int i = 0; i < resourcePacks.length; ++i) {
-                try {
-                    File resourcePack = new File(resourcePackDir, resourcePacks[i]);
-                    if (!resourcePack.isDirectory()) {
-                        // Mount a resource pack from a jar
-                        IMount resourcePackMount = new JarMount(resourcePack, subPath);
-                        mounts.add(resourcePackMount);
-                    } else {
-                        // Mount a resource pack from a folder
-                        File subResource = new File(resourcePack, subPath);
-                        if (subResource.exists()) {
-                            IMount resourcePackMount = new FileMount(subResource, 0);
+            if (resourcePacks != null) {
+                for (String resourcePack1 : resourcePacks) {
+                    try {
+                        File resourcePack = new File(resourcePackDir, resourcePack1);
+                        if (!resourcePack.isDirectory()) {
+                            // Mount a resource pack from a jar
+                            IMount resourcePackMount = new JarMount(resourcePack, subPath);
                             mounts.add(resourcePackMount);
+                        } else {
+                            // Mount a resource pack from a folder
+                            File subResource = new File(resourcePack, subPath);
+                            if (subResource.exists()) {
+                                IMount resourcePackMount = new FileMount(subResource, 0);
+                                mounts.add(resourcePackMount);
+                            }
                         }
+                    } catch (IOException e) {
+                        // Ignore
                     }
-                } catch (IOException e) {
-                    // Ignore
                 }
             }
         }

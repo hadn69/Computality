@@ -128,6 +128,25 @@ public class ComputerCraft {
         return upgrades;
     }
 
+    public static IPocketUpgrade getPocketUpgrade(String id) {
+        return pocketUpgrades.get( id );
+    }
+
+    public static IPocketUpgrade getPocketUpgrade( ItemStack stack )
+    {
+        if( stack == null ) return null;
+
+        for (IPocketUpgrade upgrade : pocketUpgrades.values())
+        {
+            ItemStack craftingStack = upgrade.getCraftingItem();
+            if( craftingStack != null && InventoryUtil.areItemsStackable( stack, craftingStack ) )
+            {
+                return upgrade;
+            }
+        }
+
+        return null;
+    }
     public static class PocketUpgrades
     {
         public static PocketModem wirelessModem;

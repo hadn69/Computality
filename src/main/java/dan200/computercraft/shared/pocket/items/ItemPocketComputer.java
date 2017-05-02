@@ -71,7 +71,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
     }
 
     @Override
-    public void getSubItems( Item itemID, CreativeTabs tabs, List<ItemStack> list )
+    public void getSubItems( Item itemID, CreativeTabs tabs, NonNullList<ItemStack> list )
     {
         getSubItems( list, ComputerFamily.Normal );
         getSubItems( list, ComputerFamily.Advanced );

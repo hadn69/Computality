@@ -80,7 +80,7 @@ public class PocketAPI implements ILuaAPI
                 for (int i = 0; i < size; i++)
                 {
                     ItemStack invStack = inventory.getStackInSlot( (i + held) % size );
-                    if( invStack != null )
+                    if( !invStack.isEmpty() )
                     {
                         newUpgrade = ComputerCraft.getPocketUpgrade( invStack );
 
@@ -88,8 +88,8 @@ public class PocketAPI implements ILuaAPI
                         {
                             // Consume an item from this stack and exit the loop
                             invStack = invStack.copy();
-                            invStack.stackSize--;
-                            inventory.setInventorySlotContents( (i + held) % size, invStack.stackSize <= 0 ? null : invStack );
+                            invStack.shrink(1);
+                            inventory.setInventorySlotContents( (i + held) % size, invStack.getCount() <= 0 ? null : invStack );
 
                             break;
                         }
@@ -102,12 +102,12 @@ public class PocketAPI implements ILuaAPI
                 if( previousUpgrade != null )
                 {
                     ItemStack stack = previousUpgrade.getCraftingItem();
-                    if( stack != null )
+                    if( !stack.isEmpty() )
                     {
                         stack = InventoryUtil.storeItems( stack, inventory, 0, 36, inventory.currentItem );
-                        if( stack != null )
+                        if( !stack.isEmpty() )
                         {
-                            WorldUtil.dropItemStack( stack, player.worldObj, player.posX, player.posY, player.posZ );
+                            WorldUtil.dropItemStack( stack, player.getEntityWorld(), player.posX, player.posY, player.posZ );
                         }
                     }
                 }
@@ -139,12 +139,12 @@ public class PocketAPI implements ILuaAPI
                 m_computer.setUpgrade( null );
 
                 ItemStack stack = previousUpgrade.getCraftingItem();
-                if( stack != null )
+                if( !stack.isEmpty() )
                 {
                     stack = InventoryUtil.storeItems( stack, inventory, 0, 36, inventory.currentItem );
-                    if( stack != null )
+                    if( !stack.isEmpty() )
                     {
-                        WorldUtil.dropItemStack( stack, player.worldObj, player.posX, player.posY, player.posZ );
+                        WorldUtil.dropItemStack( stack, player.getEntityWorld(), player.posX, player.posY, player.posZ );
                     }
                 }
 

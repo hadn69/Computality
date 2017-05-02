@@ -32,8 +32,7 @@ public class TurtleCraftCommand implements ITurtleCommand {
         ArrayList<ItemStack> results = crafting.doCrafting(turtle.getWorld(), m_limit);
         if (results != null) {
             // Store the results
-            for (int i = 0; i < results.size(); ++i) {
-                ItemStack stack = results.get(i);
+            for (ItemStack stack : results) {
                 ItemStack remainder = InventoryUtil.storeItems(stack, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot());
                 if (remainder != null) {
                     // Drop the remainder

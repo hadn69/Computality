@@ -19,6 +19,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class WorldUtil {
@@ -108,11 +109,11 @@ public class WorldUtil {
         return null;
     }
 
-    public static void dropItemStack(ItemStack stack, World world, BlockPos pos) {
+    public static void dropItemStack(@Nonnull ItemStack stack, World world, BlockPos pos) {
         dropItemStack(stack, world, pos, null);
     }
 
-    public static void dropItemStack(ItemStack stack, World world, BlockPos pos, EnumFacing direction) {
+    public static void dropItemStack(@Nonnull ItemStack stack, World world, BlockPos pos, EnumFacing direction) {
         double xDir;
         double yDir;
         double zDir;

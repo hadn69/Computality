@@ -15,6 +15,10 @@ import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
 
 public class ContainerTurtle extends Container {
     private static final int PROGRESS_ID_SELECTED_SLOT = 0;
@@ -90,6 +94,7 @@ public class ContainerTurtle extends Container {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
         super.updateProgressBar(id, value);
         switch (id) {
@@ -109,14 +114,15 @@ public class ContainerTurtle extends Container {
         return false;
     }
 
+    @Nonnull
     protected ItemStack tryItemMerge(EntityPlayer player, int slotNum, int firstSlot, int lastSlot, boolean reverse) {
         Slot slot = (Slot) inventorySlots.get(slotNum);
-        ItemStack originalStack = null;
+        ItemStack originalStack = ItemStack.EMPTY;
         if (slot != null && slot.getHasStack()) {
             ItemStack clickedStack = slot.getStack();
             originalStack = clickedStack.copy();
             if (!mergeItemStack(clickedStack, firstSlot, lastSlot, reverse)) {
-                return null;
+                return ItemStack.EMPTY;
             }
 
             if (clickedStack.getCount() == 0) {
@@ -128,19 +134,20 @@ public class ContainerTurtle extends Container {
             if (clickedStack.getCount() != originalStack.getCount()) {
                 slot.onTake(player, clickedStack);
             } else {
-                return null;
+                return ItemStack.EMPTY;
             }
         }
         return originalStack;
     }
 
     @Override
+    @Nonnull
     public ItemStack transferStackInSlot(EntityPlayer player, int slotNum) {
         if (slotNum >= 0 && slotNum < 16) {
             return tryItemMerge(player, slotNum, 16, 52, true);
         } else if (slotNum >= 16) {
             return tryItemMerge(player, slotNum, 0, 16, false);
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 }

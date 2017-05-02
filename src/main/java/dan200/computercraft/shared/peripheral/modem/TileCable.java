@@ -265,13 +265,13 @@ public class TileCable extends TileModemBase
                 if (!Objects.equal(periphName, oldPeriphName)) {
                     if (oldPeriphName != null) {
                         player.sendStatusMessage(
-                                new TextComponentTranslation("gui.computercraft:wired_modem.peripheral_disconnected", oldPeriphName)
-                                ,false);
+                                new TextComponentTranslation("gui.computercraft.wired_modem.peripheral_disconnected", oldPeriphName)
+                                ,true);
                     }
                     if (periphName != null) {
                         player.sendStatusMessage(
-                                new TextComponentTranslation("gui.computercraft:wired_modem.peripheral_connected", periphName)
-                                ,false);
+                                new TextComponentTranslation("gui.computercraft.wired_modem.peripheral_connected", periphName)
+                                ,true);
                     }
                     return true;
                 }

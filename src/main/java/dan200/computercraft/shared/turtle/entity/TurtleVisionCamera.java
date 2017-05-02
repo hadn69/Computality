@@ -25,7 +25,7 @@ public class TurtleVisionCamera extends EntityLivingBase {
     public TurtleVisionCamera(World world, ITurtleAccess turtle) {
         super(world);
         m_turtle = turtle;
-        m_armor = new ArrayList<ItemStack>();
+        m_armor = new ArrayList<>();
         applyPos();
     }
 
@@ -78,7 +78,7 @@ public class TurtleVisionCamera extends EntityLivingBase {
 
     @Override
     public ItemStack getHeldItem(EnumHand hand) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class TurtleVisionCamera extends EntityLivingBase {
 
     @Override
     public ItemStack getItemStackFromSlot(EntityEquipmentSlot slot) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

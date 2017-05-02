@@ -40,7 +40,7 @@ public class TurtleDropCommand implements ITurtleCommand {
 
         // Get things to drop
         ItemStack stack = InventoryUtil.takeItems(m_quantity, turtle.getInventory(), turtle.getSelectedSlot(), 1, turtle.getSelectedSlot());
-        if (stack == null) {
+        if (stack.isEmpty()) {
             return TurtleCommandResult.failure("No items to drop");
         }
 
@@ -54,7 +54,7 @@ public class TurtleDropCommand implements ITurtleCommand {
         if (inventory != null) {
             // Drop the item into the inventory
             ItemStack remainder = InventoryUtil.storeItems(stack, inventory, side);
-            if (remainder != null) {
+            if (!remainder.isEmpty()) {
                 // Put the remainder back in the turtle
                 InventoryUtil.storeItems(remainder, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot());
             }

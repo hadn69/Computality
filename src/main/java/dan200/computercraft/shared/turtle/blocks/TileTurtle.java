@@ -30,7 +30,6 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
@@ -40,9 +39,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class TileTurtle extends TileComputerBase
@@ -109,7 +108,7 @@ public class TileTurtle extends TileComputerBase
                 int size = getSizeInventory();
                 for (int i = 0; i < size; ++i) {
                     ItemStack stack = getStackInSlot(i);
-                    if (stack != null) {
+                    if (!stack.isEmpty()) {
                         WorldUtil.dropItemStack(stack, getWorld(), getPos());
                     }
                 }
@@ -337,6 +336,7 @@ public class TileTurtle extends TileComputerBase
     }
 
     @Override
+    @Nonnull
     public ItemStack getStackInSlot(int slot) {
         if (slot >= 0 && slot < INVENTORY_SIZE) {
             synchronized (inventory) {
@@ -350,7 +350,7 @@ public class TileTurtle extends TileComputerBase
     public ItemStack removeStackFromSlot(int slot) {
         synchronized (inventory) {
             ItemStack result = getStackInSlot(slot);
-            setInventorySlotContents(slot, null);
+            setInventorySlotContents(slot, ItemStack.EMPTY);
             return result;
         }
     }
@@ -358,13 +358,13 @@ public class TileTurtle extends TileComputerBase
     @Override
     public ItemStack decrStackSize(int slot, int count) {
         if (count == 0) {
-            return null;
+            return ItemStack.EMPTY;
         }
 
         synchronized (inventory) {
             ItemStack stack = getStackInSlot(slot);
-            if (stack == null) {
-                return null;
+            if (stack.isEmpty()) {
+                return ItemStack.EMPTY;
             }
 
             if (stack.getCount() <= count) {
@@ -538,10 +538,7 @@ public class TileTurtle extends TileComputerBase
             default:
                 return false;
         }
-        if (upgrade != null && upgrade.getType() == TurtleUpgradeType.Peripheral) {
-            return true;
-        }
-        return false;
+        return upgrade != null && upgrade.getType() == TurtleUpgradeType.Peripheral;
     }
 
     public void transferStateFrom(TileTurtle copy) {

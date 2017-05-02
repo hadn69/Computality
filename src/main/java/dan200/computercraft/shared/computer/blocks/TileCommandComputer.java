@@ -65,12 +65,12 @@ public class TileCommandComputer extends TileComputer {
         MinecraftServer server = player.getServer();
         if (server == null || !server.isCommandBlockEnabled()) {
             player.sendStatusMessage(new TextComponentTranslation("advMode.notEnabled"),false);
-            return false;
+            return true;
         } else if (ComputerCraft.canPlayerUseCommands(player) && player.capabilities.isCreativeMode) {
             return super.isUsable(player, ignoreRange);
         } else {
             player.sendStatusMessage(new TextComponentTranslation("advMode.notAllowed"),false);
-            return false;
+            return true;
         }
     }
 

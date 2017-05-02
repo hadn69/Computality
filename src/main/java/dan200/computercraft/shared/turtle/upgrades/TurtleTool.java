@@ -227,10 +227,8 @@ public class TurtleTool implements ITurtleUpgrade {
             // Consume the items the block drops
             if (canHarvestBlock(world, newPosition)) {
                 java.util.List<ItemStack> items = getBlockDropped(world, newPosition);
-                if (items != null && items.size() > 0) {
-                    Iterator<ItemStack> it = items.iterator();
-                    while (it.hasNext()) {
-                        ItemStack stack = it.next();
+                if (items.size() > 0) {
+                    for (ItemStack stack : items) {
                         ItemStack remainder = InventoryUtil.storeItems(stack, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot());
                         if (remainder != null) {
                             // If there's no room for the items, drop them

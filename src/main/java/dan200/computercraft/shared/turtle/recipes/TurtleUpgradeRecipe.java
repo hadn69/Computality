@@ -28,7 +28,7 @@ public class TurtleUpgradeRecipe implements IRecipe {
 
     @Override
     public int getRecipeSize() {
-        return 3;
+        return 3    ;
     }
 
     @Override
@@ -44,69 +44,69 @@ public class TurtleUpgradeRecipe implements IRecipe {
     @Override
     public ItemStack getCraftingResult(InventoryCrafting inventory) {
         // Scan the grid for a row containing a turtle and 1 or 2 items
-        ItemStack leftItem = null;
-        ItemStack turtle = null;
-        ItemStack rightItem = null;
+        ItemStack leftItem = ItemStack.EMPTY;
+        ItemStack turtle = ItemStack.EMPTY;
+        ItemStack rightItem = ItemStack.EMPTY;
 
         for (int y = 0; y < inventory.getHeight(); ++y) {
-            if (turtle == null) {
+            if (turtle.isEmpty()) {
                 // Search this row for potential turtles
                 boolean finishedRow = false;
                 for (int x = 0; x < inventory.getWidth(); ++x) {
                     ItemStack item = inventory.getStackInRowAndColumn(x, y);
-                    if (item != null) {
+                    if (!item.isEmpty()) {
                         if (finishedRow) {
-                            return null;
+                            return ItemStack.EMPTY;
                         }
 
                         if (item.getItem() instanceof ITurtleItem) {
                             // Item is a turtle
-                            if (turtle == null) {
+                            if (turtle.isEmpty()) {
                                 turtle = item;
                             } else {
-                                return null;
+                                return ItemStack.EMPTY;
                             }
                         } else {
                             // Item is not a turtle
-                            if (turtle == null && leftItem == null) {
+                            if (turtle.isEmpty() && leftItem.isEmpty()) {
                                 leftItem = item;
-                            } else if (turtle != null && rightItem == null) {
+                            } else if (!turtle.isEmpty()&& rightItem.isEmpty()) {
                                 rightItem = item;
                             } else {
-                                return null;
+                                return ItemStack.EMPTY;
                             }
                         }
                     } else {
                         // Item is empty
-                        if (leftItem != null || turtle != null) {
+                        if (!leftItem.isEmpty() || !turtle.isEmpty()) {
                             finishedRow = true;
                         }
                     }
                 }
 
                 // If we found anything, check we found a turtle too
-                if (turtle == null && (leftItem != null || rightItem != null)) {
-                    return null;
+                if (turtle.isEmpty() && (!leftItem.isEmpty()|| !rightItem.isEmpty())) {
+                    return ItemStack.EMPTY;
                 }
             } else {
                 // Turtle is already found, just check this row is empty
                 for (int x = 0; x < inventory.getWidth(); ++x) {
                     ItemStack item = inventory.getStackInRowAndColumn(x, y);
-                    if (item != null) {
-                        return null;
+                    if (!item.isEmpty()) {
+                        return ItemStack.EMPTY;
                     }
                 }
             }
         }
 
         // See if we found a turtle + one or more items
-        if (turtle == null || (leftItem == null && rightItem == null)) {
-            return null;
+        if (turtle.isEmpty() || (leftItem.isEmpty() && rightItem.isEmpty())) {
+            return ItemStack.EMPTY;
         }
 
         // At this point we have a turtle + 1 or 2 items
         // Get the turtle we already have
-        ITurtleItem itemTurtle = (ITurtleItem) turtle.getItem();
+            ITurtleItem itemTurtle = (ITurtleItem) turtle.getItem();
         ComputerFamily family = itemTurtle.getFamily(turtle);
         ITurtleUpgrade[] upgrades = {
                 itemTurtle.getUpgrade(turtle, TurtleSide.Left),
@@ -119,13 +119,13 @@ public class TurtleUpgradeRecipe implements IRecipe {
             if (items[i] != null) {
                 ITurtleUpgrade itemUpgrade = ComputerCraft.getTurtleUpgrade(items[i]);
                 if (itemUpgrade == null) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
                 if (upgrades[i] != null) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
                 if (!CCTurtleProxyCommon.isUpgradeSuitableForFamily(family, itemUpgrade)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
                 upgrades[i] = itemUpgrade;
             }

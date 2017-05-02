@@ -119,12 +119,16 @@ public class ComputerCraftProxyClient extends ComputerCraftProxyCommon {
             private ModelResourceLocation advanced_pocket_computer_blinking_modem_on = new ModelResourceLocation("computercraft:advanced_pocket_computer_blinking_modem_on", "inventory");
 
             @Override
-            public ModelResourceLocation getModelLocation(ItemStack stack) {
-                ItemPocketComputer itemPocketComputer = (ItemPocketComputer) stack.getItem();
-                boolean modemOn = itemPocketComputer.getModemState(stack);
-                switch (itemPocketComputer.getFamily(stack)) {
-                    case Advanced: {
-                        switch (itemPocketComputer.getState(stack)) {
+            public ModelResourceLocation getModelLocation( ItemStack stack )
+            {
+                ItemPocketComputer itemPocketComputer = (ItemPocketComputer)stack.getItem();
+                boolean modemOn = itemPocketComputer.getLightState( stack );
+                switch( itemPocketComputer.getFamily( stack ) )
+                {
+                    case Advanced:
+                    {
+                        switch( itemPocketComputer.getState( stack ) )
+                        {
                             case Off:
                             default: {
                                 return advanced_pocket_computer_off;

@@ -13,6 +13,7 @@ import dan200.computercraft.api.media.IMediaProvider;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.IPeripheralProvider;
 import dan200.computercraft.api.permissions.ITurtlePermissionProvider;
+import dan200.computercraft.api.pocket.IPocketUpgrade;
 import dan200.computercraft.api.redstone.IBundledRedstoneProvider;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
 import dan200.computercraft.core.filesystem.ComboMount;
@@ -37,15 +38,13 @@ import dan200.computercraft.shared.peripheral.modem.BlockAdvancedModem;
 import dan200.computercraft.shared.peripheral.modem.WirelessNetwork;
 import dan200.computercraft.shared.peripheral.printer.TilePrinter;
 import dan200.computercraft.shared.pocket.items.ItemPocketComputer;
+import dan200.computercraft.shared.pocket.peripherals.PocketModem;
 import dan200.computercraft.shared.proxy.ICCTurtleProxy;
 import dan200.computercraft.shared.proxy.IComputerCraftProxy;
 import dan200.computercraft.shared.turtle.blocks.BlockTurtle;
 import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 import dan200.computercraft.shared.turtle.upgrades.*;
-import dan200.computercraft.shared.util.CreativeTabMain;
-import dan200.computercraft.shared.util.IDAssigner;
-import dan200.computercraft.shared.util.IEntityDropConsumer;
-import dan200.computercraft.shared.util.WorldUtil;
+import dan200.computercraft.shared.util.*;
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -74,9 +73,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 ///////////////
 // UNIVERSAL //
@@ -121,6 +118,33 @@ public class ComputerCraft {
         public static Configuration config;
     }
 
+    public static class Items
+    {
+        public static ItemDiskLegacy disk;
+        public static ItemDiskExpanded diskExpanded;
+        public static ItemPrintout printout;
+        public static ItemTreasureDisk treasureDisk;
+        public static ItemPocketComputer pocketComputer;
+    }
+
+    public static class Upgrades
+    {
+        public static TurtleModem wirelessModem;
+        public static TurtleCraftingTable craftingTable;
+        public static TurtleSword diamondSword;
+        public static TurtleShovel diamondShovel;
+        public static TurtleTool diamondPickaxe;
+        public static TurtleAxe diamondAxe;
+        public static TurtleHoe diamondHoe;
+        public static TurtleModem advancedModem;
+    }
+
+    public static class PocketUpgrades
+    {
+        public static PocketModem wirelessModem;
+        public static PocketModem advancedModem;
+    }
+
     // Registries
     public static ClientComputerRegistry clientComputerRegistry = new ClientComputerRegistry();
     public static ServerComputerRegistry serverComputerRegistry = new ServerComputerRegistry();
@@ -140,6 +164,7 @@ public class ComputerCraft {
     private static List<IBundledRedstoneProvider> bundledRedstoneProviders = new ArrayList<IBundledRedstoneProvider>();
     private static List<IMediaProvider> mediaProviders = new ArrayList<IMediaProvider>();
     private static List<ITurtlePermissionProvider> permissionProviders = new ArrayList<ITurtlePermissionProvider>();
+    private static final Map<String, IPocketUpgrade> pocketUpgrades = new HashMap<String, IPocketUpgrade>();
 
     public ComputerCraft() {
     }
@@ -286,9 +311,23 @@ public class ComputerCraft {
         return true;
     }
 
-    public static void registerPeripheralProvider(IPeripheralProvider provider) {
-        if (provider != null && !peripheralProviders.contains(provider)) {
-            peripheralProviders.add(provider);
+    public static void registerPocketUpgrade( IPocketUpgrade upgrade )
+    {
+        String id = upgrade.getUpgradeID().toString();
+        IPocketUpgrade existing = pocketUpgrades.get( id );
+        if( existing != null )
+        {
+            throw new RuntimeException( "Error registering '" + upgrade.getUnlocalisedAdjective() + " pocket computer'. UpgradeID '" + id + "' is already registered by '" + existing.getUnlocalisedAdjective() + " pocket computer'" );
+        }
+
+        pocketUpgrades.put( id, upgrade );
+    }
+
+    public static void registerPeripheralProvider( IPeripheralProvider provider )
+    {
+        if( provider != null && !peripheralProviders.contains( provider ) )
+        {
+            peripheralProviders.add( provider );
         }
     }
 
@@ -372,7 +411,8 @@ public class ComputerCraft {
         return null;
     }
 
-    public static int createUniqueNumberedSaveDir(World world, String parentSubPath) {
+    public static int createUniqueNumberedSaveDir( World world, String parentSubPath )
+    {
         return IDAssigner.getNextIDFromDirectory(new File(getWorldDir(world), parentSubPath));
     }
 

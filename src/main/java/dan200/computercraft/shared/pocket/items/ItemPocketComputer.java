@@ -10,17 +10,16 @@ import com.google.common.base.Objects;
 import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.api.filesystem.IMount;
 import dan200.computercraft.api.media.IMedia;
-import dan200.computercraft.api.peripheral.IPeripheral;
+import dan200.computercraft.api.pocket.IPocketUpgrade;
 import dan200.computercraft.shared.computer.blocks.ComputerState;
 import dan200.computercraft.shared.computer.core.ClientComputer;
 import dan200.computercraft.shared.computer.core.ComputerFamily;
 import dan200.computercraft.shared.computer.core.ServerComputer;
 import dan200.computercraft.shared.computer.items.IComputerItem;
 import dan200.computercraft.shared.pocket.apis.PocketAPI;
-import dan200.computercraft.shared.pocket.peripherals.PocketModemPeripheral;
+import dan200.computercraft.shared.pocket.core.PocketServerComputer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -29,6 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.List;
 
@@ -42,7 +42,8 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
         setCreativeTab(ComputerCraft.mainCreativeTab);
     }
 
-    public ItemStack create(int id, String label, ComputerFamily family, boolean modem) {
+    public ItemStack create( int id, String label, ComputerFamily family, IPocketUpgrade upgrade )
+    {
         // Ignore types we can't handle
         if (family != ComputerFamily.Normal && family != ComputerFamily.Advanced) {
             return null;
@@ -50,14 +51,16 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
 
         // Build the stack
         int damage = (family == ComputerFamily.Advanced) ? 1 : 0;
-        ItemStack result = new ItemStack(this, 1, damage);
-        if (id >= 0 || modem) {
+        ItemStack result = new ItemStack( this, 1, damage );
+        if( id >= 0 || upgrade != null )
+        {
             NBTTagCompound compound = new NBTTagCompound();
             if (id >= 0) {
                 compound.setInteger("computerID", id);
             }
-            if (modem) {
-                compound.setInteger("upgrade", 1);
+            if( upgrade != null )
+            {
+                compound.setString( "upgrade", upgrade.getUpgradeID().toString() );
             }
             result.setTagCompound(compound);
         }
@@ -68,11 +71,19 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
     }
 
     @Override
-    public void getSubItems(Item itemID, CreativeTabs tabs, NonNullList<ItemStack> list) {
-        list.add(PocketComputerItemFactory.create(-1, null, ComputerFamily.Normal, false));
-        list.add(PocketComputerItemFactory.create(-1, null, ComputerFamily.Normal, true));
-        list.add(PocketComputerItemFactory.create(-1, null, ComputerFamily.Advanced, false));
-        list.add(PocketComputerItemFactory.create(-1, null, ComputerFamily.Advanced, true));
+    public void getSubItems( Item itemID, CreativeTabs tabs, List<ItemStack> list )
+    {
+        getSubItems( list, ComputerFamily.Normal );
+        getSubItems( list, ComputerFamily.Advanced );
+    }
+
+    private void getSubItems( List<ItemStack> list, ComputerFamily family )
+    {
+        list.add( PocketComputerItemFactory.create( -1, null, family, null ) );
+        for (IPocketUpgrade upgrade : ComputerCraft.getVanillaPocketUpgrades())
+        {
+            list.add( PocketComputerItemFactory.create( -1, null, family, upgrade ) );
+        }
     }
 
     @Override
@@ -80,11 +91,13 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
         if (!world.isRemote) {
             // Server side
             IInventory inventory = (entity instanceof EntityPlayer) ? ((EntityPlayer) entity).inventory : null;
-            ServerComputer computer = createServerComputer(world, inventory, stack);
-            if (computer != null) {
+            PocketServerComputer computer = createServerComputer( world, inventory, entity, stack );
+            if( computer != null )
+            {
                 // Ping computer
                 computer.keepAlive();
-                computer.setWorld(world);
+                computer.setWorld( world );
+                computer.update( entity, stack );
 
                 // Sync ID
                 int id = computer.getID();
@@ -105,24 +118,10 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
                 }
 
                 // Update modem
-                IPeripheral peripheral = computer.getPeripheral(2);
-                if (peripheral != null && peripheral instanceof PocketModemPeripheral) {
-                    // Location
-                    PocketModemPeripheral modem = (PocketModemPeripheral) peripheral;
-                    if (entity instanceof EntityLivingBase) {
-                        EntityLivingBase player = (EntityLivingBase) entity;
-                        modem.setLocation(world, player.posX, player.posY + player.getEyeHeight(), player.posZ);
-                    } else {
-                        modem.setLocation(world, entity.posX, entity.posY, entity.posZ);
-                    }
-
-                    // Light
-                    boolean modemLight = modem.isActive();
-                    NBTTagCompound modemNBT = computer.getUserData();
-                    if (modemNBT.getBoolean("modemLight") != modemLight) {
-                        modemNBT.setBoolean("modemLight", modemLight);
-                        computer.updateUserData();
-                    }
+                IPocketUpgrade upgrade = getUpgrade( stack );
+                if( upgrade != null )
+                {
+                    upgrade.update( computer, computer.getPeripheral( 2 ) );
                 }
             }
         } else {
@@ -135,14 +134,25 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-        if (!world.isRemote) {
-            ServerComputer computer = createServerComputer(world, player.inventory, stack);
-            if (computer != null) {
+    public ActionResult<ItemStack> onItemRightClick( ItemStack stack, World world, EntityPlayer player, EnumHand hand )
+    {
+        if( !world.isRemote )
+        {
+            PocketServerComputer computer = createServerComputer( world, player.inventory, player, stack );
+
+            boolean stop = false;
+            if( computer != null )
+            {
                 computer.turnOn();
+
+                IPocketUpgrade upgrade = getUpgrade( stack );
+                if( upgrade != null )
+                {
+                    stop = upgrade.onRightClick( world, computer, computer.getPeripheral( 2 ) );
+                }
             }
-            ComputerCraft.openPocketComputerGUI(player, hand);
+
+            if( !stop ) ComputerCraft.openPocketComputerGUI( player, hand );
         }
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
@@ -161,13 +171,15 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
     }
 
     @Override
-    public String getItemStackDisplayName(ItemStack stack) {
-        String baseString = getUnlocalizedName(stack);
-        boolean modem = getHasModem(stack);
-        if (modem) {
+    public String getItemStackDisplayName( ItemStack stack )
+    {
+        String baseString = getUnlocalizedName( stack );
+        IPocketUpgrade upgrade = getUpgrade( stack );
+        if( upgrade != null )
+        {
             return I18n.translateToLocalFormatted(
-                    baseString + ".upgraded.name",
-                    I18n.translateToLocal("upgrade.computercraft.wireless_modem.adjective")
+                baseString + ".upgraded.name",
+                I18n.translateToLocal( upgrade.getUnlocalisedAdjective() )
             );
         } else {
             return I18n.translateToLocal(baseString + ".name");
@@ -184,21 +196,27 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
         }
     }
 
-    private ServerComputer createServerComputer(final World world, IInventory inventory, ItemStack stack) {
-        if (world.isRemote) {
+    private PocketServerComputer createServerComputer( final World world, IInventory inventory, Entity entity, ItemStack stack )
+    {
+        if( world.isRemote )
+        {
             return null;
         }
 
-        ServerComputer computer;
-        int instanceID = getInstanceID(stack);
-        int sessionID = getSessionID(stack);
+        PocketServerComputer computer;
+        int instanceID = getInstanceID( stack );
+        int sessionID = getSessionID( stack );
         int correctSessionID = ComputerCraft.serverComputerRegistry.getSessionID();
 
-        if (instanceID >= 0 && sessionID == correctSessionID &&
-                ComputerCraft.serverComputerRegistry.contains(instanceID)) {
-            computer = ComputerCraft.serverComputerRegistry.get(instanceID);
-        } else {
-            if (instanceID < 0 || sessionID != correctSessionID) {
+        if( instanceID >= 0 && sessionID == correctSessionID &&
+            ComputerCraft.serverComputerRegistry.contains( instanceID ) )
+        {
+            computer = (PocketServerComputer) ComputerCraft.serverComputerRegistry.get( instanceID );
+        }
+        else
+        {
+            if( instanceID < 0 || sessionID != correctSessionID )
+            {
                 instanceID = ComputerCraft.serverComputerRegistry.getUnusedInstanceID();
                 setInstanceID(stack, instanceID);
                 setSessionID(stack, correctSessionID);
@@ -208,21 +226,20 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
                 computerID = ComputerCraft.createUniqueNumberedSaveDir(world, "computer");
                 setComputerID(stack, computerID);
             }
-            computer = new ServerComputer(
-                    world,
-                    computerID,
-                    getLabel(stack),
-                    instanceID,
-                    getFamily(stack),
-                    ComputerCraft.terminalWidth_pocketComputer,
-                    ComputerCraft.terminalHeight_pocketComputer
+            computer = new PocketServerComputer(
+                world,
+                computerID,
+                getLabel( stack ),
+                instanceID,
+                getFamily( stack ),
+                stack,
+                entity
             );
-            computer.addAPI(new PocketAPI());
-            if (getHasModem(stack)) {
-                computer.setPeripheral(2, new PocketModemPeripheral(false));
-            }
-            ComputerCraft.serverComputerRegistry.add(instanceID, computer);
-            if (inventory != null) {
+            computer.addAPI( new PocketAPI( computer ) );
+            computer.setUpgrade( getUpgrade( stack ) );
+            ComputerCraft.serverComputerRegistry.add( instanceID, computer );
+            if( inventory != null )
+            {
                 inventory.markDirty();
             }
         }
@@ -312,9 +329,11 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
     }
 
     @Override
-    public IMount createDataMount(ItemStack stack, World world) {
-        ServerComputer computer = createServerComputer(world, null, stack);
-        if (computer != null) {
+    public IMount createDataMount( ItemStack stack, World world )
+    {
+        ServerComputer computer = createServerComputer( world, null, null, stack );
+        if( computer != null )
+        {
             return computer.getRootMount();
         }
         return null;
@@ -358,9 +377,11 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
         return ComputerState.Off;
     }
 
-    public boolean getModemState(ItemStack stack) {
-        ClientComputer computer = getClientComputer(stack);
-        if (computer != null && computer.isOn()) {
+    public boolean getLightState( ItemStack stack )
+    {
+        ClientComputer computer = getClientComputer( stack );
+        if( computer != null && computer.isOn() )
+        {
             NBTTagCompound computerNBT = computer.getUserData();
             if (computerNBT != null && computerNBT.getBoolean("modemLight")) {
                 return true;
@@ -369,11 +390,43 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
         return false;
     }
 
-    public boolean getHasModem(ItemStack stack) {
+    public static IPocketUpgrade getUpgrade( ItemStack stack )
+    {
         NBTTagCompound compound = stack.getTagCompound();
-        if (compound != null && compound.hasKey("upgrade")) {
-            return (compound.getInteger("upgrade") == 1);
+        if( compound != null )
+        {
+            if( compound.hasKey( "upgrade", Constants.NBT.TAG_STRING ) )
+            {
+                String name = compound.getString( "upgrade" );
+                return ComputerCraft.getPocketUpgrade( name );
+            }
+            else if( compound.hasKey( "upgrade", Constants.NBT.TAG_ANY_NUMERIC ) )
+            {
+                int id = compound.getInteger( "upgrade" );
+                if( id == 1 )
+                {
+                    return ComputerCraft.getPocketUpgrade( "computercraft:wireless_modem" );
+                }
+            }
         }
-        return false;
+
+        return null;
+    }
+
+    public static void setUpgrade( ItemStack stack, IPocketUpgrade upgrade )
+    {
+        NBTTagCompound compound = stack.getTagCompound();
+        if( compound == null ) stack.setTagCompound( compound = new NBTTagCompound() );
+
+        if( upgrade == null )
+        {
+            compound.removeTag( "upgrade" );
+        }
+        else
+        {
+            compound.setString( "upgrade", upgrade.getUpgradeID().toString() );
+        }
+
+        compound.removeTag( "upgrade_info" );
     }
 }

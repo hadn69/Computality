@@ -37,8 +37,8 @@ public class PocketModem implements IPocketUpgrade
     public String getUnlocalisedAdjective()
     {
         return m_advanced
-            ? "upgrade.computercraft:advanced_modem.adjective"
-            : "upgrade.computercraft:wireless_modem.adjective";
+            ? "upgrade.computercraft.advanced_modem.adjective"
+            : "upgrade.computercraft.wireless_modem.adjective";
     }
 
     @Nullable

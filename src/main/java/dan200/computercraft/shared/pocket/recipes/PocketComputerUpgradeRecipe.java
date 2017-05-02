@@ -17,9 +17,13 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import org.lwjgl.Sys;
+
+import javax.annotation.Nonnull;
 
 public class PocketComputerUpgradeRecipe implements IRecipe {
     public PocketComputerUpgradeRecipe() {
+        System.out.println("foagdag");
     }
 
     @Override
@@ -39,9 +43,10 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
     }
 
     @Override
+    @Nonnull
     public ItemStack getCraftingResult(InventoryCrafting inventory) {
         // Scan the grid for a pocket computer
-        ItemStack computer = null;
+        ItemStack computer = ItemStack.EMPTY;
         int computerX = -1;
         int computerY = -1;
         for( int y=0; y<inventory.getHeight(); ++y )
@@ -49,7 +54,7 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
             for( int x=0; x<inventory.getWidth(); ++x )
             {
                 ItemStack item = inventory.getStackInRowAndColumn( x, y );
-                if( item != null && item.getItem() instanceof ItemPocketComputer )
+                if( !item.isEmpty() && item.getItem() instanceof ItemPocketComputer )
                 {
                     computer = item;
                     computerX = x;
@@ -63,13 +68,13 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
         }
 
         if (computer == null) {
-            return null;
+            return ItemStack.EMPTY;
         }
 
         ItemPocketComputer itemComputer = (ItemPocketComputer)computer.getItem();
         if( itemComputer.getUpgrade( computer ) != null )
         {
-            return null;
+            return ItemStack.EMPTY;
         }
 
         // Check for upgrades around the item
@@ -86,17 +91,17 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
                 else if( x == computerX && y == computerY - 1 )
                 {
                     upgrade = ComputerCraft.getPocketUpgrade( item );
-                    if( upgrade == null ) return null;
+                    if( upgrade == null ) return ItemStack.EMPTY;
                 }
-                else if( item != null )
+                else if( !item.isEmpty() )
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
         }
 
         if (upgrade == null) {
-            return null;
+            return ItemStack.EMPTY;
         }
 
         // Construct the new stack

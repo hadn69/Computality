@@ -89,23 +89,23 @@ public class ComputerCraftProxyClient extends ComputerCraftProxyCommon {
                 ComputerFamily family = itemComputer.getFamily(stack.getItemDamage());
                 return (family == ComputerFamily.Advanced) ? advanced_computer : computer;
             }
-        }, new String[]{"computer", "advanced_computer"});
-        registerItemModel(ComputerCraft.Blocks.peripheral, 0, "peripheral");
-        registerItemModel(ComputerCraft.Blocks.peripheral, 1, "wireless_modem");
-        registerItemModel(ComputerCraft.Blocks.peripheral, 2, "monitor");
-        registerItemModel(ComputerCraft.Blocks.peripheral, 3, "printer");
-        registerItemModel(ComputerCraft.Blocks.peripheral, 4, "advanced_monitor");
-        registerItemModel(ComputerCraft.Blocks.cable, 0, "cable");
-        registerItemModel(ComputerCraft.Blocks.cable, 1, "wired_modem");
-        registerItemModel(ComputerCraft.Blocks.commandComputer, "command_computer");
-        registerItemModel(ComputerCraft.Blocks.advancedModem, "advanced_modem");
+        }, new String[]{ "computer", "advanced_computer" } );
+        registerItemModel( ComputerCraft.Blocks.peripheral, 0, "peripheral" );
+        registerItemModel( ComputerCraft.Blocks.peripheral, 1, "wireless_modem" );
+        registerItemModel( ComputerCraft.Blocks.peripheral, 2, "monitor" );
+        registerItemModel( ComputerCraft.Blocks.peripheral, 3, "printer" );
+        registerItemModel( ComputerCraft.Blocks.peripheral, 4, "advanced_monitor" );
+        registerItemModel( ComputerCraft.Blocks.cable, 0, "cable" );
+        registerItemModel( ComputerCraft.Blocks.cable, 1, "wired_modem" );
+        registerItemModel( ComputerCraft.Blocks.commandComputer, "command_computer" );
+        registerItemModel( ComputerCraft.Blocks.advancedModem, "advanced_modem" );
 
-        registerItemModel(ComputerCraft.Items.disk, "disk");
-        registerItemModel(ComputerCraft.Items.diskExpanded, "disk_expanded");
-        registerItemModel(ComputerCraft.Items.treasureDisk, "disk_treasure");
-        registerItemModel(ComputerCraft.Items.printout, 0, "printout");
-        registerItemModel(ComputerCraft.Items.printout, 1, "pages");
-        registerItemModel(ComputerCraft.Items.printout, 2, "book");
+        registerItemModel( ComputerCraft.Items.disk, "disk" );
+        registerItemModel( ComputerCraft.Items.diskExpanded, "disk_expanded" );
+        registerItemModel( ComputerCraft.Items.treasureDisk, "disk_treasure" );
+        registerItemModel( ComputerCraft.Items.printout, 0, "printout" );
+        registerItemModel( ComputerCraft.Items.printout, 1, "pages" );
+        registerItemModel( ComputerCraft.Items.printout, 2, "book" );
         registerItemModel(ComputerCraft.Items.pocketComputer, new ItemMeshDefinition() {
             private ModelResourceLocation pocket_computer_off = new ModelResourceLocation("computercraft:pocket_computer", "inventory");
             private ModelResourceLocation pocket_computer_on = new ModelResourceLocation("computercraft:pocket_computer_on", "inventory");

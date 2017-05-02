@@ -303,7 +303,7 @@ public class TurtlePlaceCommand implements ITurtleCommand {
     public TurtleCommandResult execute(ITurtleAccess turtle) {
         // Get thing to place
         ItemStack stack = turtle.getInventory().getStackInSlot(turtle.getSelectedSlot());
-        if (stack == null) {
+        if (stack.isEmpty()) {
             return TurtleCommandResult.failure("No items to place");
         }
 

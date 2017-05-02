@@ -117,6 +117,7 @@ public class ComputerCraft {
         public static int modem_highAltitudeRangeDuringStorm = 384;
         public static int computerSpaceLimit = 1000 * 1000;
         public static int floppySpaceLimit = 125 * 1000;
+        public static int maximumFilesOpen  = 128;
         public static Configuration config;
     }
 
@@ -568,6 +569,10 @@ public class ComputerCraft {
         prop = Config.config.get(Configuration.CATEGORY_GENERAL, "floppySpaceLimit", Config.floppySpaceLimit);
         prop.setComment("The disk space limit for floppy disks, in bytes");
         Config.floppySpaceLimit = prop.getInt();
+
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "maximumFilesOpen", Config.maximumFilesOpen);
+        prop.setComment("How many files a computer can have open at the same time");
+        Config.maximumFilesOpen = prop.getInt();
 
         prop = Config.config.get(Configuration.CATEGORY_GENERAL, "turtlesNeedFuel", Config.turtlesNeedFuel);
         prop.setComment("Set whether Turtles require fuel to move");

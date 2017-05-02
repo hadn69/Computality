@@ -117,26 +117,15 @@ public class ComputerCraft {
         public static int maximumFilesOpen  = 128;
         public static Configuration config;
     }
+    public static Iterable<IPocketUpgrade> getVanillaPocketUpgrades() {
+        List<IPocketUpgrade> upgrades = new ArrayList<>();
+        for(IPocketUpgrade upgrade : pocketUpgrades.values()) {
+            if(upgrade instanceof PocketModem) {
+                upgrades.add( upgrade );
+            }
+        }
 
-    public static class Items
-    {
-        public static ItemDiskLegacy disk;
-        public static ItemDiskExpanded diskExpanded;
-        public static ItemPrintout printout;
-        public static ItemTreasureDisk treasureDisk;
-        public static ItemPocketComputer pocketComputer;
-    }
-
-    public static class Upgrades
-    {
-        public static TurtleModem wirelessModem;
-        public static TurtleCraftingTable craftingTable;
-        public static TurtleSword diamondSword;
-        public static TurtleShovel diamondShovel;
-        public static TurtleTool diamondPickaxe;
-        public static TurtleAxe diamondAxe;
-        public static TurtleHoe diamondHoe;
-        public static TurtleModem advancedModem;
+        return upgrades;
     }
 
     public static class PocketUpgrades

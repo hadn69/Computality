@@ -26,18 +26,6 @@ import java.lang.reflect.Method;
  * but may be called before it is fully loaded.
  */
 public final class ComputerCraftAPI {
-    private static boolean ccSearched = false;
-    private static Class computerCraft = null;
-    private static Method computerCraft_getVersion = null;
-    private static Method computerCraft_createUniqueNumberedSaveDir = null;
-    private static Method computerCraft_createSaveDirMount = null;
-    private static Method computerCraft_createResourceMount = null;
-    private static Method computerCraft_registerPeripheralProvider = null;
-    private static Method computerCraft_registerTurtleUpgrade = null;
-    private static Method computerCraft_registerBundledRedstoneProvider = null;
-    private static Method computerCraft_getDefaultBundledRedstoneOutput = null;
-    private static Method computerCraft_registerMediaProvider = null;
-    private static Method computerCraft_registerPermissionProvider = null;
 
     // The functions below here are private, and are used to interface with the non-API ComputerCraft classes.
     // Reflection is used here so you can develop your mod without decompiling ComputerCraft and including

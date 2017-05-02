@@ -432,7 +432,7 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy {
         GameRegistry.addRecipe( new PocketComputerUpgradeRecipe() );
 
         // Advanced Wireless Pocket Computer
-        ItemStack advancedWirelessPocketComputer = PocketComputerItemFactory.create( -1, null, ComputerFamily.Advanced, true );
+        ItemStack advancedWirelessPocketComputer = PocketComputerItemFactory.create( -1, null, ComputerFamily.Advanced, null );
 
         // Impostor Pocket Computer recipes (to fool NEI)
         for (IPocketUpgrade upgrade : ComputerCraft.getVanillaPocketUpgrades())

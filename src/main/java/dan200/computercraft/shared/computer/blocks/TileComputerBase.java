@@ -119,7 +119,8 @@ public abstract class TileComputerBase extends TileGeneric
 
     @Override
     public boolean getRedstoneConnectivity(EnumFacing side) {
-        int localDir = remapLocalSide(DirectionUtil.toLocal(this, side));
+        if (side == null) return false;
+        int localDir = remapLocalSide(DirectionUtil.toLocal(this, side.getOpposite()));
         return !isRedstoneBlockedOnSide(localDir);
     }
 

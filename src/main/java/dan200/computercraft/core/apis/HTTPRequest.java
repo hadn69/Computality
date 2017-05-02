@@ -186,7 +186,7 @@ public class HTTPRequest {
 
         // Compare the URL to the whitelist
         boolean allowed = false;
-        String whitelistString = ComputerCraft.http_whitelist;
+        String whitelistString = ComputerCraft.Config.http_whitelist;
         String[] allowedURLs = whitelistString.split(";");
         for (int i = 0; i < allowedURLs.length; ++i) {
             String allowedURL = allowedURLs[i];

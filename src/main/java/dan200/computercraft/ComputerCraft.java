@@ -82,7 +82,7 @@ import java.util.List;
 // UNIVERSAL //
 ///////////////
 
-@Mod(modid = "computercraft", name = "ComputerCraft", version = "${version}")
+@Mod(modid = "computercraft", name = "ComputerCraft", version = "${version}", guiFactory = "dan200.computercraft.client.gui.GuiConfig$Factory")
 public class ComputerCraft {
     // GUI IDs
     public static final int diskDriveGUIID = 100;
@@ -98,24 +98,28 @@ public class ComputerCraft {
     public static final int terminalHeight_turtle = 13;
     public static final int terminalWidth_pocketComputer = 26;
     public static final int terminalHeight_pocketComputer = 20;
-    // Configuration options
-    public static boolean http_enable = true;
-    public static String http_whitelist = "*";
-    public static boolean disable_lua51_features = false;
-    public static String default_computer_settings = "";
-    public static boolean enableCommandBlock = false;
-    public static boolean turtlesNeedFuel = true;
-    public static int turtleFuelLimit = 20000;
-    public static int advancedTurtleFuelLimit = 100000;
-    public static boolean turtlesObeyBlockProtection = true;
-    public static boolean turtlesCanPush = true;
-    public static int modem_range = 64;
-    public static int modem_highAltitudeRange = 384;
-    public static int modem_rangeDuringStorm = 64;
-    public static int modem_highAltitudeRangeDuringStorm = 384;
 
-    public static int computerSpaceLimit = 1000 * 1000;
-    public static int floppySpaceLimit = 125 * 1000;
+    public static class Config {
+        // Configuration options
+        public static boolean http_enable = true;
+        public static String http_whitelist = "*";
+        public static boolean disable_lua51_features = false;
+        public static String default_computer_settings = "";
+        public static boolean enableCommandBlock = false;
+        public static boolean turtlesNeedFuel = true;
+        public static int turtleFuelLimit = 20000;
+        public static int advancedTurtleFuelLimit = 100000;
+        public static boolean turtlesObeyBlockProtection = true;
+        public static boolean turtlesCanPush = true;
+        public static int modem_range = 64;
+        public static int modem_highAltitudeRange = 384;
+        public static int modem_rangeDuringStorm = 64;
+        public static int modem_highAltitudeRangeDuringStorm = 384;
+        public static int computerSpaceLimit = 1000 * 1000;
+        public static int floppySpaceLimit = 125 * 1000;
+        public static Configuration config;
+    }
+
     // Registries
     public static ClientComputerRegistry clientComputerRegistry = new ClientComputerRegistry();
     public static ServerComputerRegistry serverComputerRegistry = new ServerComputerRegistry();
@@ -516,76 +520,76 @@ public class ComputerCraft {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         // Load config
-        Configuration config = new Configuration(event.getSuggestedConfigurationFile());
-        config.load();
+        Config.config = new Configuration(event.getSuggestedConfigurationFile());
+        Config.config.load();
 
         // Setup general
 
-        Property prop = config.get(Configuration.CATEGORY_GENERAL, "http_enable", http_enable);
+        Property prop = Config.config.get(Configuration.CATEGORY_GENERAL, "http_enable", Config.http_enable);
         prop.setComment("Enable the \"http\" API on Computers (see \"http_whitelist\" for more fine grained control than this)");
-        http_enable = prop.getBoolean(http_enable);
+        Config.http_enable = prop.getBoolean(Config.http_enable);
 
-        prop = config.get(Configuration.CATEGORY_GENERAL, "http_whitelist", http_whitelist);
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "http_whitelist", Config.http_whitelist);
         prop.setComment("A semicolon limited list of wildcards for domains that can be accessed through the \"http\" API on Computers. Set this to \"*\" to access to the entire internet. Example: \"*.pastebin.com;*.github.com;*.computercraft.info\" will restrict access to just those 3 domains.");
-        http_whitelist = prop.getString();
+        Config.http_whitelist = prop.getString();
 
-        prop = config.get(Configuration.CATEGORY_GENERAL, "disable_lua51_features", disable_lua51_features);
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "disable_lua51_features", Config.disable_lua51_features);
         prop.setComment("Set this to true to disable Lua 5.1 functions that will be removed in a future update. Useful for ensuring forward compatibility of your programs now.");
-        disable_lua51_features = prop.getBoolean(disable_lua51_features);
+        Config.disable_lua51_features = prop.getBoolean(Config.disable_lua51_features);
 
-        prop = config.get(Configuration.CATEGORY_GENERAL, "default_computer_settings", default_computer_settings);
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "default_computer_settings", Config.default_computer_settings);
         prop.setComment("A comma seperated list of default system settings to set on new computers. Example: \"shell.autocomplete=false,lua.autocomplete=false,edit.autocomplete=false\" will disable all autocompletion");
-        default_computer_settings = prop.getString();
+        Config.default_computer_settings = prop.getString();
 
-        prop = config.get(Configuration.CATEGORY_GENERAL, "enableCommandBlock", enableCommandBlock);
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "enableCommandBlock", Config.enableCommandBlock);
         prop.setComment("Enable Command Block peripheral support");
-        enableCommandBlock = prop.getBoolean(enableCommandBlock);
+        Config.enableCommandBlock = prop.getBoolean(Config.enableCommandBlock);
 
-        prop = config.get(Configuration.CATEGORY_GENERAL, "modem_range", modem_range);
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "modem_range", Config.modem_range);
         prop.setComment("The range of Wireless Modems at low altitude in clear weather, in meters");
-        modem_range = Math.min(prop.getInt(), 100000);
+        Config.modem_range = Math.min(prop.getInt(), 100000);
 
-        prop = config.get(Configuration.CATEGORY_GENERAL, "modem_highAltitudeRange", modem_highAltitudeRange);
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "modem_highAltitudeRange", Config.modem_highAltitudeRange);
         prop.setComment("The range of Wireless Modems at maximum altitude in clear weather, in meters");
-        modem_highAltitudeRange = Math.min(prop.getInt(), 100000);
+        Config.modem_highAltitudeRange = Math.min(prop.getInt(), 100000);
 
-        prop = config.get(Configuration.CATEGORY_GENERAL, "modem_rangeDuringStorm", modem_rangeDuringStorm);
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "modem_rangeDuringStorm", Config.modem_rangeDuringStorm);
         prop.setComment("The range of Wireless Modems at low altitude in stormy weather, in meters");
-        modem_rangeDuringStorm = Math.min(prop.getInt(), 100000);
+        Config.modem_rangeDuringStorm = Math.min(prop.getInt(), 100000);
 
-        prop = config.get(Configuration.CATEGORY_GENERAL, "modem_highAltitudeRangeDuringStorm", modem_highAltitudeRangeDuringStorm);
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "modem_highAltitudeRangeDuringStorm", Config.modem_highAltitudeRangeDuringStorm);
         prop.setComment("The range of Wireless Modems at maximum altitude in stormy weather, in meters");
-        modem_highAltitudeRangeDuringStorm = Math.min(prop.getInt(), 100000);
+        Config.modem_highAltitudeRangeDuringStorm = Math.min(prop.getInt(), 100000);
 
-        prop = config.get(Configuration.CATEGORY_GENERAL, "computerSpaceLimit", computerSpaceLimit);
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "computerSpaceLimit", Config.computerSpaceLimit);
         prop.setComment("The disk space limit for computers and turtles, in bytes");
-        computerSpaceLimit = prop.getInt();
+        Config.computerSpaceLimit = prop.getInt();
 
-        prop = config.get(Configuration.CATEGORY_GENERAL, "floppySpaceLimit", floppySpaceLimit);
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "floppySpaceLimit", Config.floppySpaceLimit);
         prop.setComment("The disk space limit for floppy disks, in bytes");
-        floppySpaceLimit = prop.getInt();
+        Config.floppySpaceLimit = prop.getInt();
 
-        prop = config.get(Configuration.CATEGORY_GENERAL, "turtlesNeedFuel", turtlesNeedFuel);
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "turtlesNeedFuel", Config.turtlesNeedFuel);
         prop.setComment("Set whether Turtles require fuel to move");
-        turtlesNeedFuel = prop.getBoolean(turtlesNeedFuel);
+        Config.turtlesNeedFuel = prop.getBoolean(Config.turtlesNeedFuel);
 
-        prop = config.get(Configuration.CATEGORY_GENERAL, "turtleFuelLimit", turtleFuelLimit);
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "turtleFuelLimit", Config.turtleFuelLimit);
         prop.setComment("The fuel limit for Turtles");
-        turtleFuelLimit = prop.getInt(turtleFuelLimit);
+        Config.turtleFuelLimit = prop.getInt(Config.turtleFuelLimit);
 
-        prop = config.get(Configuration.CATEGORY_GENERAL, "advancedTurtleFuelLimit", advancedTurtleFuelLimit);
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "advancedTurtleFuelLimit", Config.advancedTurtleFuelLimit);
         prop.setComment("The fuel limit for Advanced Turtles");
-        advancedTurtleFuelLimit = prop.getInt(advancedTurtleFuelLimit);
+        Config.advancedTurtleFuelLimit = prop.getInt(Config.advancedTurtleFuelLimit);
 
-        prop = config.get(Configuration.CATEGORY_GENERAL, "turtlesObeyBlockProtection", turtlesObeyBlockProtection);
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "turtlesObeyBlockProtection", Config.turtlesObeyBlockProtection);
         prop.setComment("If set to true, Turtles will be unable to build, dig, or enter protected areas (such as near the server spawn point)");
-        turtlesObeyBlockProtection = prop.getBoolean(turtlesObeyBlockProtection);
+        Config.turtlesObeyBlockProtection = prop.getBoolean(Config.turtlesObeyBlockProtection);
 
-        prop = config.get(Configuration.CATEGORY_GENERAL, "turtlesCanPush", turtlesCanPush);
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "turtlesCanPush", Config.turtlesCanPush);
         prop.setComment("If set to true, Turtles will push entities out of the way instead of stopping if there is space to do so");
-        turtlesCanPush = prop.getBoolean(turtlesCanPush);
+        Config.turtlesCanPush = prop.getBoolean(Config.turtlesCanPush);
 
-        config.save();
+        Config.config.save();
 
         // Setup network
         networkEventChannel = NetworkRegistry.INSTANCE.newEventDrivenChannel("CC");

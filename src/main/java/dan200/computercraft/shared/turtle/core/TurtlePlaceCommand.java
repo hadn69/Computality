@@ -189,7 +189,7 @@ public class TurtlePlaceCommand implements ITurtleCommand {
 
             boolean replaceable = block.isReplaceable(world, position);
             if (allowReplaceable || !replaceable) {
-                if (ComputerCraft.turtlesObeyBlockProtection) {
+                if (ComputerCraft.Config.turtlesObeyBlockProtection) {
                     // Check spawn protection
                     boolean editable = true;
                     if (replaceable) {

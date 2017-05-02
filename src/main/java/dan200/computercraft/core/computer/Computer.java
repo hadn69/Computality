@@ -374,7 +374,7 @@ public class Computer {
         m_apis.add(new OSAPI(m_apiEnvironment));
         m_apis.add(new BitAPI(m_apiEnvironment));
         //m_apis.add( new BufferAPI( m_apiEnvironment ) );
-        if (ComputerCraft.http_enable) {
+        if (ComputerCraft.Config.http_enable) {
             m_apis.add(new HTTPAPI(m_apiEnvironment));
         }
     }

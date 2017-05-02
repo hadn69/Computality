@@ -61,7 +61,7 @@ public class TurtleMoveCommand implements ITurtleCommand {
                 newPosition.getZ()
         );
         if (!oldWorld.checkNoEntityCollision(aabb)) {
-            if (ComputerCraft.turtlesCanPush && m_direction != MoveDirection.Up && m_direction != MoveDirection.Down) {
+            if (ComputerCraft.Config.turtlesCanPush && m_direction != MoveDirection.Up && m_direction != MoveDirection.Down) {
                 // Check there is space for all the pushable entities to be pushed
                 List list = oldWorld.getEntitiesWithinAABBExcludingEntity((Entity) null, aabb);
                 for (int i = 0; i < list.size(); ++i) {
@@ -130,7 +130,7 @@ public class TurtleMoveCommand implements ITurtleCommand {
         } else if (position.getY() > world.getHeight() - 1) {
             return TurtleCommandResult.failure("Too high to move");
         }
-        if (ComputerCraft.turtlesObeyBlockProtection) {
+        if (ComputerCraft.Config.turtlesObeyBlockProtection) {
             // Check spawn protection
             if (!ComputerCraft.isBlockEnterable(world, position, turtlePlayer)) {
                 return TurtleCommandResult.failure("Cannot enter protected area");

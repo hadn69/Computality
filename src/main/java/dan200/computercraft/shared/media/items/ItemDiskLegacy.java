@@ -116,7 +116,7 @@ public class ItemDiskLegacy extends Item
             diskID = ComputerCraft.createUniqueNumberedSaveDir(world, "computer/disk");
             setDiskID(stack, diskID);
         }
-        return ComputerCraftAPI.createSaveDirMount(world, "computer/disk/" + diskID, ComputerCraft.floppySpaceLimit);
+        return ComputerCraftAPI.createSaveDirMount(world, "computer/disk/" + diskID, ComputerCraft.Config.floppySpaceLimit);
     }
 
     public int getColor(ItemStack stack) {

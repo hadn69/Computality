@@ -8,7 +8,6 @@ package dan200.computercraft.shared.proxy;
 
 import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.api.ComputerCraftAPI;
-import dan200.computercraft.core.computer.Computer;
 import dan200.computercraft.core.computer.MainThread;
 import dan200.computercraft.shared.common.DefaultBundledRedstoneProvider;
 import dan200.computercraft.shared.common.TileGeneric;
@@ -461,7 +460,7 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy {
 
         // Register peripheral providers
         ComputerCraftAPI.registerPeripheralProvider(new DefaultPeripheralProvider());
-        if (ComputerCraft.enableCommandBlock) {
+        if (ComputerCraft.Config.enableCommandBlock) {
             ComputerCraftAPI.registerPeripheralProvider(new CommandBlockPeripheralProvider());
         }
 

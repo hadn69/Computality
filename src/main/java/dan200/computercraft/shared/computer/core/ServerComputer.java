@@ -265,7 +265,7 @@ public class ServerComputer extends ServerTerminal
 
     @Override
     public long getComputerSpaceLimit() {
-        return ComputerCraft.computerSpaceLimit;
+        return ComputerCraft.Config.computerSpaceLimit;
     }
 
     @Override

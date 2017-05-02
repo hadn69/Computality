@@ -211,7 +211,7 @@ public class TurtleTool implements ITurtleUpgrade {
         if (WorldUtil.isBlockInWorld(world, newPosition) &&
                 !world.isAirBlock(newPosition) &&
                 !WorldUtil.isLiquidBlock(world, newPosition)) {
-            if (ComputerCraft.turtlesObeyBlockProtection) {
+            if (ComputerCraft.Config.turtlesObeyBlockProtection) {
                 // Check spawn protection
                 TurtlePlayer turtlePlayer = TurtlePlaceCommand.createPlayer(turtle, position, direction);
                 if (!ComputerCraft.isBlockEditable(world, newPosition, turtlePlayer)) {

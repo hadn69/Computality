@@ -21,9 +21,9 @@ plugins {
 }
 */
 
-version = "1.80pr0"
+version = "1.0.0"
 group = "dan200.computercraft"
-archivesBaseName = "ComputerCraft"
+archivesBaseName = "computality"
 
 minecraft {
     version = "1.11.2-13.20.0.2286"

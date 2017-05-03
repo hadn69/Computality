@@ -80,7 +80,7 @@ public class ComputerCraftProxyClient extends ComputerCraftProxyCommon {
 
         // Register item models
         registerItemModel(ComputerCraft.Blocks.computer, new ItemMeshDefinition() {
-            private ModelResourceLocation computer = new ModelResourceLocation("computercraft:CC-Computer", "inventory");
+            private ModelResourceLocation computer = new ModelResourceLocation("computercraft:computer", "inventory");
             private ModelResourceLocation advanced_computer = new ModelResourceLocation("computercraft:advanced_computer", "inventory");
 
             @Override

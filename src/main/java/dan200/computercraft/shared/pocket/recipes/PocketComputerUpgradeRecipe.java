@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 
 public class PocketComputerUpgradeRecipe implements IRecipe {
     public PocketComputerUpgradeRecipe() {
-        System.out.println("foagdag");
+
     }
 
     @Override
@@ -37,7 +37,7 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
 
     @Override
     public boolean matches(InventoryCrafting inventory, World world) {
-        return (getCraftingResult(inventory) != null);
+        return (!getCraftingResult(inventory).isEmpty());
     }
 
     @Override
@@ -57,14 +57,17 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
                     break;
                 }
             }
-            if (computer != null) {
+            if (!computer.isEmpty()) {
                 break;
             }
         }
 
-        if (computer == null) {
+        if (computer.isEmpty()) {
             return ItemStack.EMPTY;
         }
+
+        if(!(computer.getItem() instanceof ItemPocketComputer))
+            return ItemStack.EMPTY;
 
         ItemPocketComputer itemComputer = (ItemPocketComputer) computer.getItem();
         if (ItemPocketComputer.getUpgrade(computer) != null) {

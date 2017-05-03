@@ -73,7 +73,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
     public ItemStack create(int id, String label, ComputerFamily family, IPocketUpgrade upgrade) {
         // Ignore types we can't handle
         if (family != ComputerFamily.Normal && family != ComputerFamily.Advanced) {
-            return null;
+            return ItemStack.EMPTY;
         }
 
         // Build the stack

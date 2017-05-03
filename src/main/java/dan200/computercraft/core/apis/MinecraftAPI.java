@@ -23,7 +23,8 @@ public class MinecraftAPI implements ILuaAPI {
     @Override
     public String[] getNames() {
         return new String[]{
-                "minecraft"
+                "minecraft",
+                "mc"
         };
     }
 

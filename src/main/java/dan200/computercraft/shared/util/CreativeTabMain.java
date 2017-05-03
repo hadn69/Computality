@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 
 public class CreativeTabMain extends CreativeTabs {
     public CreativeTabMain(int i) {
-        super(i, "ComputerCraft");
+        super(i, "computality");
     }
 
     @Override

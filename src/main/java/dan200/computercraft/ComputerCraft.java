@@ -46,6 +46,7 @@ import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 import dan200.computercraft.shared.turtle.upgrades.*;
 import dan200.computercraft.shared.util.*;
 import io.netty.buffer.Unpooled;
+import net.minecraft.command.server.CommandSummon;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -66,6 +67,7 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
@@ -605,7 +607,6 @@ public class ComputerCraft {
         // Setup network
         networkEventChannel = NetworkRegistry.INSTANCE.newEventDrivenChannel("CC");
         networkEventChannel.register(new PacketHandler());
-
         proxy.preInit();
         turtleProxy.preInit();
     }

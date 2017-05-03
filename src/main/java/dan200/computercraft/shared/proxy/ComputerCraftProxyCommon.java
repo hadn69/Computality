@@ -270,7 +270,7 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy {
         RecipeSorter.register("computercraft:impostor_shapeless", ImpostorShapelessRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
         RecipeSorter.register("computercraft:disk", DiskRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
         RecipeSorter.register("computercraft:printout", PrintoutRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
-        RecipeSorter.register("computercraft:pocket_computer_upgrade", PocketComputerUpgradeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+        //RecipeSorter.register("computercraft:pocket_computer_upgrade", PocketComputerUpgradeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 
         // Recipes
         // Computer

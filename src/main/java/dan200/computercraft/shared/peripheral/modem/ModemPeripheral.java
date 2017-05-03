@@ -24,6 +24,7 @@ public abstract class ModemPeripheral
     private Map<Integer, IReceiver> m_channels;
     private boolean m_open;
     private boolean m_changed;
+
     public ModemPeripheral() {
         m_network = null;
         m_computer = null;

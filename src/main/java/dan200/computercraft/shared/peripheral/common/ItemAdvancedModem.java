@@ -14,8 +14,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-import java.util.List;
-
 public class ItemAdvancedModem extends ItemPeripheralBase {
     public ItemAdvancedModem(Block block) {
         super(block);

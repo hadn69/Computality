@@ -28,7 +28,7 @@ public class TurtleUpgradeRecipe implements IRecipe {
 
     @Override
     public int getRecipeSize() {
-        return 3    ;
+        return 3;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class TurtleUpgradeRecipe implements IRecipe {
                             // Item is not a turtle
                             if (turtle.isEmpty() && leftItem.isEmpty()) {
                                 leftItem = item;
-                            } else if (!turtle.isEmpty()&& rightItem.isEmpty()) {
+                            } else if (!turtle.isEmpty() && rightItem.isEmpty()) {
                                 rightItem = item;
                             } else {
                                 return ItemStack.EMPTY;
@@ -85,7 +85,7 @@ public class TurtleUpgradeRecipe implements IRecipe {
                 }
 
                 // If we found anything, check we found a turtle too
-                if (turtle.isEmpty() && (!leftItem.isEmpty()|| !rightItem.isEmpty())) {
+                if (turtle.isEmpty() && (!leftItem.isEmpty() || !rightItem.isEmpty())) {
                     return ItemStack.EMPTY;
                 }
             } else {
@@ -106,7 +106,7 @@ public class TurtleUpgradeRecipe implements IRecipe {
 
         // At this point we have a turtle + 1 or 2 items
         // Get the turtle we already have
-            ITurtleItem itemTurtle = (ITurtleItem) turtle.getItem();
+        ITurtleItem itemTurtle = (ITurtleItem) turtle.getItem();
         ComputerFamily family = itemTurtle.getFamily(turtle);
         ITurtleUpgrade[] upgrades = {
                 itemTurtle.getUpgrade(turtle, TurtleSide.Left),

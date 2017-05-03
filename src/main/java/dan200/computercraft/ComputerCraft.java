@@ -73,13 +73,16 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 ///////////////
 // UNIVERSAL //
 ///////////////
 
-@Mod(modid = "computercraft", name = "ComputerCraft", version = "${version}", guiFactory = "dan200.computercraft.client.gui.GuiConfig$Factory")
+@Mod(modid = "computercraft", name = "Computality", version = "${version}", guiFactory = "dan200.computercraft.client.gui.GuiConfig$Factory")
 public class ComputerCraft {
     // GUI IDs
     public static final int diskDriveGUIID = 100;
@@ -95,64 +98,7 @@ public class ComputerCraft {
     public static final int terminalHeight_turtle = 13;
     public static final int terminalWidth_pocketComputer = 26;
     public static final int terminalHeight_pocketComputer = 20;
-
-    public static class Config {
-        // Configuration options
-        public static boolean http_enable = true;
-        public static String http_whitelist = "*";
-        public static boolean disable_lua51_features = false;
-        public static String default_computer_settings = "";
-        public static boolean enableCommandBlock = false;
-        public static boolean turtlesNeedFuel = true;
-        public static int turtleFuelLimit = 20000;
-        public static int advancedTurtleFuelLimit = 100000;
-        public static boolean turtlesObeyBlockProtection = true;
-        public static boolean turtlesCanPush = true;
-        public static int modem_range = 64;
-        public static int modem_highAltitudeRange = 384;
-        public static int modem_rangeDuringStorm = 64;
-        public static int modem_highAltitudeRangeDuringStorm = 384;
-        public static int computerSpaceLimit = 1000 * 1000;
-        public static int floppySpaceLimit = 125 * 1000;
-        public static int maximumFilesOpen  = 128;
-        public static Configuration config;
-    }
-    public static Iterable<IPocketUpgrade> getVanillaPocketUpgrades() {
-        List<IPocketUpgrade> upgrades = new ArrayList<>();
-        for(IPocketUpgrade upgrade : pocketUpgrades.values()) {
-            if(upgrade instanceof PocketModem) {
-                upgrades.add( upgrade );
-            }
-        }
-
-        return upgrades;
-    }
-
-    public static IPocketUpgrade getPocketUpgrade(String id) {
-        return pocketUpgrades.get( id );
-    }
-
-    public static IPocketUpgrade getPocketUpgrade( ItemStack stack )
-    {
-        if( stack == null ) return null;
-
-        for (IPocketUpgrade upgrade : pocketUpgrades.values())
-        {
-            ItemStack craftingStack = upgrade.getCraftingItem();
-            if( craftingStack != null && InventoryUtil.areItemsStackable( stack, craftingStack ) )
-            {
-                return upgrade;
-            }
-        }
-
-        return null;
-    }
-    public static class PocketUpgrades
-    {
-        public static PocketModem wirelessModem;
-        public static PocketModem advancedModem;
-    }
-
+    private static final Map<String, IPocketUpgrade> pocketUpgrades = new HashMap<String, IPocketUpgrade>();
     // Registries
     public static ClientComputerRegistry clientComputerRegistry = new ClientComputerRegistry();
     public static ServerComputerRegistry serverComputerRegistry = new ServerComputerRegistry();
@@ -172,9 +118,35 @@ public class ComputerCraft {
     private static List<IBundledRedstoneProvider> bundledRedstoneProviders = new ArrayList<IBundledRedstoneProvider>();
     private static List<IMediaProvider> mediaProviders = new ArrayList<IMediaProvider>();
     private static List<ITurtlePermissionProvider> permissionProviders = new ArrayList<ITurtlePermissionProvider>();
-    private static final Map<String, IPocketUpgrade> pocketUpgrades = new HashMap<String, IPocketUpgrade>();
-
     public ComputerCraft() {
+    }
+
+    public static Iterable<IPocketUpgrade> getVanillaPocketUpgrades() {
+        List<IPocketUpgrade> upgrades = new ArrayList<>();
+        for (IPocketUpgrade upgrade : pocketUpgrades.values()) {
+            if (upgrade instanceof PocketModem) {
+                upgrades.add(upgrade);
+            }
+        }
+
+        return upgrades;
+    }
+
+    public static IPocketUpgrade getPocketUpgrade(String id) {
+        return pocketUpgrades.get(id);
+    }
+
+    public static IPocketUpgrade getPocketUpgrade(ItemStack stack) {
+        if (stack == null) return null;
+
+        for (IPocketUpgrade upgrade : pocketUpgrades.values()) {
+            ItemStack craftingStack = upgrade.getCraftingItem();
+            if (craftingStack != null && InventoryUtil.areItemsStackable(stack, craftingStack)) {
+                return upgrade;
+            }
+        }
+
+        return null;
     }
 
     public static String getVersion() {
@@ -319,23 +291,19 @@ public class ComputerCraft {
         return true;
     }
 
-    public static void registerPocketUpgrade( IPocketUpgrade upgrade )
-    {
+    public static void registerPocketUpgrade(IPocketUpgrade upgrade) {
         String id = upgrade.getUpgradeID().toString();
-        IPocketUpgrade existing = pocketUpgrades.get( id );
-        if( existing != null )
-        {
-            throw new RuntimeException( "Error registering '" + upgrade.getUnlocalisedAdjective() + " pocket computer'. UpgradeID '" + id + "' is already registered by '" + existing.getUnlocalisedAdjective() + " pocket computer'" );
+        IPocketUpgrade existing = pocketUpgrades.get(id);
+        if (existing != null) {
+            throw new RuntimeException("Error registering '" + upgrade.getUnlocalisedAdjective() + " pocket computer'. UpgradeID '" + id + "' is already registered by '" + existing.getUnlocalisedAdjective() + " pocket computer'");
         }
 
-        pocketUpgrades.put( id, upgrade );
+        pocketUpgrades.put(id, upgrade);
     }
 
-    public static void registerPeripheralProvider( IPeripheralProvider provider )
-    {
-        if( provider != null && !peripheralProviders.contains( provider ) )
-        {
-            peripheralProviders.add( provider );
+    public static void registerPeripheralProvider(IPeripheralProvider provider) {
+        if (provider != null && !peripheralProviders.contains(provider)) {
+            peripheralProviders.add(provider);
         }
     }
 
@@ -419,8 +387,7 @@ public class ComputerCraft {
         return null;
     }
 
-    public static int createUniqueNumberedSaveDir( World world, String parentSubPath )
-    {
+    public static int createUniqueNumberedSaveDir(World world, String parentSubPath) {
         return IDAssigner.getNextIDFromDirectory(new File(getWorldDir(world), parentSubPath));
     }
 
@@ -667,6 +634,33 @@ public class ComputerCraft {
             ComputerCraft.serverComputerRegistry.reset();
             WirelessNetwork.resetNetworks();
         }
+    }
+
+    public static class Config {
+        // Configuration options
+        public static boolean http_enable = true;
+        public static String http_whitelist = "*";
+        public static boolean disable_lua51_features = false;
+        public static String default_computer_settings = "";
+        public static boolean enableCommandBlock = false;
+        public static boolean turtlesNeedFuel = true;
+        public static int turtleFuelLimit = 20000;
+        public static int advancedTurtleFuelLimit = 100000;
+        public static boolean turtlesObeyBlockProtection = true;
+        public static boolean turtlesCanPush = true;
+        public static int modem_range = 64;
+        public static int modem_highAltitudeRange = 384;
+        public static int modem_rangeDuringStorm = 64;
+        public static int modem_highAltitudeRangeDuringStorm = 384;
+        public static int computerSpaceLimit = 1000 * 1000;
+        public static int floppySpaceLimit = 125 * 1000;
+        public static int maximumFilesOpen = 128;
+        public static Configuration config;
+    }
+
+    public static class PocketUpgrades {
+        public static PocketModem wirelessModem;
+        public static PocketModem advancedModem;
     }
 
     // Blocks and Items

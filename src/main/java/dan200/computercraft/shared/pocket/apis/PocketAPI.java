@@ -19,12 +19,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
-public class PocketAPI implements ILuaAPI
-{
+public class PocketAPI implements ILuaAPI {
     private final PocketServerComputer m_computer;
 
-    public PocketAPI( PocketServerComputer computer )
-    {
+    public PocketAPI(PocketServerComputer computer) {
         this.m_computer = computer;
     }
 
@@ -48,25 +46,20 @@ public class PocketAPI implements ILuaAPI
     }
 
     @Override
-    public String[] getMethodNames()
-    {
-        return new String[] {
-            "equip",
-            "unequip"
+    public String[] getMethodNames() {
+        return new String[]{
+                "equip",
+                "unequip"
         };
     }
 
     @Override
-    public Object[] callMethod( ILuaContext context, int method, Object[] arguments ) throws LuaException
-    {
-        switch( method )
-        {
-            case 0:
-            {
+    public Object[] callMethod(ILuaContext context, int method, Object[] arguments) throws LuaException {
+        switch (method) {
+            case 0: {
                 // equip
-                if( !(m_computer.getEntity() instanceof EntityPlayer) )
-                {
-                    throw new LuaException( "Cannot find player" );
+                if (!(m_computer.getEntity() instanceof EntityPlayer)) {
+                    throw new LuaException("Cannot find player");
                 }
 
                 ItemStack pocketStack = m_computer.getStack();
@@ -77,54 +70,46 @@ public class PocketAPI implements ILuaAPI
                 IPocketUpgrade newUpgrade = null;
 
                 int size = inventory.getSizeInventory(), held = inventory.currentItem;
-                for (int i = 0; i < size; i++)
-                {
-                    ItemStack invStack = inventory.getStackInSlot( (i + held) % size );
-                    if( !invStack.isEmpty() )
-                    {
-                        newUpgrade = ComputerCraft.getPocketUpgrade( invStack );
+                for (int i = 0; i < size; i++) {
+                    ItemStack invStack = inventory.getStackInSlot((i + held) % size);
+                    if (!invStack.isEmpty()) {
+                        newUpgrade = ComputerCraft.getPocketUpgrade(invStack);
 
-                        if( newUpgrade != null && newUpgrade != previousUpgrade )
-                        {
+                        if (newUpgrade != null && newUpgrade != previousUpgrade) {
                             // Consume an item from this stack and exit the loop
                             invStack = invStack.copy();
                             invStack.shrink(1);
-                            inventory.setInventorySlotContents( (i + held) % size, invStack.getCount() <= 0 ? null : invStack );
+                            inventory.setInventorySlotContents((i + held) % size, invStack.getCount() <= 0 ? null : invStack);
 
                             break;
                         }
                     }
                 }
 
-                if( newUpgrade == null ) throw new LuaException( "Cannot find a valid upgrade" );
+                if (newUpgrade == null) throw new LuaException("Cannot find a valid upgrade");
 
                 // Remove the current upgrade
-                if( previousUpgrade != null )
-                {
+                if (previousUpgrade != null) {
                     ItemStack stack = previousUpgrade.getCraftingItem();
-                    if( !stack.isEmpty() )
-                    {
-                        stack = InventoryUtil.storeItems( stack, inventory, 0, 36, inventory.currentItem );
-                        if( !stack.isEmpty() )
-                        {
-                            WorldUtil.dropItemStack( stack, player.getEntityWorld(), player.posX, player.posY, player.posZ );
+                    if (!stack.isEmpty()) {
+                        stack = InventoryUtil.storeItems(stack, inventory, 0, 36, inventory.currentItem);
+                        if (!stack.isEmpty()) {
+                            WorldUtil.dropItemStack(stack, player.getEntityWorld(), player.posX, player.posY, player.posZ);
                         }
                     }
                 }
 
                 // Set the new upgrade
-                ItemPocketComputer.setUpgrade( pocketStack, newUpgrade );
-                m_computer.setUpgrade( newUpgrade );
+                ItemPocketComputer.setUpgrade(pocketStack, newUpgrade);
+                m_computer.setUpgrade(newUpgrade);
 
                 return null;
             }
 
-            case 1:
-            {
+            case 1: {
                 // unequip
-                if( !(m_computer.getEntity() instanceof EntityPlayer) )
-                {
-                    throw new LuaException( "Cannot find player" );
+                if (!(m_computer.getEntity() instanceof EntityPlayer)) {
+                    throw new LuaException("Cannot find player");
                 }
 
                 ItemStack pocketStack = m_computer.getStack();
@@ -133,18 +118,16 @@ public class PocketAPI implements ILuaAPI
 
                 IPocketUpgrade previousUpgrade = m_computer.getUpgrade();
 
-                if( previousUpgrade == null ) throw new LuaException( "Nothing to unequip" );
+                if (previousUpgrade == null) throw new LuaException("Nothing to unequip");
 
-                ItemPocketComputer.setUpgrade( pocketStack, null );
-                m_computer.setUpgrade( null );
+                ItemPocketComputer.setUpgrade(pocketStack, null);
+                m_computer.setUpgrade(null);
 
                 ItemStack stack = previousUpgrade.getCraftingItem();
-                if( !stack.isEmpty() )
-                {
-                    stack = InventoryUtil.storeItems( stack, inventory, 0, 36, inventory.currentItem );
-                    if( !stack.isEmpty() )
-                    {
-                        WorldUtil.dropItemStack( stack, player.getEntityWorld(), player.posX, player.posY, player.posZ );
+                if (!stack.isEmpty()) {
+                    stack = InventoryUtil.storeItems(stack, inventory, 0, 36, inventory.currentItem);
+                    if (!stack.isEmpty()) {
+                        WorldUtil.dropItemStack(stack, player.getEntityWorld(), player.posX, player.posY, player.posZ);
                     }
                 }
 

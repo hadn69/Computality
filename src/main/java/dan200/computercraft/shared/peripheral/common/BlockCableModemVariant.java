@@ -38,6 +38,7 @@ public enum BlockCableModemVariant implements IStringSerializable {
 
     private String m_name;
     private EnumFacing m_facing;
+
     private BlockCableModemVariant(String name, EnumFacing facing) {
         m_name = name;
         m_facing = facing;

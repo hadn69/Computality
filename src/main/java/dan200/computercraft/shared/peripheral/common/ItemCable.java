@@ -20,8 +20,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.List;
-
 public class ItemCable extends ItemPeripheralBase {
     public ItemCable(Block block) {
         super(block);

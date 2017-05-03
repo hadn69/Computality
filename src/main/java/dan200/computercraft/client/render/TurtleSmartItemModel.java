@@ -37,6 +37,7 @@ public class TurtleSmartItemModel implements IBakedModel, IResourceManagerReload
     private ItemStack m_defaultItem;
     private HashMap<TurtleModelCombination, IBakedModel> m_cachedModels;
     private ItemOverrideList m_overrides;
+
     public TurtleSmartItemModel() {
         m_defaultItem = TurtleItemFactory.create(-1, null, null, ComputerFamily.Normal, null, null, 0, null);
         m_cachedModels = new HashMap<TurtleModelCombination, IBakedModel>();

@@ -31,6 +31,24 @@ public final class ComputerCraftAPI {
     // Reflection is used here so you can develop your mod without decompiling ComputerCraft and including
     // it in your solution, and so your mod won't crash if ComputerCraft is installed.
 
+    private static boolean ccSearched = false;
+    private static Class computerCraft = null;
+    private static Method computerCraft_getVersion = null;
+    private static Method computerCraft_createUniqueNumberedSaveDir = null;
+    private static Method computerCraft_createSaveDirMount = null;
+    private static Method computerCraft_createResourceMount = null;
+    private static Method computerCraft_registerPeripheralProvider = null;
+    private static Method computerCraft_registerTurtleUpgrade = null;
+    private static Method computerCraft_registerBundledRedstoneProvider = null;
+    private static Method computerCraft_getDefaultBundledRedstoneOutput = null;
+    private static Method computerCraft_registerMediaProvider = null;
+    private static Method computerCraft_registerPermissionProvider = null;
+    private static Method computerCraft_registerPocketUpgrade = null;
+
+    // The functions below here are private, and are used to interface with the non-API ComputerCraft classes.
+    // Reflection is used here so you can develop your mod without decompiling ComputerCraft and including
+    // it in your solution, and so your mod won't crash if ComputerCraft is installed.
+
     public static boolean isInstalled() {
         findCC();
         return computerCraft != null;
@@ -235,22 +253,17 @@ public final class ComputerCraftAPI {
 
     public static void registerPocketUpgrade(IPocketUpgrade upgrade) {
         findCC();
-        if(computerCraft_registerPocketUpgrade != null) {
+        if (computerCraft_registerPocketUpgrade != null) {
             try {
-                computerCraft_registerPocketUpgrade.invoke( null, upgrade );
+                computerCraft_registerPocketUpgrade.invoke(null, upgrade);
             } catch (Exception e) {
                 // It failed
             }
         }
     }
 
-    // The functions below here are private, and are used to interface with the non-API ComputerCraft classes.
-    // Reflection is used here so you can develop your mod without decompiling ComputerCraft and including
-    // it in your solution, and so your mod won't crash if ComputerCraft is installed.
-    
-    private static void findCC()
-    {
-        if( !ccSearched ) {
+    private static void findCC() {
+        if (!ccSearched) {
             try {
                 computerCraft = Class.forName("dan200.computercraft.ComputerCraft");
                 computerCraft_getVersion = findCCMethod("getVersion", new Class[]{
@@ -282,11 +295,11 @@ public final class ComputerCraftAPI {
                 computerCraft_registerPermissionProvider = findCCMethod("registerPermissionProvider", new Class[]{
                         ITurtlePermissionProvider.class
                 });
-                computerCraft_registerPocketUpgrade = findCCMethod( "registerPocketUpgrade", new Class[] {
-                    IPocketUpgrade.class
-                } );
-            } catch( Exception e ) {
-                System.out.println( "ComputerCraftAPI: ComputerCraft not found." );
+                computerCraft_registerPocketUpgrade = findCCMethod("registerPocketUpgrade", new Class[]{
+                        IPocketUpgrade.class
+                });
+            } catch (Exception e) {
+                System.out.println("ComputerCraftAPI: ComputerCraft not found.");
             } finally {
                 ccSearched = true;
             }
@@ -303,19 +316,5 @@ public final class ComputerCraftAPI {
             System.out.println("ComputerCraftAPI: ComputerCraft method " + name + " not found.");
             return null;
         }
-    }    
-    
-    private static boolean ccSearched = false;    
-    private static Class computerCraft = null;
-    private static Method computerCraft_getVersion = null;
-    private static Method computerCraft_createUniqueNumberedSaveDir = null;
-    private static Method computerCraft_createSaveDirMount = null;
-    private static Method computerCraft_createResourceMount = null;
-    private static Method computerCraft_registerPeripheralProvider = null;
-    private static Method computerCraft_registerTurtleUpgrade = null;
-    private static Method computerCraft_registerBundledRedstoneProvider = null;
-    private static Method computerCraft_getDefaultBundledRedstoneOutput = null;
-    private static Method computerCraft_registerMediaProvider = null;
-    private static Method computerCraft_registerPermissionProvider = null;
-    private static Method computerCraft_registerPocketUpgrade = null;
+    }
 }

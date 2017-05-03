@@ -15,8 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 
-import java.util.List;
-
 public class ItemCommandComputer extends ItemComputer {
     public ItemCommandComputer(Block block) {
         super(block);

@@ -52,6 +52,7 @@ public class Computer {
     private int[] m_bundledInput;
     private boolean m_inputChanged;
     private IPeripheral[] m_peripherals;
+
     public Computer(IComputerEnvironment environment, Terminal terminal, int id) {
         ComputerThread.start();
 

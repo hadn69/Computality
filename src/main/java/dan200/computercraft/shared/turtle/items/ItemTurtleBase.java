@@ -31,8 +31,6 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-;
-
 public abstract class ItemTurtleBase extends ItemComputerBase implements ITurtleItem {
     protected ItemTurtleBase(Block block) {
         super(block);

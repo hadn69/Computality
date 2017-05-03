@@ -12,8 +12,7 @@ import java.util.Map;
 /**
  * Wrapper class for pocket computers
  */
-public interface IPocketAccess
-{
+public interface IPocketAccess {
     /**
      * Gets the holding entity of this item
      *
@@ -34,7 +33,7 @@ public interface IPocketAccess
      *
      * @param value If the light should be on
      */
-    void setModemLight( boolean value );
+    void setModemLight(boolean value);
 
     /**
      * Get the upgrade specific NBT

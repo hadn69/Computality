@@ -23,6 +23,7 @@ public class JarMount implements IMount {
     private ZipFile m_zipFile;
     private FileInZip m_root;
     private String m_rootPath;
+
     public JarMount(File jarFile, String subPath) throws IOException {
         if (!jarFile.exists() || jarFile.isDirectory()) {
             throw new FileNotFoundException();

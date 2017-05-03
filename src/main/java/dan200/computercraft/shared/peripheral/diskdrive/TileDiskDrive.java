@@ -1,10 +1,10 @@
-
 package dan200.computercraft.shared.peripheral.diskdrive;
 /*
   This file is part of ComputerCraft - http://www.computercraft.info
   Copyright Daniel Ratcliffe, 2011-2016. Do not distribute without permission.
   Send enquiries to dratcliffe@gmail.com
  */
+
 import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.api.filesystem.IMount;
 import dan200.computercraft.api.filesystem.IWritableMount;
@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class TileDiskDrive extends TilePeripheralBase
-        implements ITickable,IInventory {
+        implements ITickable, IInventory {
     // Statics
 
     private static final int BLOCKEVENT_PLAY_RECORD = 0;
@@ -51,6 +51,7 @@ public class TileDiskDrive extends TilePeripheralBase
     private boolean m_recordPlaying;
     private boolean m_restartRecord;
     private boolean m_ejectQueued;
+
     public TileDiskDrive() {
         m_computers = new HashMap<IComputerAccess, MountInfo>();
 

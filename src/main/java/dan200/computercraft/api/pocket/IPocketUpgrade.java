@@ -17,8 +17,7 @@ import javax.annotation.Nullable;
  * <p>
  * This is similar to {@link dan200.computercraft.api.turtle.ITurtleUpgrade}.
  */
-public interface IPocketUpgrade
-{
+public interface IPocketUpgrade {
 
     /**
      * Gets a unique identifier representing this type of turtle upgrade. eg: "computercraft:wireless_modem" or "my_mod:my_upgrade".
@@ -64,7 +63,7 @@ public interface IPocketUpgrade
      * @see ITurtleUpgrade#createPeripheral(ITurtleAccess, TurtleSide)
      */
     @Nullable
-    IPeripheral createPeripheral( @Nonnull IPocketAccess access );
+    IPeripheral createPeripheral(@Nonnull IPocketAccess access);
 
     /**
      * Called when the pocket computer item stack updates
@@ -72,7 +71,7 @@ public interface IPocketUpgrade
      * @param access     The access object for the pocket item stack
      * @param peripheral The peripheral for this upgrade
      */
-    void update( @Nonnull IPocketAccess access, @Nullable IPeripheral peripheral );
+    void update(@Nonnull IPocketAccess access, @Nullable IPeripheral peripheral);
 
     /**
      * Called when the pocket computer is right clicked on something
@@ -82,5 +81,5 @@ public interface IPocketUpgrade
      * @param peripheral The peripheral for this upgrade
      * @return {@code true} to stop the gui from opening, otherwise false.
      */
-    boolean onRightClick( @Nonnull World world, @Nonnull IPocketAccess access, @Nullable IPeripheral peripheral );
+    boolean onRightClick(@Nonnull World world, @Nonnull IPocketAccess access, @Nullable IPeripheral peripheral);
 }

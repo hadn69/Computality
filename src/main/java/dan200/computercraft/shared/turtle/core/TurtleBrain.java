@@ -58,6 +58,7 @@ public class TurtleBrain implements ITurtleAccess {
     private TurtleAnimation m_animation;
     private int m_animationProgress;
     private int m_lastAnimationProgress;
+
     public TurtleBrain(TileTurtle turtle) {
         m_owner = turtle;
 

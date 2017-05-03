@@ -13,17 +13,14 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class PocketComputerItemFactory
-{
+public class PocketComputerItemFactory {
     @Nonnull
-    public static ItemStack create( int id, String label, ComputerFamily family, IPocketUpgrade upgrade )
-    {
+    public static ItemStack create(int id, String label, ComputerFamily family, IPocketUpgrade upgrade) {
         ItemPocketComputer computer = ComputerCraft.Items.pocketComputer;
         switch (family) {
             case Normal:
-            case Advanced:
-            {
-                return computer.create( id, label, family, upgrade );
+            case Advanced: {
+                return computer.create(id, label, family, upgrade);
             }
         }
         return ItemStack.EMPTY;

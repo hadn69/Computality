@@ -42,13 +42,8 @@ public class CommandBlockPeripheral implements IPeripheral {
         switch (method) {
             case 0: {
                 // getCommand
-                return context.executeMainThreadTask(new ILuaTask() {
-                    @Override
-                    public Object[] execute() throws LuaException {
-                        return new Object[]{
-                                m_commandBlock.getCommandBlockLogic().getCommand()
-                        };
-                    }
+                return context.executeMainThreadTask(() -> new Object[]{
+                        m_commandBlock.getCommandBlockLogic().getCommand()
                 });
             }
             case 1: {
@@ -58,29 +53,23 @@ public class CommandBlockPeripheral implements IPeripheral {
                 }
 
                 final String command = (String) arguments[0];
-                context.issueMainThreadTask(new ILuaTask() {
-                    @Override
-                    public Object[] execute() throws LuaException {
-                        BlockPos pos = m_commandBlock.getPos();
-                        m_commandBlock.getCommandBlockLogic().setCommand(command);
-                        m_commandBlock.getWorld().markBlockRangeForRenderUpdate(pos, pos);
-                        return null;
-                    }
+                context.issueMainThreadTask(() -> {
+                    BlockPos pos = m_commandBlock.getPos();
+                    m_commandBlock.getCommandBlockLogic().setCommand(command);
+                    m_commandBlock.getWorld().markBlockRangeForRenderUpdate(pos, pos);
+                    return null;
                 });
                 return null;
             }
             case 2: {
                 // runCommand
-                return context.executeMainThreadTask(new ILuaTask() {
-                    @Override
-                    public Object[] execute() throws LuaException {
-                        m_commandBlock.getCommandBlockLogic().trigger(m_commandBlock.getWorld());
-                        int result = m_commandBlock.getCommandBlockLogic().getSuccessCount();
-                        if (result > 0) {
-                            return new Object[]{true};
-                        } else {
-                            return new Object[]{false, "Command failed"};
-                        }
+                return context.executeMainThreadTask(() -> {
+                    m_commandBlock.getCommandBlockLogic().trigger(m_commandBlock.getWorld());
+                    int result = m_commandBlock.getCommandBlockLogic().getSuccessCount();
+                    if (result > 0) {
+                        return new Object[]{true};
+                    } else {
+                        return new Object[]{false, "Command failed"};
                     }
                 });
             }

@@ -22,14 +22,12 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TilePrinter extends TilePeripheralBase
@@ -41,14 +39,13 @@ public class TilePrinter extends TilePeripheralBase
     private static final int[] sideSlots = {0};
 
     // Members
-
-    ItemStackHandler inventory;
     private final Terminal m_page;
+    ItemStackHandler inventory;
     private String m_pageTitle;
     private boolean m_printing;
 
     public TilePrinter() {
-        inventory=new ItemStackHandler(13);
+        inventory = new ItemStackHandler(13);
         m_page = new Terminal(ItemPrintout.LINE_MAX_LENGTH, ItemPrintout.LINES_PER_PAGE);
         m_pageTitle = "";
         m_printing = false;
@@ -139,7 +136,7 @@ public class TilePrinter extends TilePeripheralBase
     public ItemStack removeStackFromSlot(int i) {
         synchronized (inventory) {
             ItemStack result = inventory.getStackInSlot(i);
-            inventory.setStackInSlot(i,ItemStack.EMPTY);
+            inventory.setStackInSlot(i, ItemStack.EMPTY);
             updateAnim();
             return result;
         }
@@ -154,15 +151,15 @@ public class TilePrinter extends TilePeripheralBase
 
             if (inventory.getStackInSlot(i).getCount() <= j) {
                 ItemStack itemstack = inventory.getStackInSlot(i);
-                inventory.setStackInSlot(i,ItemStack.EMPTY);
+                inventory.setStackInSlot(i, ItemStack.EMPTY);
                 markDirty();
                 updateAnim();
                 return itemstack;
             }
 
-            ItemStack part =inventory.getStackInSlot(i).splitStack(j);
+            ItemStack part = inventory.getStackInSlot(i).splitStack(j);
             if (inventory.getStackInSlot(i).getCount() == 0) {
-                inventory.setStackInSlot(i,ItemStack.EMPTY);
+                inventory.setStackInSlot(i, ItemStack.EMPTY);
                 updateAnim();
             }
             markDirty();
@@ -173,7 +170,7 @@ public class TilePrinter extends TilePeripheralBase
     @Override
     public void setInventorySlotContents(int i, ItemStack stack) {
         synchronized (inventory) {
-            inventory.setStackInSlot(i,stack);
+            inventory.setStackInSlot(i, stack);
             markDirty();
             updateAnim();
         }
@@ -183,7 +180,7 @@ public class TilePrinter extends TilePeripheralBase
     public void clear() {
         synchronized (inventory) {
             for (int i = 0; i < inventory.getSlots(); ++i) {
-                inventory.setStackInSlot(i,ItemStack.EMPTY);
+                inventory.setStackInSlot(i, ItemStack.EMPTY);
             }
             markDirty();
             updateAnim();
@@ -371,18 +368,18 @@ public class TilePrinter extends TilePeripheralBase
             }
 
             for (int i = 1; i < 7; ++i) {
-                ItemStack paperStack =inventory.getStackInSlot(i);
-                if (!paperStack.isEmpty()&& isPaper(paperStack)) {
+                ItemStack paperStack = inventory.getStackInSlot(i);
+                if (!paperStack.isEmpty() && isPaper(paperStack)) {
                     // Decrement ink
                     inkStack.shrink(1);
                     if (inkStack.getCount() <= 0) {
-                        inventory.setStackInSlot(0,ItemStack.EMPTY);
+                        inventory.setStackInSlot(0, ItemStack.EMPTY);
                     }
 
                     // Decrement paper
                     paperStack.shrink(1);
                     if (paperStack.getCount() <= 0) {
-                        inventory.setStackInSlot(i,ItemStack.EMPTY);
+                        inventory.setStackInSlot(i, ItemStack.EMPTY);
                         updateAnim();
                     }
 

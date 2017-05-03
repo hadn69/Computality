@@ -17,7 +17,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-import org.lwjgl.Sys;
 
 import javax.annotation.Nonnull;
 
@@ -32,9 +31,8 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
     }
 
     @Override
-    public ItemStack getRecipeOutput()
-    {
-        return PocketComputerItemFactory.create( -1, null, ComputerFamily.Normal, null );
+    public ItemStack getRecipeOutput() {
+        return PocketComputerItemFactory.create(-1, null, ComputerFamily.Normal, null);
     }
 
     @Override
@@ -49,13 +47,10 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
         ItemStack computer = ItemStack.EMPTY;
         int computerX = -1;
         int computerY = -1;
-        for( int y=0; y<inventory.getHeight(); ++y )
-        {
-            for( int x=0; x<inventory.getWidth(); ++x )
-            {
-                ItemStack item = inventory.getStackInRowAndColumn( x, y );
-                if( !item.isEmpty() && item.getItem() instanceof ItemPocketComputer )
-                {
+        for (int y = 0; y < inventory.getHeight(); ++y) {
+            for (int x = 0; x < inventory.getWidth(); ++x) {
+                ItemStack item = inventory.getStackInRowAndColumn(x, y);
+                if (!item.isEmpty() && item.getItem() instanceof ItemPocketComputer) {
                     computer = item;
                     computerX = x;
                     computerY = y;
@@ -71,30 +66,22 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
             return ItemStack.EMPTY;
         }
 
-        ItemPocketComputer itemComputer = (ItemPocketComputer)computer.getItem();
-        if( itemComputer.getUpgrade( computer ) != null )
-        {
+        ItemPocketComputer itemComputer = (ItemPocketComputer) computer.getItem();
+        if (itemComputer.getUpgrade(computer) != null) {
             return ItemStack.EMPTY;
         }
 
         // Check for upgrades around the item
         IPocketUpgrade upgrade = null;
-        for (int y = 0; y < inventory.getHeight(); ++y)
-        {
-            for (int x = 0; x < inventory.getWidth(); ++x)
-            {
-                ItemStack item = inventory.getStackInRowAndColumn( x, y );
-                if( x == computerX && y == computerY )
-                {
+        for (int y = 0; y < inventory.getHeight(); ++y) {
+            for (int x = 0; x < inventory.getWidth(); ++x) {
+                ItemStack item = inventory.getStackInRowAndColumn(x, y);
+                if (x == computerX && y == computerY) {
                     continue;
-                }
-                else if( x == computerX && y == computerY - 1 )
-                {
-                    upgrade = ComputerCraft.getPocketUpgrade( item );
-                    if( upgrade == null ) return ItemStack.EMPTY;
-                }
-                else if( !item.isEmpty() )
-                {
+                } else if (x == computerX && y == computerY - 1) {
+                    upgrade = ComputerCraft.getPocketUpgrade(item);
+                    if (upgrade == null) return ItemStack.EMPTY;
+                } else if (!item.isEmpty()) {
                     return ItemStack.EMPTY;
                 }
             }
@@ -105,10 +92,10 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
         }
 
         // Construct the new stack
-        ComputerFamily family = itemComputer.getFamily( computer );
-        int computerID = itemComputer.getComputerID( computer );
-        String label = itemComputer.getLabel( computer );
-        return PocketComputerItemFactory.create( computerID, label, family, upgrade );
+        ComputerFamily family = itemComputer.getFamily(computer);
+        int computerID = itemComputer.getComputerID(computer);
+        String label = itemComputer.getLabel(computer);
+        return PocketComputerItemFactory.create(computerID, label, family, upgrade);
     }
 
     @Override

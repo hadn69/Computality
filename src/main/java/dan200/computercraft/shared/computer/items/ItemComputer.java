@@ -22,8 +22,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.List;
-
 public class ItemComputer extends ItemComputerBase {
     public static int HIGHEST_DAMAGE_VALUE_ID = 16382;
 

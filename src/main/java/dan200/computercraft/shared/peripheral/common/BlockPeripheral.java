@@ -13,7 +13,6 @@ import dan200.computercraft.shared.peripheral.modem.TileWirelessModem;
 import dan200.computercraft.shared.peripheral.monitor.TileMonitor;
 import dan200.computercraft.shared.peripheral.printer.TilePrinter;
 import dan200.computercraft.shared.util.DirectionUtil;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -48,10 +47,21 @@ public class BlockPeripheral extends BlockPeripheralBase {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{
-                Properties.FACING,
-                Properties.VARIANT
-        });
+        return new BlockStateContainer(this, Properties.FACING,
+                Properties.VARIANT);
+    }
+
+    @Override
+    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+        if (state.getBlock() != this) return 0;
+        switch (getPeripheralType(world, pos)) {
+            case AdvancedMonitor:
+                return 7;
+            case Monitor:
+                return 5;
+            default:
+                return 0;
+        }
     }
 
     @Override
@@ -84,10 +94,10 @@ public class BlockPeripheral extends BlockPeripheralBase {
     @Override
     public int getMetaFromState(IBlockState state) {
         int meta = 0;
-        BlockPeripheralVariant variant = (BlockPeripheralVariant) state.getValue(Properties.VARIANT);
+        BlockPeripheralVariant variant = state.getValue(Properties.VARIANT);
         switch (variant.getPeripheralType()) {
             case DiskDrive: {
-                EnumFacing dir = (EnumFacing) state.getValue(Properties.FACING);
+                EnumFacing dir = state.getValue(Properties.FACING);
                 if (dir.getAxis() == EnumFacing.Axis.Y) {
                     dir = EnumFacing.NORTH;
                 }
@@ -107,7 +117,7 @@ public class BlockPeripheral extends BlockPeripheralBase {
                         break;
                     }
                     default: {
-                        EnumFacing dir = (EnumFacing) state.getValue(Properties.FACING);
+                        EnumFacing dir = state.getValue(Properties.FACING);
                         meta = dir.getIndex() + 4;
                         break;
                     }
@@ -141,8 +151,8 @@ public class BlockPeripheral extends BlockPeripheralBase {
             dir = peripheral.getDirection();
         } else {
             anim = 0;
-            dir = (EnumFacing) state.getValue(Properties.FACING);
-            switch ((BlockPeripheralVariant) state.getValue(BlockPeripheral.Properties.VARIANT)) {
+            dir = state.getValue(Properties.FACING);
+            switch (state.getValue(Properties.VARIANT)) {
                 case WirelessModemDownOff:
                 case WirelessModemDownOn: {
                     dir = EnumFacing.DOWN;
@@ -377,7 +387,7 @@ public class BlockPeripheral extends BlockPeripheralBase {
 
     @Override
     public PeripheralType getPeripheralType(IBlockState state) {
-        return ((BlockPeripheralVariant) state.getValue(Properties.VARIANT)).getPeripheralType();
+        return state.getValue(Properties.VARIANT).getPeripheralType();
     }
 
     @Override
@@ -447,6 +457,6 @@ public class BlockPeripheral extends BlockPeripheralBase {
 
     public static class Properties {
         public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-        public static final PropertyEnum<BlockPeripheralVariant> VARIANT = PropertyEnum.<BlockPeripheralVariant>create("variant", BlockPeripheralVariant.class);
+        public static final PropertyEnum<BlockPeripheralVariant> VARIANT = PropertyEnum.create("variant", BlockPeripheralVariant.class);
     }
 }

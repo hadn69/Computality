@@ -405,8 +405,8 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy {
         GameRegistry.addRecipe(new ImpostorShapelessRecipe(bookPrintout, new Object[]{leather, singlePrintout, string}));
 
         // Pocket Computer
-        ItemStack pocketComputer = PocketComputerItemFactory.create( -1, null, ComputerFamily.Normal, null );
-        GameRegistry.addRecipe( pocketComputer,
+        ItemStack pocketComputer = PocketComputerItemFactory.create(-1, null, ComputerFamily.Normal, null);
+        GameRegistry.addRecipe(pocketComputer,
                 "XXX", "XYX", "XZX",
                 'X', Blocks.STONE,
                 'Y', Items.GOLDEN_APPLE,
@@ -414,8 +414,8 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy {
         );
 
         // Advanced Pocket Computer
-        ItemStack advancedPocketComputer = PocketComputerItemFactory.create( -1, null, ComputerFamily.Advanced, null );
-        GameRegistry.addRecipe( advancedPocketComputer,
+        ItemStack advancedPocketComputer = PocketComputerItemFactory.create(-1, null, ComputerFamily.Advanced, null);
+        GameRegistry.addRecipe(advancedPocketComputer,
                 "XXX", "XYX", "XZX",
                 'X', Items.GOLD_INGOT,
                 'Y', Items.GOLDEN_APPLE,
@@ -423,31 +423,30 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy {
         );
 
         // Register pocket upgrades
-        ComputerCraft.PocketUpgrades.wirelessModem = new PocketModem( false );
-        ComputerCraftAPI.registerPocketUpgrade( ComputerCraft.PocketUpgrades.wirelessModem );
-        ComputerCraft.PocketUpgrades.advancedModem = new PocketModem( true );
-        ComputerCraftAPI.registerPocketUpgrade( ComputerCraft.PocketUpgrades.advancedModem );
+        ComputerCraft.PocketUpgrades.wirelessModem = new PocketModem(false);
+        ComputerCraftAPI.registerPocketUpgrade(ComputerCraft.PocketUpgrades.wirelessModem);
+        ComputerCraft.PocketUpgrades.advancedModem = new PocketModem(true);
+        ComputerCraftAPI.registerPocketUpgrade(ComputerCraft.PocketUpgrades.advancedModem);
 
         // Wireless Pocket Computer
-        GameRegistry.addRecipe( new PocketComputerUpgradeRecipe() );
+        GameRegistry.addRecipe(new PocketComputerUpgradeRecipe());
 
         // Advanced Wireless Pocket Computer
-        ItemStack advancedWirelessPocketComputer = PocketComputerItemFactory.create( -1, null, ComputerFamily.Advanced, null );
+        ItemStack advancedWirelessPocketComputer = PocketComputerItemFactory.create(-1, null, ComputerFamily.Advanced, null);
 
         // Impostor Pocket Computer recipes (to fool NEI)
-        for (IPocketUpgrade upgrade : ComputerCraft.getVanillaPocketUpgrades())
-        {
-            GameRegistry.addRecipe( new ImpostorRecipe(
-                1, 2,
-                new ItemStack[]{ upgrade.getCraftingItem(), pocketComputer },
-                PocketComputerItemFactory.create( -1, null, ComputerFamily.Normal, upgrade )
-            ) );
+        for (IPocketUpgrade upgrade : ComputerCraft.getVanillaPocketUpgrades()) {
+            GameRegistry.addRecipe(new ImpostorRecipe(
+                    1, 2,
+                    new ItemStack[]{upgrade.getCraftingItem(), pocketComputer},
+                    PocketComputerItemFactory.create(-1, null, ComputerFamily.Normal, upgrade)
+            ));
 
-            GameRegistry.addRecipe( new ImpostorRecipe(
-                1, 2,
-                new ItemStack[]{ upgrade.getCraftingItem(), advancedPocketComputer },
-                PocketComputerItemFactory.create( -1, null, ComputerFamily.Advanced, upgrade )
-            ) );
+            GameRegistry.addRecipe(new ImpostorRecipe(
+                    1, 2,
+                    new ItemStack[]{upgrade.getCraftingItem(), advancedPocketComputer},
+                    PocketComputerItemFactory.create(-1, null, ComputerFamily.Advanced, upgrade)
+            ));
         }
 
         // Skulls (Easter Egg)

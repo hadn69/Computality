@@ -17,7 +17,6 @@ import dan200.computercraft.core.apis.ILuaAPI;
 import dan200.computercraft.shared.turtle.core.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.Map;

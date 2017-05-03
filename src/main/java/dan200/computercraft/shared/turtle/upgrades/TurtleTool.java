@@ -38,7 +38,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.vecmath.Matrix4f;
-import java.util.Iterator;
 
 public class TurtleTool implements ITurtleUpgrade {
     protected ItemStack m_item;

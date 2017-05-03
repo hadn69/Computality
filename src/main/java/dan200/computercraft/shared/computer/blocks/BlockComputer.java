@@ -27,6 +27,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+
 public class BlockComputer extends BlockComputerBase {
     public BlockComputer() {
         super(Material.ROCK);
@@ -40,7 +42,11 @@ public class BlockComputer extends BlockComputerBase {
         );
     }
 
-    // Members
+    @Override
+    public int getLightValue(@Nonnull IBlockState state, IBlockAccess world,@Nonnull BlockPos pos) {
+        return state.getValue(Properties.STATE) != ComputerState.Off? 7 : 0;
+    }
+// Members
 
     @Override
     protected BlockStateContainer createBlockState() {

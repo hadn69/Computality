@@ -49,7 +49,7 @@ public interface IPocketUpgrade {
      * @return The item stack used for crafting. This can be {@code null} if crafting is disabled.
      * @see ITurtleUpgrade#getCraftingItem()
      */
-    @Nullable
+    @Nonnull
     ItemStack getCraftingItem();
 
     /**

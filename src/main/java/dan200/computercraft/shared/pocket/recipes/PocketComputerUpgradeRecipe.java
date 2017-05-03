@@ -11,6 +11,7 @@ import dan200.computercraft.api.pocket.IPocketUpgrade;
 import dan200.computercraft.shared.computer.core.ComputerFamily;
 import dan200.computercraft.shared.pocket.items.ItemPocketComputer;
 import dan200.computercraft.shared.pocket.items.PocketComputerItemFactory;
+import net.minecraft.block.BlockWorkbench;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -37,7 +38,7 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
 
     @Override
     public boolean matches(InventoryCrafting inventory, World world) {
-        return (!getCraftingResult(inventory).isEmpty());
+        return !getCraftingResult(inventory).isEmpty();
     }
 
     @Override
@@ -84,10 +85,13 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
                 } else if (x == computerX && y == computerY - 1) {
                     upgrade = ComputerCraft.getPocketUpgrade(item);
                     if (upgrade == null) return ItemStack.EMPTY;
+                    break;
                 } else if (!item.isEmpty()) {
                     return ItemStack.EMPTY;
                 }
             }
+            if(upgrade!=null)
+                break;
         }
 
         if (upgrade == null) {

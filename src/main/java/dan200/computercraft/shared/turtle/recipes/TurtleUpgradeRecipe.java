@@ -38,7 +38,7 @@ public class TurtleUpgradeRecipe implements IRecipe {
 
     @Override
     public boolean matches(InventoryCrafting inventory, World world) {
-        return (getCraftingResult(inventory) != null);
+        return (!getCraftingResult(inventory).isEmpty());
     }
 
     @Override

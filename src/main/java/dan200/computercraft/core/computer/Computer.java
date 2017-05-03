@@ -374,6 +374,7 @@ public class Computer {
         m_apis.add(new PeripheralAPI(m_apiEnvironment));
         m_apis.add(new OSAPI(m_apiEnvironment));
         m_apis.add(new BitAPI(m_apiEnvironment));
+        m_apis.add(new MinecraftAPI(m_apiEnvironment));
         //m_apis.add( new BufferAPI( m_apiEnvironment ) );
         if (ComputerCraft.Config.http_enable) {
             m_apis.add(new HTTPAPI(m_apiEnvironment));
@@ -385,9 +386,7 @@ public class Computer {
         ILuaMachine machine = new LuaJLuaMachine(this);
 
         // Add the APIs
-        Iterator<ILuaAPI> it = m_apis.iterator();
-        while (it.hasNext()) {
-            ILuaAPI api = it.next();
+        for (ILuaAPI api : m_apis) {
             machine.addAPI(api);
             api.startup();
         }
@@ -605,7 +604,7 @@ public class Computer {
         ComputerThread.queueTask(task, computer);
     }
 
-    private static enum State {
+    private enum State {
         Off,
         Starting,
         Running,

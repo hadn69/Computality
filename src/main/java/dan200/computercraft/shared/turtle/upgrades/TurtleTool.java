@@ -121,10 +121,7 @@ public class TurtleTool implements ITurtleUpgrade {
     protected boolean canBreakBlock(World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
-        if (block.isAir(state, world, pos) || block == Blocks.BEDROCK || block.getBlockHardness(state, world, pos) <= -1.0F) {
-            return false;
-        }
-        return true;
+        return !(block.isAir(state, world, pos) || block == Blocks.BEDROCK || block.getBlockHardness(state, world, pos) <= -1.0F);
     }
 
     protected boolean canHarvestBlock(World world, BlockPos pos) {

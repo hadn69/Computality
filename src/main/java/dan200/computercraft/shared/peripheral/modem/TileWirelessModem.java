@@ -29,7 +29,7 @@ public class TileWirelessModem extends TileModemBase {
     public EnumFacing getDirection() {
         // Wireless Modem
         IBlockState state = getBlockState();
-        switch ((BlockPeripheralVariant) state.getValue(BlockPeripheral.Properties.VARIANT)) {
+        switch (state.getValue(BlockPeripheral.Properties.VARIANT)) {
             case WirelessModemDownOff:
             case WirelessModemDownOn: {
                 return EnumFacing.DOWN;
@@ -39,7 +39,7 @@ public class TileWirelessModem extends TileModemBase {
                 return EnumFacing.UP;
             }
             default: {
-                return (EnumFacing) state.getValue(BlockPeripheral.Properties.FACING);
+                return state.getValue(BlockPeripheral.Properties.FACING);
             }
         }
     }

@@ -335,7 +335,7 @@ public class ComputerCraftProxyClient extends ComputerCraftProxyCommon {
                 if (!ComputerCraft.clientComputerRegistry.contains(instanceID)) {
                     ComputerCraft.clientComputerRegistry.add(instanceID, new ClientComputer(instanceID));
                 }
-                ComputerCraft.clientComputerRegistry.get(instanceID).handlePacket(packet, (EntityPlayer) player);
+                ComputerCraft.clientComputerRegistry.get(instanceID).handlePacket(packet, player);
                 break;
             }
             case ComputerCraftPacket.ComputerDeleted: {

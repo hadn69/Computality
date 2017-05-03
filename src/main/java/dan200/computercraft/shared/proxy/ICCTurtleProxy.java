@@ -14,21 +14,21 @@ import net.minecraft.item.ItemStack;
 import java.util.List;
 
 public interface ICCTurtleProxy {
-    public void preInit();
+    void preInit();
 
-    public void init();
+    void init();
 
-    public void registerTurtleUpgrade(ITurtleUpgrade upgrade);
+    void registerTurtleUpgrade(ITurtleUpgrade upgrade);
 
-    public ITurtleUpgrade getTurtleUpgrade(String id);
+    ITurtleUpgrade getTurtleUpgrade(String id);
 
-    public ITurtleUpgrade getTurtleUpgrade(int legacyId);
+    ITurtleUpgrade getTurtleUpgrade(int legacyId);
 
-    public ITurtleUpgrade getTurtleUpgrade(ItemStack item);
+    ITurtleUpgrade getTurtleUpgrade(ItemStack item);
 
-    public void addAllUpgradedTurtles(List<ItemStack> list);
+    void addAllUpgradedTurtles(List<ItemStack> list);
 
-    public void setEntityDropConsumer(Entity entity, IEntityDropConsumer consumer);
+    void setEntityDropConsumer(Entity entity, IEntityDropConsumer consumer);
 
-    public void clearEntityDropConsumer(Entity entity);
+    void clearEntityDropConsumer(Entity entity);
 }

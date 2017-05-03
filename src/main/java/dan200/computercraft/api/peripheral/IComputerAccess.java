@@ -27,12 +27,12 @@ public interface IComputerAccess {
      * @see #unmount(String)
      * @see dan200.computercraft.api.filesystem.IMount
      */
-    public String mount(String desiredLocation, IMount mount);
+    String mount(String desiredLocation, IMount mount);
 
     /**
      * TODO: Document me
      */
-    public String mount(String desiredLocation, IMount mount, String driveName);
+    String mount(String desiredLocation, IMount mount, String driveName);
 
     /**
      * Mount a mount onto the computers' file system in a writable mode.<br>
@@ -46,12 +46,12 @@ public interface IComputerAccess {
      * @see #unmount(String)
      * @see IMount
      */
-    public String mountWritable(String desiredLocation, IWritableMount mount);
+    String mountWritable(String desiredLocation, IWritableMount mount);
 
     /**
      * TODO: Document me
      */
-    public String mountWritable(String desiredLocation, IWritableMount mount, String driveName);
+    String mountWritable(String desiredLocation, IWritableMount mount, String driveName);
 
     /**
      * Unmounts a directory previously mounted onto the computers file system by mount() or mountWritable().<br>
@@ -65,7 +65,7 @@ public interface IComputerAccess {
      * @see #mount(String, IMount)
      * @see #mountWritable(String, IWritableMount)
      */
-    public void unmount(String location);
+    void unmount(String location);
 
     /**
      * Returns the numerical ID of this computercraft.<br>
@@ -74,7 +74,7 @@ public interface IComputerAccess {
      *
      * @return The identifier.
      */
-    public int getID();
+    int getID();
 
     /**
      * Causes an event to be raised on this computercraft, which the computercraft can respond to by calling
@@ -92,7 +92,7 @@ public interface IComputerAccess {
      *                  You may supply null to indicate that no arguments are to be supplied.
      * @see dan200.computercraft.api.peripheral.IPeripheral#callMethod
      */
-    public void queueEvent(String event, Object[] arguments);
+    void queueEvent(String event, Object[] arguments);
 
     /**
      * Get a string, unique to the computercraft, by which the computercraft refers to this peripheral.
@@ -103,5 +103,5 @@ public interface IComputerAccess {
      *
      * @return A string unique to the computercraft, but not globally.
      */
-    public String getAttachmentName();
+    String getAttachmentName();
 }

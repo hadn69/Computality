@@ -199,10 +199,7 @@ public class TileTurtle extends TileComputerBase
         if (getFamily() == ComputerFamily.Advanced) {
             return true;
         } else {
-            if (exploder != null && (exploder instanceof EntityLivingBase || exploder instanceof EntityFireball)) {
-                return true;
-            }
-            return false;
+            return exploder != null && (exploder instanceof EntityLivingBase || exploder instanceof EntityFireball);
         }
     }
 

@@ -22,5 +22,5 @@ public interface IPeripheralProvider {
      * @return a peripheral, or null if there is not a peripheral here you'd like to handle.
      * @see dan200.computercraft.api.ComputerCraftAPI#registerPeripheralProvider(IPeripheralProvider)
      */
-    public IPeripheral getPeripheral(World world, BlockPos pos, EnumFacing side);
+    IPeripheral getPeripheral(World world, BlockPos pos, EnumFacing side);
 }

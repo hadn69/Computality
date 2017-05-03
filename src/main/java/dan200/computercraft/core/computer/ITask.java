@@ -7,7 +7,7 @@
 package dan200.computercraft.core.computer;
 
 public interface ITask {
-    public Computer getOwner();
+    Computer getOwner();
 
-    public void execute();
+    void execute();
 }

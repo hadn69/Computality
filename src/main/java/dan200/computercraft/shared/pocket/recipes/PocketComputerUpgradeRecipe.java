@@ -67,7 +67,7 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
         }
 
         ItemPocketComputer itemComputer = (ItemPocketComputer) computer.getItem();
-        if (itemComputer.getUpgrade(computer) != null) {
+        if (ItemPocketComputer.getUpgrade(computer) != null) {
             return ItemStack.EMPTY;
         }
 

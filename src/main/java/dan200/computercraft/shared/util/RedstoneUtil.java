@@ -31,7 +31,7 @@ public class RedstoneUtil {
             IBlockState state = world.getBlockState(pos);
             if (block == Blocks.REDSTONE_WIRE) {
                 if (side != EnumFacing.UP) {
-                    power = ((Integer) state.getValue(BlockRedstoneWire.POWER)).intValue();
+                    power = state.getValue(BlockRedstoneWire.POWER).intValue();
                 } else {
                     power = 0;
                 }

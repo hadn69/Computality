@@ -25,7 +25,7 @@ public class TileAdvancedModem extends TileModemBase {
     public EnumFacing getDirection() {
         // Wireless Modem
         IBlockState state = getBlockState();
-        return (EnumFacing) state.getValue(BlockAdvancedModem.Properties.FACING);
+        return state.getValue(BlockAdvancedModem.Properties.FACING);
     }
 
     @Override

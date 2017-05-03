@@ -113,7 +113,7 @@ public class TileCable extends TileModemBase
     @Override
     public EnumFacing getDirection() {
         IBlockState state = getBlockState();
-        BlockCableModemVariant modem = (BlockCableModemVariant) state.getValue(BlockCable.Properties.MODEM);
+        BlockCableModemVariant modem = state.getValue(BlockCable.Properties.MODEM);
         if (modem != BlockCableModemVariant.None) {
             return modem.getFacing();
         } else {
@@ -124,7 +124,7 @@ public class TileCable extends TileModemBase
     @Override
     public void setDirection(EnumFacing dir) {
         IBlockState state = getBlockState();
-        BlockCableModemVariant modem = (BlockCableModemVariant) state.getValue(BlockCable.Properties.MODEM);
+        BlockCableModemVariant modem = state.getValue(BlockCable.Properties.MODEM);
         if (modem != BlockCableModemVariant.None) {
             setBlockState(state.withProperty(BlockCable.Properties.MODEM, BlockCableModemVariant.fromFacing(dir)));
         }
@@ -597,8 +597,8 @@ public class TileCable extends TileModemBase
 
     // Generic network search stuff
 
-    private static interface ICableVisitor {
-        public void visit(TileCable modem, int distance);
+    private interface ICableVisitor {
+        void visit(TileCable modem, int distance);
     }
 
     private static class Peripheral extends ModemPeripheral {

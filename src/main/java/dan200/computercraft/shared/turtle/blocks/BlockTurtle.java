@@ -63,10 +63,8 @@ public class BlockTurtle extends BlockComputerBase {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{
-                Properties.FACING,
-                Properties.DYE
-        });
+        return new BlockStateContainer(this, Properties.FACING,
+                Properties.DYE);
     }
 
     @Override
@@ -142,6 +140,6 @@ public class BlockTurtle extends BlockComputerBase {
 
     public static class Properties {
         public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-        public static final PropertyEnum<BlockTurtleDyeVariant> DYE = PropertyEnum.<BlockTurtleDyeVariant>create("dye", BlockTurtleDyeVariant.class);
+        public static final PropertyEnum<BlockTurtleDyeVariant> DYE = PropertyEnum.create("dye", BlockTurtleDyeVariant.class);
     }
 }

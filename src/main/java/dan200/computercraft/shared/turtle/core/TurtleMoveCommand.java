@@ -63,7 +63,7 @@ public class TurtleMoveCommand implements ITurtleCommand {
         if (!oldWorld.checkNoEntityCollision(aabb)) {
             if (ComputerCraft.Config.turtlesCanPush && m_direction != MoveDirection.Up && m_direction != MoveDirection.Down) {
                 // Check there is space for all the pushable entities to be pushed
-                List list = oldWorld.getEntitiesWithinAABBExcludingEntity((Entity) null, aabb);
+                List list = oldWorld.getEntitiesWithinAABBExcludingEntity(null, aabb);
                 for (int i = 0; i < list.size(); ++i) {
                     Entity entity = (Entity) list.get(i);
                     if (!entity.isDead && entity.preventEntitySpawning) {

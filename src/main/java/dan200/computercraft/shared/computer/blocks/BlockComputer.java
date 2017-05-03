@@ -43,21 +43,21 @@ public class BlockComputer extends BlockComputerBase {
     }
 
     @Override
-    public int getLightValue(@Nonnull IBlockState state, IBlockAccess world,@Nonnull BlockPos pos) {
-        return state.getValue(Properties.STATE) != ComputerState.Off? 7 : 0;
+    public int getLightValue(@Nonnull IBlockState state, IBlockAccess world, @Nonnull BlockPos pos) {
+        return state.getValue(Properties.STATE) != ComputerState.Off ? 7 : 0;
     }
 // Members
 
     @Override
+    @Nonnull
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{
-                Properties.FACING,
+        return new BlockStateContainer(this, Properties.FACING,
                 Properties.ADVANCED,
-                Properties.STATE
-        });
+                Properties.STATE);
     }
 
     @Override
+    @Nonnull
     public IBlockState getStateFromMeta(int meta) {
         EnumFacing dir = EnumFacing.getFront(meta & 0x7);
         if (dir.getAxis() == EnumFacing.Axis.Y) {
@@ -75,8 +75,8 @@ public class BlockComputer extends BlockComputerBase {
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        int meta = ((EnumFacing) state.getValue(Properties.FACING)).getIndex();
-        if ((Boolean) state.getValue(Properties.ADVANCED)) {
+        int meta = state.getValue(Properties.FACING).getIndex();
+        if (state.getValue(Properties.ADVANCED)) {
             meta += 8;
         }
         return meta;
@@ -101,7 +101,8 @@ public class BlockComputer extends BlockComputerBase {
     }
 
     @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+    @Nonnull
+    public IBlockState getActualState(@Nonnull IBlockState state, IBlockAccess world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile != null && tile instanceof IComputerTile) {
             IComputer computer = ((IComputerTile) tile).getComputer();
@@ -123,7 +124,7 @@ public class BlockComputer extends BlockComputerBase {
 
     @Override
     public ComputerFamily getFamily(IBlockState state) {
-        if ((Boolean) state.getValue(Properties.ADVANCED)) {
+        if (state.getValue(Properties.ADVANCED)) {
             return ComputerFamily.Advanced;
         } else {
             return ComputerFamily.Normal;
@@ -153,6 +154,6 @@ public class BlockComputer extends BlockComputerBase {
     public static class Properties {
         public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
         public static final PropertyBool ADVANCED = PropertyBool.create("advanced");
-        public static final PropertyEnum<ComputerState> STATE = PropertyEnum.<ComputerState>create("state", ComputerState.class);
+        public static final PropertyEnum<ComputerState> STATE = PropertyEnum.create("state", ComputerState.class);
     }
 }

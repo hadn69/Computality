@@ -15,7 +15,7 @@ public enum ComputerState implements IStringSerializable {
 
     private String m_name;
 
-    private ComputerState(String name) {
+    ComputerState(String name) {
         m_name = name;
     }
 

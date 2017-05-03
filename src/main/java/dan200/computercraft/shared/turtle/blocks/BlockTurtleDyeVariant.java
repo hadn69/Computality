@@ -31,7 +31,7 @@ public enum BlockTurtleDyeVariant implements IStringSerializable {
     private String m_name;
     private Colour m_colour;
 
-    private BlockTurtleDyeVariant(String name, Colour colour) {
+    BlockTurtleDyeVariant(String name, Colour colour) {
         m_name = name;
         m_colour = colour;
     }

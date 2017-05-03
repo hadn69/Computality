@@ -21,7 +21,7 @@ public enum PeripheralType implements IStringSerializable {
 
     private String m_name;
 
-    private PeripheralType(String name) {
+    PeripheralType(String name) {
         m_name = name;
     }
 

@@ -26,19 +26,19 @@ public interface ITurtleAccess {
      *
      * @return the world in which the turtle resides.
      */
-    public World getWorld();
+    World getWorld();
 
     /**
      * Returns a vector containing the integer co-ordinates at which the turtle resides.
      *
      * @return a vector containing the integer co-ordinates at which the turtle resides.
      */
-    public BlockPos getPosition();
+    BlockPos getPosition();
 
     /**
      * TODO: Document me
      */
-    public boolean teleportTo(World world, BlockPos pos);
+    boolean teleportTo(World world, BlockPos pos);
 
     /**
      * Returns a vector containing the floating point co-ordinates at which the turtle is rendered.
@@ -47,73 +47,73 @@ public interface ITurtleAccess {
      * @param f The subframe fraction
      * @return a vector containing the floating point co-ordinates at which the turtle resides.
      */
-    public Vec3d getVisualPosition(float f);
+    Vec3d getVisualPosition(float f);
 
     /**
      * TODO: Document me
      */
-    public float getVisualYaw(float f);
+    float getVisualYaw(float f);
 
     /**
      * Returns the world direction the turtle is currently facing.
      *
      * @return the world direction the turtle is currently facing.
      */
-    public EnumFacing getDirection();
+    EnumFacing getDirection();
 
     /**
      * TODO: Document me
      */
-    public void setDirection(EnumFacing dir);
+    void setDirection(EnumFacing dir);
 
     /**
      * TODO: Document me
      */
-    public int getSelectedSlot();
+    int getSelectedSlot();
 
     /**
      * TODO: Document me
      */
-    public void setSelectedSlot(int slot);
+    void setSelectedSlot(int slot);
 
     /**
      * Gets the colour the turtle has been dyed.
      *
      * @return 0-15 if the turtle has been dyed one of the 16 standard minecraft colours, -1 if the turtle is clean.
      */
-    public int getDyeColour();
+    int getDyeColour();
 
     /**
      * Sets the colour of the turtle, as if the player had dyed it with a dye item.
      *
      * @param dyeColour 0-15 to dye the turtle one of the 16 standard minecraft colours, or -1 to remove the dye from the turtle.
      */
-    public void setDyeColour(int dyeColour);
+    void setDyeColour(int dyeColour);
 
     /**
      * TODO: Document me
      */
-    public IInventory getInventory();
+    IInventory getInventory();
 
     /**
      * TODO: Document me
      */
-    public boolean isFuelNeeded();
+    boolean isFuelNeeded();
 
     /**
      * TODO: Document me
      */
-    public int getFuelLevel();
+    int getFuelLevel();
 
     /**
      * TODO: Document me
      */
-    public void setFuelLevel(int fuel);
+    void setFuelLevel(int fuel);
 
     /**
      * TODO: Document me
      */
-    public int getFuelLimit();
+    int getFuelLimit();
 
     /**
      * Removes some fuel from the turtles fuel supply. Negative numbers can be passed in to INCREASE the fuel level of the turtle.
@@ -121,12 +121,12 @@ public interface ITurtleAccess {
      * @return Whether the turtle was able to consume the ammount of fuel specified. Will return false if you supply a number
      * greater than the current fuel level of the turtle.
      */
-    public boolean consumeFuel(int fuel);
+    boolean consumeFuel(int fuel);
 
     /**
      * TODO: Document me
      */
-    public void addFuel(int fuel);
+    void addFuel(int fuel);
 
     /**
      * Adds a custom command to the turtles command queue. Unlike peripheral methods, these custom commands will be executed
@@ -140,39 +140,39 @@ public interface ITurtleAccess {
      * unchanged if called from a peripheral method.
      * @see ITurtleCommand
      */
-    public Object[] executeCommand(ILuaContext context, ITurtleCommand command) throws LuaException, InterruptedException;
+    Object[] executeCommand(ILuaContext context, ITurtleCommand command) throws LuaException, InterruptedException;
 
     /**
      * TODO: Document me
      */
-    public void playAnimation(TurtleAnimation animation);
+    void playAnimation(TurtleAnimation animation);
 
     /**
      * Returns the turtle on the specified side of the turtle, if there is one.
      *
      * @return the turtle on the specified side of the turtle, if there is one.
      */
-    public ITurtleUpgrade getUpgrade(TurtleSide side);
+    ITurtleUpgrade getUpgrade(TurtleSide side);
 
     /**
      * TODO: Document me
      */
-    public void setUpgrade(TurtleSide side, ITurtleUpgrade upgrade);
+    void setUpgrade(TurtleSide side, ITurtleUpgrade upgrade);
 
     /**
      * Returns the peripheral created by the upgrade on the specified side of the turtle, if there is one.
      *
      * @return the peripheral created by the upgrade on the specified side of the turtle, if there is one.
      */
-    public IPeripheral getPeripheral(TurtleSide side);
+    IPeripheral getPeripheral(TurtleSide side);
 
     /**
      * TODO: Document me
      */
-    public NBTTagCompound getUpgradeNBTData(TurtleSide side);
+    NBTTagCompound getUpgradeNBTData(TurtleSide side);
 
     /**
      * TODO: Document me
      */
-    public void updateUpgradeNBTData(TurtleSide side);
+    void updateUpgradeNBTData(TurtleSide side);
 }

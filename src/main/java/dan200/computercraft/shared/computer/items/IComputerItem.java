@@ -10,9 +10,9 @@ import dan200.computercraft.shared.computer.core.ComputerFamily;
 import net.minecraft.item.ItemStack;
 
 public interface IComputerItem {
-    public int getComputerID(ItemStack stack);
+    int getComputerID(ItemStack stack);
 
-    public String getLabel(ItemStack stack);
+    String getLabel(ItemStack stack);
 
-    public ComputerFamily getFamily(ItemStack stack);
+    ComputerFamily getFamily(ItemStack stack);
 }

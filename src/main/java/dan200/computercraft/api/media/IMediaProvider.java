@@ -20,5 +20,5 @@ public interface IMediaProvider {
      * @return an IMedia implementation, or null if the item is not something you wish to handle
      * @see dan200.computercraft.api.ComputerCraftAPI#registerMediaProvider(IMediaProvider)
      */
-    public IMedia getMedia(ItemStack stack);
+    IMedia getMedia(ItemStack stack);
 }

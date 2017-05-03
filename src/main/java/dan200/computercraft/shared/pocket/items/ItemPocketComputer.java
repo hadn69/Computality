@@ -32,8 +32,6 @@ import net.minecraftforge.common.util.Constants;
 
 import java.util.List;
 
-;
-
 public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
     public ItemPocketComputer() {
         setMaxStackSize(1);

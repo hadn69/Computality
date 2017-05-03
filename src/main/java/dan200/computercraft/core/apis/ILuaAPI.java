@@ -9,11 +9,11 @@ package dan200.computercraft.core.apis;
 import dan200.computercraft.api.lua.ILuaObject;
 
 public interface ILuaAPI extends ILuaObject {
-    public String[] getNames();
+    String[] getNames();
 
-    public void startup(); // LT
+    void startup(); // LT
 
-    public void advance(double _dt); // MT
+    void advance(double _dt); // MT
 
-    public void shutdown(); // LT
+    void shutdown(); // LT
 }

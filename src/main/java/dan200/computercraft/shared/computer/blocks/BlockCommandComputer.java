@@ -43,10 +43,8 @@ public class BlockCommandComputer extends BlockComputerBase {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{
-                Properties.FACING,
-                Properties.STATE
-        });
+        return new BlockStateContainer(this, Properties.FACING,
+                Properties.STATE);
     }
 
     @Override
@@ -60,7 +58,7 @@ public class BlockCommandComputer extends BlockComputerBase {
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return ((EnumFacing) state.getValue(Properties.FACING)).getIndex();
+        return state.getValue(Properties.FACING).getIndex();
     }
 
     @Override
@@ -119,6 +117,6 @@ public class BlockCommandComputer extends BlockComputerBase {
 
     public static class Properties {
         public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-        public static final PropertyEnum<ComputerState> STATE = PropertyEnum.<ComputerState>create("state", ComputerState.class);
+        public static final PropertyEnum<ComputerState> STATE = PropertyEnum.create("state", ComputerState.class);
     }
 }

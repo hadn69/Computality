@@ -44,7 +44,7 @@ public class TurtleInspectCommand implements ITurtleCommand {
             if (!FAIL_ON_AIR || !world.isAirBlock(newPosition)) {
                 IBlockState state = world.getBlockState(newPosition);
                 Block block = state.getBlock();
-                String name = ((ResourceLocation) Block.REGISTRY.getNameForObject(block)).toString();
+                String name = Block.REGISTRY.getNameForObject(block).toString();
                 int metadata = block.getMetaFromState(state);
 
                 Map<Object, Object> table = new HashMap<Object, Object>();

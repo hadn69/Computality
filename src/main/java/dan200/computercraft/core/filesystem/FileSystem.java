@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 public class FileSystem {
     private final Map<String, MountWrapper> m_mounts = new HashMap<String, MountWrapper>();
     private final Set<IMountedFile> m_openFiles = new HashSet<IMountedFile>();
+
     public FileSystem(String rootLabel, IMount rootMount) throws FileSystemException {
         mount(rootLabel, "", rootMount);
     }
@@ -70,7 +71,7 @@ public class FileSystem {
         for (int i = 0; i < path.length(); i++) {
             char c = path.charAt(i);
             if (c >= 32 && Arrays.binarySearch(specialChars, c) < 0 && (allowWildcards || c != '*')) {
-                cleanName.append((char) c);
+                cleanName.append(c);
             }
         }
         path = cleanName.toString();
@@ -518,7 +519,7 @@ public class FileSystem {
                     writer.flush();
                 }
             };
-            return (IMountedFileNormal) openFile(file, writer);
+            return openFile(file, writer);
         }
         return null;
     }
@@ -549,7 +550,7 @@ public class FileSystem {
                     throw new UnsupportedOperationException();
                 }
             };
-            return (IMountedFileBinary) openFile(file, stream);
+            return openFile(file, stream);
         }
         return null;
     }
@@ -580,7 +581,7 @@ public class FileSystem {
                     stream.flush();
                 }
             };
-            return (IMountedFileBinary) openFile(file, stream);
+            return openFile(file, stream);
         }
         return null;
     }

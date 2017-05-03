@@ -15,7 +15,7 @@ import net.minecraft.world.World;
  * @see dan200.computercraft.api.ComputerCraftAPI#registerPermissionProvider(ITurtlePermissionProvider)
  */
 public interface ITurtlePermissionProvider {
-    public boolean isBlockEnterable(World world, BlockPos pos);
+    boolean isBlockEnterable(World world, BlockPos pos);
 
-    public boolean isBlockEditable(World world, BlockPos pos);
+    boolean isBlockEditable(World world, BlockPos pos);
 }

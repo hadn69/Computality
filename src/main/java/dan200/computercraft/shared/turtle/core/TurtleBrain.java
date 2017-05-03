@@ -234,10 +234,10 @@ public class TurtleBrain implements ITurtleAccess {
         // NBT
         m_upgradeNBTData.clear();
         if (nbttagcompound.hasKey("leftUpgradeNBT")) {
-            m_upgradeNBTData.put(TurtleSide.Left, (NBTTagCompound) nbttagcompound.getCompoundTag("leftUpgradeNBT").copy());
+            m_upgradeNBTData.put(TurtleSide.Left, nbttagcompound.getCompoundTag("leftUpgradeNBT").copy());
         }
         if (nbttagcompound.hasKey("rightUpgradeNBT")) {
-            m_upgradeNBTData.put(TurtleSide.Right, (NBTTagCompound) nbttagcompound.getCompoundTag("rightUpgradeNBT").copy());
+            m_upgradeNBTData.put(TurtleSide.Right, nbttagcompound.getCompoundTag("rightUpgradeNBT").copy());
         }
     }
 
@@ -270,10 +270,10 @@ public class TurtleBrain implements ITurtleAccess {
 
         // Write NBT
         if (m_upgradeNBTData.containsKey(TurtleSide.Left)) {
-            nbttagcompound.setTag("leftUpgradeNBT", (NBTTagCompound) getUpgradeNBTData(TurtleSide.Left).copy());
+            nbttagcompound.setTag("leftUpgradeNBT", getUpgradeNBTData(TurtleSide.Left).copy());
         }
         if (m_upgradeNBTData.containsKey(TurtleSide.Right)) {
-            nbttagcompound.setTag("rightUpgradeNBT", (NBTTagCompound) getUpgradeNBTData(TurtleSide.Right).copy());
+            nbttagcompound.setTag("rightUpgradeNBT", getUpgradeNBTData(TurtleSide.Right).copy());
         }
 
         return nbttagcompound;
@@ -299,10 +299,10 @@ public class TurtleBrain implements ITurtleAccess {
 
         // NBT
         if (m_upgradeNBTData.containsKey(TurtleSide.Left)) {
-            nbttagcompound.setTag("leftUpgradeNBT", (NBTTagCompound) getUpgradeNBTData(TurtleSide.Left).copy());
+            nbttagcompound.setTag("leftUpgradeNBT", getUpgradeNBTData(TurtleSide.Left).copy());
         }
         if (m_upgradeNBTData.containsKey(TurtleSide.Right)) {
-            nbttagcompound.setTag("rightUpgradeNBT", (NBTTagCompound) getUpgradeNBTData(TurtleSide.Right).copy());
+            nbttagcompound.setTag("rightUpgradeNBT", getUpgradeNBTData(TurtleSide.Right).copy());
         }
 
         // Colour
@@ -342,10 +342,10 @@ public class TurtleBrain implements ITurtleAccess {
         // NBT
         m_upgradeNBTData.clear();
         if (nbttagcompound.hasKey("leftUpgradeNBT")) {
-            m_upgradeNBTData.put(TurtleSide.Left, (NBTTagCompound) nbttagcompound.getCompoundTag("leftUpgradeNBT").copy());
+            m_upgradeNBTData.put(TurtleSide.Left, nbttagcompound.getCompoundTag("leftUpgradeNBT").copy());
         }
         if (nbttagcompound.hasKey("rightUpgradeNBT")) {
-            m_upgradeNBTData.put(TurtleSide.Right, (NBTTagCompound) nbttagcompound.getCompoundTag("rightUpgradeNBT").copy());
+            m_upgradeNBTData.put(TurtleSide.Right, nbttagcompound.getCompoundTag("rightUpgradeNBT").copy());
         }
 
         // Colour
@@ -900,7 +900,7 @@ public class TurtleBrain implements ITurtleAccess {
                     }
 
                     AxisAlignedBB aabb = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
-                    List list = world.getEntitiesWithinAABBExcludingEntity((Entity) null, aabb);
+                    List list = world.getEntitiesWithinAABBExcludingEntity(null, aabb);
                     if (!list.isEmpty()) {
                         double pushStep = 1.0f / (float) ANIM_DURATION;
                         double pushStepX = (double) moveDir.getFrontOffsetX() * pushStep;

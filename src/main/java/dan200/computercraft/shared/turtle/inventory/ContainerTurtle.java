@@ -85,7 +85,7 @@ public class ContainerTurtle extends Container {
 
         int selectedSlot = m_turtle.getSelectedSlot();
         for (int i = 0; i < listeners.size(); ++i) {
-            IContainerListener icrafting = (IContainerListener) listeners.get(i);
+            IContainerListener icrafting = listeners.get(i);
             if (m_selectedSlot != selectedSlot) {
                 icrafting.sendProgressBarUpdate(this, PROGRESS_ID_SELECTED_SLOT, selectedSlot);
             }
@@ -116,7 +116,7 @@ public class ContainerTurtle extends Container {
 
     @Nonnull
     protected ItemStack tryItemMerge(EntityPlayer player, int slotNum, int firstSlot, int lastSlot, boolean reverse) {
-        Slot slot = (Slot) inventorySlots.get(slotNum);
+        Slot slot = inventorySlots.get(slotNum);
         ItemStack originalStack = ItemStack.EMPTY;
         if (slot != null && slot.getHasStack()) {
             ItemStack clickedStack = slot.getStack();

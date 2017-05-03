@@ -10,11 +10,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public interface INetwork {
-    public void addReceiver(IReceiver receiver);
+    void addReceiver(IReceiver receiver);
 
-    public void removeReceiver(IReceiver receiver);
+    void removeReceiver(IReceiver receiver);
 
-    public void transmit(int channel, int replyChannel, Object payload, World world, Vec3d pos, double range, boolean interdimensional, Object senderObject);
+    void transmit(int channel, int replyChannel, Object payload, World world, Vec3d pos, double range, boolean interdimensional, Object senderObject);
 
-    public boolean isWireless();
+    boolean isWireless();
 }

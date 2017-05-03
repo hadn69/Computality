@@ -13,43 +13,43 @@ import dan200.computercraft.core.filesystem.FileSystem;
 import dan200.computercraft.core.terminal.Terminal;
 
 public interface IAPIEnvironment {
-    public Computer getComputer();
+    Computer getComputer();
 
-    public int getComputerID();
+    int getComputerID();
 
-    public IComputerEnvironment getComputerEnvironment();
+    IComputerEnvironment getComputerEnvironment();
 
-    public Terminal getTerminal();
+    Terminal getTerminal();
 
-    public FileSystem getFileSystem();
+    FileSystem getFileSystem();
 
-    public void shutdown();
+    void shutdown();
 
-    public void reboot();
+    void reboot();
 
-    public void queueEvent(String event, Object[] args);
+    void queueEvent(String event, Object[] args);
 
-    public void setOutput(int side, int output);
+    void setOutput(int side, int output);
 
-    public int getOutput(int side);
+    int getOutput(int side);
 
-    public int getInput(int side);
+    int getInput(int side);
 
-    public void setBundledOutput(int side, int output);
+    void setBundledOutput(int side, int output);
 
-    public int getBundledOutput(int side);
+    int getBundledOutput(int side);
 
-    public int getBundledInput(int side);
+    int getBundledInput(int side);
 
-    public void setPeripheralChangeListener(IPeripheralChangeListener listener);
+    void setPeripheralChangeListener(IPeripheralChangeListener listener);
 
-    public IPeripheral getPeripheral(int side);
+    IPeripheral getPeripheral(int side);
 
-    public String getLabel();
+    String getLabel();
 
-    public void setLabel(String label);
+    void setLabel(String label);
 
-    public static interface IPeripheralChangeListener {
-        public void onPeripheralChanged(int side, IPeripheral newPeripheral);
+    interface IPeripheralChangeListener {
+        void onPeripheralChanged(int side, IPeripheral newPeripheral);
     }
 }

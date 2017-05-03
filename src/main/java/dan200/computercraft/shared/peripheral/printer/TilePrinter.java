@@ -353,10 +353,7 @@ public class TilePrinter extends TilePeripheralBase
             if (inkStack.isEmpty() || !isInk(inkStack)) {
                 return false;
             }
-            if (getPaperLevel() > 0) {
-                return true;
-            }
-            return false;
+            return getPaperLevel() > 0;
         }
     }
 

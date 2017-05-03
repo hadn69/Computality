@@ -46,7 +46,7 @@ public class BlockAdvancedModem extends BlockPeripheralBase {
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        EnumFacing dir = (EnumFacing) state.getValue(Properties.FACING);
+        EnumFacing dir = state.getValue(Properties.FACING);
         return dir.getIndex();
     }
 
@@ -61,7 +61,7 @@ public class BlockAdvancedModem extends BlockPeripheralBase {
             dir = peripheral.getDirection();
         } else {
             anim = 0;
-            dir = (EnumFacing) state.getValue(Properties.FACING);
+            dir = state.getValue(Properties.FACING);
         }
 
         state = state.withProperty(Properties.FACING, dir);

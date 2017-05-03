@@ -9,23 +9,23 @@ package dan200.computercraft.shared.computer.core;
 import dan200.computercraft.shared.common.ITerminal;
 
 public interface IComputer extends ITerminal {
-    public int getInstanceID();
+    int getInstanceID();
 
-    public int getID();
+    int getID();
 
-    public String getLabel();
+    String getLabel();
 
-    public boolean isOn();
+    boolean isOn();
 
-    public boolean isCursorDisplayed();
+    boolean isCursorDisplayed();
 
-    public void turnOn();
+    void turnOn();
 
-    public void shutdown();
+    void shutdown();
 
-    public void reboot();
+    void reboot();
 
-    public void queueEvent(String event);
+    void queueEvent(String event);
 
-    public void queueEvent(String event, Object[] arguments);
+    void queueEvent(String event, Object[] arguments);
 }

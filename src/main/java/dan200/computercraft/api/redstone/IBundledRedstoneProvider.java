@@ -22,5 +22,5 @@ public interface IBundledRedstoneProvider {
      * @return a number in the range 0-65535 to indicate this block is providing output, or -1 if you do not wish to handle this block
      * @see dan200.computercraft.api.ComputerCraftAPI#registerBundledRedstoneProvider(IBundledRedstoneProvider)
      */
-    public int getBundledRedstoneOutput(World world, BlockPos pos, EnumFacing side);
+    int getBundledRedstoneOutput(World world, BlockPos pos, EnumFacing side);
 }

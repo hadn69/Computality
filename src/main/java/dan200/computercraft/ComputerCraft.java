@@ -68,6 +68,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import net.minecraftforge.fml.relauncher.Side;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -118,6 +119,7 @@ public class ComputerCraft {
     private static List<IBundledRedstoneProvider> bundledRedstoneProviders = new ArrayList<IBundledRedstoneProvider>();
     private static List<IMediaProvider> mediaProviders = new ArrayList<IMediaProvider>();
     private static List<ITurtlePermissionProvider> permissionProviders = new ArrayList<ITurtlePermissionProvider>();
+
     public ComputerCraft() {
     }
 
@@ -352,8 +354,7 @@ public class ComputerCraft {
         int combinedSignal = -1;
         for (IBundledRedstoneProvider bundledRedstoneProvider : bundledRedstoneProviders) {
             try {
-                IBundledRedstoneProvider handler = bundledRedstoneProvider;
-                int signal = handler.getBundledRedstoneOutput(world, pos, side);
+                int signal = bundledRedstoneProvider.getBundledRedstoneOutput(world, pos, side);
                 if (signal >= 0) {
                     if (combinedSignal < 0) {
                         combinedSignal = (signal & 0xffff);
@@ -373,8 +374,7 @@ public class ComputerCraft {
             // Try the handlers in order:
             for (IMediaProvider mediaProvider : mediaProviders) {
                 try {
-                    IMediaProvider handler = mediaProvider;
-                    IMedia media = handler.getMedia(stack);
+                    IMedia media = mediaProvider.getMedia(stack);
                     if (media != null) {
                         return media;
                     }
@@ -399,9 +399,9 @@ public class ComputerCraft {
         }
     }
 
-    public static IMount createResourceMount(Class modClass, String domain, String subPath) {
+    public static IMount createResourceMount(@Nonnull Class modClass, @Nonnull String domain,@Nonnull String subPath) {
         // Start building list of mounts
-        List<IMount> mounts = new ArrayList<IMount>();
+        List<IMount> mounts = new ArrayList<>();
         subPath = "assets/" + domain + "/" + subPath;
 
         // Mount from debug dir

@@ -1,3 +1,13 @@
+New Features in Computality 1.81:
+
+* Ported to Minecraft 1.11.2
+* Added Minecraft API
+* Added Time API
+* Monitors are fullbright now
+* Ender modems can now be attached to pocket computers
+* Config gui
+* Turtles have the correct redstone sides
+
 New Features in ComputerCraft 1.80:
 
 * Added .getResponseHeaders() to HTTP responses.

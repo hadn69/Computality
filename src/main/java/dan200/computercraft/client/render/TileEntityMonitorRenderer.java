@@ -35,15 +35,9 @@ public class TileEntityMonitorRenderer extends TileEntitySpecialRenderer<TileMon
         if (tileEntity != null) {
             GlStateManager.pushMatrix();
             if(ComputerCraft.Config.monitorFullbright) {
-                GlStateManager.disableLighting();
-                float x = OpenGlHelper.lastBrightnessX;
-                float y = OpenGlHelper.lastBrightnessY;
-                boolean prev = ForgeModContainer.forgeLightPipelineEnabled;
-                ForgeModContainer.forgeLightPipelineEnabled = false;
-                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+                Minecraft.getMinecraft().entityRenderer.disableLightmap();
                 renderMonitorAt(tileEntity, posX, posY, posZ, f, i);
-                ForgeModContainer.forgeLightPipelineEnabled = prev;
-                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, x, y);
+                Minecraft.getMinecraft().entityRenderer.enableLightmap();
             } else {
                 renderMonitorAt(tileEntity, posX, posY, posZ, f, i);
             }

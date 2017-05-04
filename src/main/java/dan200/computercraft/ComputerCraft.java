@@ -570,6 +570,10 @@ public class ComputerCraft {
         prop.setComment("The range of Wireless Modems at maximum altitude in stormy weather, in meters");
         Config.modem_highAltitudeRangeDuringStorm = Math.min(prop.getInt(), 100000);
 
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "monitorFullbright", Config.monitorFullbright);
+        prop.setComment("Make monitors ignore light level and render at full brightness at all times");
+        Config.monitorFullbright = prop.getBoolean();
+
         prop = Config.config.get(Configuration.CATEGORY_GENERAL, "computerSpaceLimit", Config.computerSpaceLimit);
         prop.setComment("The disk space limit for computers and turtles, in bytes");
         Config.computerSpaceLimit = prop.getInt();
@@ -656,6 +660,7 @@ public class ComputerCraft {
         public static int computerSpaceLimit = 1000 * 1000;
         public static int floppySpaceLimit = 125 * 1000;
         public static int maximumFilesOpen = 128;
+        public static boolean monitorFullbright = true;
         public static Configuration config;
     }
 

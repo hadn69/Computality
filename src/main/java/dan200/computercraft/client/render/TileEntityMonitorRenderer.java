@@ -16,12 +16,14 @@ import dan200.computercraft.shared.util.Colour;
 import dan200.computercraft.shared.util.DirectionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.ForgeModContainer;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityMonitorRenderer extends TileEntitySpecialRenderer<TileMonitor> {
@@ -31,7 +33,21 @@ public class TileEntityMonitorRenderer extends TileEntitySpecialRenderer<TileMon
     @Override
     public void renderTileEntityAt(TileMonitor tileEntity, double posX, double posY, double posZ, float f, int i) {
         if (tileEntity != null) {
-            renderMonitorAt(tileEntity, posX, posY, posZ, f, i);
+            GlStateManager.pushMatrix();
+            if(ComputerCraft.Config.monitorFullbright) {
+                GlStateManager.disableLighting();
+                float x = OpenGlHelper.lastBrightnessX;
+                float y = OpenGlHelper.lastBrightnessY;
+                boolean prev = ForgeModContainer.forgeLightPipelineEnabled;
+                ForgeModContainer.forgeLightPipelineEnabled = false;
+                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+                renderMonitorAt(tileEntity, posX, posY, posZ, f, i);
+                ForgeModContainer.forgeLightPipelineEnabled = prev;
+                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, x, y);
+            } else {
+                renderMonitorAt(tileEntity, posX, posY, posZ, f, i);
+            }
+            GlStateManager.popMatrix();
         }
     }
 

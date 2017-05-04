@@ -22,6 +22,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
+import javax.annotation.Nonnull;
+
 public class TurtleUpgradeRecipe implements IRecipe {
     public TurtleUpgradeRecipe() {
     }
@@ -32,17 +34,19 @@ public class TurtleUpgradeRecipe implements IRecipe {
     }
 
     @Override
+    @Nonnull
     public ItemStack getRecipeOutput() {
         return TurtleItemFactory.create(-1, null, null, ComputerFamily.Normal, null, null, 0, null);
     }
 
     @Override
-    public boolean matches(InventoryCrafting inventory, World world) {
+    public boolean matches(@Nonnull InventoryCrafting inventory, @Nonnull World world) {
         return (!getCraftingResult(inventory).isEmpty());
     }
 
     @Override
-    public ItemStack getCraftingResult(InventoryCrafting inventory) {
+    @Nonnull
+    public ItemStack getCraftingResult(@Nonnull InventoryCrafting inventory) {
         // Scan the grid for a row containing a turtle and 1 or 2 items
         ItemStack leftItem = ItemStack.EMPTY;
         ItemStack turtle = ItemStack.EMPTY;
@@ -141,7 +145,8 @@ public class TurtleUpgradeRecipe implements IRecipe {
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inventoryCrafting) {
+    @Nonnull
+    public NonNullList<ItemStack> getRemainingItems(@Nonnull InventoryCrafting inventoryCrafting) {
         NonNullList<ItemStack> list = NonNullList.create();
         for (int i = 0; i < inventoryCrafting.getSizeInventory(); ++i) {
             ItemStack stack = inventoryCrafting.getStackInSlot(i);

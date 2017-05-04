@@ -769,7 +769,7 @@ public class TurtleBrain implements ITurtleAccess {
         for (TurtleSide side : TurtleSide.values()) {
             ITurtleUpgrade upgrade = getUpgrade(side);
             IPeripheral peripheral = null;
-            if (upgrade != null && upgrade.getType() == TurtleUpgradeType.Peripheral) {
+            if (upgrade != null && upgrade.getType().isPeripheral()) {
                 peripheral = upgrade.createPeripheral(this, side);
             }
 

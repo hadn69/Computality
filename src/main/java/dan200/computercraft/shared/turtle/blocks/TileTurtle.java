@@ -535,7 +535,7 @@ public class TileTurtle extends TileComputerBase
             default:
                 return false;
         }
-        return upgrade != null && upgrade.getType() == TurtleUpgradeType.Peripheral;
+        return upgrade != null && upgrade.getType().isPeripheral();
     }
 
     public void transferStateFrom(TileTurtle copy) {

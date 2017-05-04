@@ -26,7 +26,7 @@ public class TurtleToolCommand implements ITurtleCommand {
         for (TurtleSide side : TurtleSide.values()) {
             if (!m_side.isPresent() || m_side.get() == side) {
                 ITurtleUpgrade upgrade = turtle.getUpgrade(side);
-                if (upgrade != null && upgrade.getType() == TurtleUpgradeType.Tool) {
+                if (upgrade != null && upgrade.getType().isTool()) {
                     TurtleCommandResult result = upgrade.useTool(turtle, side, m_verb, m_direction.toWorldDir(turtle));
                     if (result.isSuccess()) {
                         switch (side) {

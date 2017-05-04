@@ -61,7 +61,7 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy {
     }
 
     public static boolean isUpgradeSuitableForFamily(ComputerFamily family, ITurtleUpgrade upgrade) {
-        return family != ComputerFamily.Beginners || upgrade.getType() == TurtleUpgradeType.Tool;
+        return family != ComputerFamily.Beginners || upgrade.getType().isTool();
     }
 
     @Override
@@ -113,7 +113,7 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy {
 
     private void addAllUpgradedTurtles(ComputerFamily family, List<ItemStack> list) {
         ItemStack basicStack = TurtleItemFactory.create(-1, null, null, family, null, null, 0, null);
-        if (basicStack != null) {
+        if (!basicStack.isEmpty()) {
             list.add(basicStack);
         }
         addUpgradedTurtle(family, ComputerCraft.Upgrades.diamondPickaxe, list);
@@ -129,7 +129,7 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy {
     private void addUpgradedTurtle(ComputerFamily family, ITurtleUpgrade upgrade, List<ItemStack> list) {
         if (isUpgradeSuitableForFamily(family, upgrade)) {
             ItemStack stack = TurtleItemFactory.create(-1, null, null, family, upgrade, null, 0, null);
-            if (stack != null) {
+            if (!stack.isEmpty()) {
                 list.add(stack);
             }
         }
@@ -242,7 +242,7 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy {
                 }
 
                 ItemStack baseTurtle = TurtleItemFactory.create(-1, null, null, family, null, null, 0, null);
-                if (baseTurtle != null) {
+                if (!baseTurtle.isEmpty()) {
                     ItemStack craftedTurtle = TurtleItemFactory.create(-1, null, null, family, upgrade, null, 0, null);
                     ItemStack craftedTurtleFlipped = TurtleItemFactory.create(-1, null, null, family, null, upgrade, 0, null);
                     recipeList.add(new ImpostorRecipe(2, 1, new ItemStack[]{baseTurtle, craftingItem}, craftedTurtle));

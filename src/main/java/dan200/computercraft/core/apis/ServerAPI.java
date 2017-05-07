@@ -4,13 +4,9 @@ import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.core.computer.IComputerEnvironment;
 import dan200.computercraft.core.terminal.Terminal;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
 public class ServerAPI implements ILuaAPI {
@@ -50,6 +46,7 @@ public class ServerAPI implements ILuaAPI {
                 {
                         "getOnlinePlayerUUIDs",
                         "getOnlinePlayerNames",
+                        "getNameFromUUID"
                 };
     }
 
@@ -71,6 +68,8 @@ public class ServerAPI implements ILuaAPI {
                     playerNames[i] = player.getDisplayNameString();
                 }
                 return playerNames;
+            case 2:
+                return null;
         }
         return new Object[0];
     }

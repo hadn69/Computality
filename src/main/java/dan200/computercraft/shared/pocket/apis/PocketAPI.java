@@ -18,6 +18,7 @@ import dan200.computercraft.shared.util.WorldUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import org.luaj.vm2.ast.Str;
 
 public class PocketAPI implements ILuaAPI {
     private final PocketServerComputer m_computer;
@@ -49,7 +50,8 @@ public class PocketAPI implements ILuaAPI {
     public String[] getMethodNames() {
         return new String[]{
                 "equip",
-                "unequip"
+                "unequip",
+                "getColor"
         };
     }
 
@@ -133,6 +135,9 @@ public class PocketAPI implements ILuaAPI {
 
                 return null;
             }
+            case 3:
+                ItemStack pocketStack = m_computer.getStack();
+                return new Object[]{String.valueOf(ItemPocketComputer.getLightState(pocketStack))};
             default:
                 return null;
         }

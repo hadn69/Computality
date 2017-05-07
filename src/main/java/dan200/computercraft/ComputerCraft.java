@@ -46,7 +46,6 @@ import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 import dan200.computercraft.shared.turtle.upgrades.*;
 import dan200.computercraft.shared.util.*;
 import io.netty.buffer.Unpooled;
-import net.minecraft.command.server.CommandSummon;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -67,7 +66,6 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
@@ -547,7 +545,7 @@ public class ComputerCraft {
         Config.disable_lua51_features = prop.getBoolean(Config.disable_lua51_features);
 
         prop = Config.config.get(Configuration.CATEGORY_GENERAL, "default_computer_settings", Config.default_computer_settings);
-        prop.setComment("A comma seperated list of default system settings to set on new computers. Example: \"shell.autocomplete=false,lua.autocomplete=false,edit.autocomplete=false\" will disable all autocompletion");
+        prop.setComment("A comma separated list of default system settings to set on new computers. Example: \"shell.autocomplete=false,lua.autocomplete=false,edit.autocomplete=false\" will disable all autocompletion");
         Config.default_computer_settings = prop.getString();
 
         prop = Config.config.get(Configuration.CATEGORY_GENERAL, "enableCommandBlock", Config.enableCommandBlock);

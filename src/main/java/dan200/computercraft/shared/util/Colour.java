@@ -40,7 +40,7 @@ public enum Colour {
         if (colour >= 0 && colour < 16) {
             return Colour.values()[colour];
         }
-        return null;
+        return Colour.Black;
     }
 
     public Colour getNext() {

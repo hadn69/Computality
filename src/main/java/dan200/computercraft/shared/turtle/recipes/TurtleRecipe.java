@@ -13,11 +13,10 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class TurtleRecipe implements IRecipe {
     private final Item[] m_recipe;
@@ -34,18 +33,18 @@ public class TurtleRecipe implements IRecipe {
     }
 
     @Override
-    @Nonnull
+    @Nullable
     public ItemStack getRecipeOutput() {
         return TurtleItemFactory.create(-1, null, null, m_family, null, null, 0, null);
     }
 
     @Override
-    public boolean matches(@Nonnull InventoryCrafting _inventory,@Nonnull World world) {
-        return (!getCraftingResult(_inventory).isEmpty());
+    public boolean matches(@Nonnull InventoryCrafting _inventory, @Nonnull World world) {
+        return (getCraftingResult(_inventory) != null);
     }
 
     @Override
-    @Nonnull
+    @Nullable
     public ItemStack getCraftingResult(@Nonnull InventoryCrafting inventory) {
         // See if we match the recipe, and extract the input computercraft ID
         int computerID = -1;
@@ -53,18 +52,18 @@ public class TurtleRecipe implements IRecipe {
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 3; ++x) {
                 ItemStack item = inventory.getStackInRowAndColumn(x, y);
-                if (!item.isEmpty() && item.getItem() == m_recipe[x + y * 3]) {
+                if (item != null && item.getItem() == m_recipe[x + y * 3]) {
                     if (item.getItem() instanceof IComputerItem) {
                         IComputerItem itemComputer = (IComputerItem) item.getItem();
                         if (m_family == ComputerFamily.Beginners || itemComputer.getFamily(item) == m_family) {
                             computerID = itemComputer.getComputerID(item);
                             label = itemComputer.getLabel(item);
                         } else {
-                            return ItemStack.EMPTY;
+                            return null;
                         }
                     }
                 } else {
-                    return ItemStack.EMPTY;
+                    return null;
                 }
             }
         }
@@ -79,13 +78,13 @@ public class TurtleRecipe implements IRecipe {
     }
 
     @Override
-    @Nonnull
-    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inventoryCrafting) {
-        NonNullList<ItemStack> list = NonNullList.create();
-        for (int i = 0; i < inventoryCrafting.getSizeInventory(); ++i) {
+    @Nullable
+    public ItemStack[] getRemainingItems(@Nonnull InventoryCrafting inventoryCrafting) {
+        ItemStack[] results = new ItemStack[inventoryCrafting.getSizeInventory()];
+        for (int i = 0; i < results.length; ++i) {
             ItemStack stack = inventoryCrafting.getStackInSlot(i);
-            list.add(ForgeHooks.getContainerItem(stack));
+            results[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(stack);
         }
-        return list;
+        return results;
     }
 }

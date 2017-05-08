@@ -11,15 +11,13 @@ import dan200.computercraft.api.pocket.IPocketUpgrade;
 import dan200.computercraft.shared.computer.core.ComputerFamily;
 import dan200.computercraft.shared.pocket.items.ItemPocketComputer;
 import dan200.computercraft.shared.pocket.items.PocketComputerItemFactory;
-import net.minecraft.block.BlockWorkbench;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class PocketComputerUpgradeRecipe implements IRecipe {
     public PocketComputerUpgradeRecipe() {
@@ -38,41 +36,41 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
 
     @Override
     public boolean matches(InventoryCrafting inventory, World world) {
-        return !getCraftingResult(inventory).isEmpty();
+        return getCraftingResult(inventory) != null;
     }
 
     @Override
-    @Nonnull
+    @Nullable
     public ItemStack getCraftingResult(InventoryCrafting inventory) {
         // Scan the grid for a pocket computer
-        ItemStack computer = ItemStack.EMPTY;
+        ItemStack computer = null;
         int computerX = -1;
         int computerY = -1;
         for (int y = 0; y < inventory.getHeight(); ++y) {
             for (int x = 0; x < inventory.getWidth(); ++x) {
                 ItemStack item = inventory.getStackInRowAndColumn(x, y);
-                if (!item.isEmpty() && item.getItem() instanceof ItemPocketComputer) {
+                if (item != null && item.getItem() instanceof ItemPocketComputer) {
                     computer = item;
                     computerX = x;
                     computerY = y;
                     break;
                 }
             }
-            if (!computer.isEmpty()) {
+            if (computer != null) {
                 break;
             }
         }
 
-        if (computer.isEmpty()) {
-            return ItemStack.EMPTY;
+        if (computer == null) {
+            return null;
         }
 
         if(!(computer.getItem() instanceof ItemPocketComputer))
-            return ItemStack.EMPTY;
+            return null;
 
         ItemPocketComputer itemComputer = (ItemPocketComputer) computer.getItem();
         if (ItemPocketComputer.getUpgrade(computer) != null) {
-            return ItemStack.EMPTY;
+            return null;
         }
 
         // Check for upgrades around the item
@@ -84,10 +82,10 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
                     continue;
                 } else if (x == computerX && y == computerY - 1) {
                     upgrade = ComputerCraft.getPocketUpgrade(item);
-                    if (upgrade == null) return ItemStack.EMPTY;
+                    if (upgrade == null) return null;
                     break;
-                } else if (!item.isEmpty()) {
-                    return ItemStack.EMPTY;
+                } else if (item != null) {
+                    return null;
                 }
             }
             if(upgrade!=null)
@@ -95,7 +93,7 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
         }
 
         if (upgrade == null) {
-            return ItemStack.EMPTY;
+            return null;
         }
 
         // Construct the new stack
@@ -106,12 +104,5 @@ public class PocketComputerUpgradeRecipe implements IRecipe {
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inventoryCrafting) {
-        NonNullList<ItemStack> list = NonNullList.create();
-        for (int i = 0; i < inventoryCrafting.getSizeInventory(); ++i) {
-            ItemStack stack = inventoryCrafting.getStackInSlot(i);
-            list.add(ForgeHooks.getContainerItem(stack));
-        }
-        return list;
-    }
+    public ItemStack[] getRemainingItems( @Nonnull InventoryCrafting inventoryCrafting )     {         ItemStack[] results = new ItemStack[ inventoryCrafting.getSizeInventory() ];         for (int i = 0; i < results.length; ++i)         {             ItemStack stack = inventoryCrafting.getStackInSlot(i);             results[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(stack);         }         return results;     }
 }

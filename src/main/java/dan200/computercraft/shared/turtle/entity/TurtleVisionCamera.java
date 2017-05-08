@@ -78,7 +78,7 @@ public class TurtleVisionCamera extends EntityLivingBase {
 
     @Override
     public ItemStack getHeldItem(EnumHand hand) {
-        return ItemStack.EMPTY;
+        return null;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class TurtleVisionCamera extends EntityLivingBase {
 
     @Override
     public ItemStack getItemStackFromSlot(EntityEquipmentSlot slot) {
-        return ItemStack.EMPTY;
+        return null;
     }
 
     @Override

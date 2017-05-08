@@ -64,12 +64,12 @@ public class TileCommandComputer extends TileComputer {
     public boolean isUsable(EntityPlayer player, boolean ignoreRange) {
         MinecraftServer server = player.getServer();
         if (server == null || !server.isCommandBlockEnabled()) {
-            player.sendStatusMessage(new TextComponentTranslation("advMode.notEnabled"), false);
+            player.addChatMessage(new TextComponentTranslation("advMode.notEnabled"));
             return true;
         } else if (ComputerCraft.canPlayerUseCommands(player) && player.capabilities.isCreativeMode) {
             return super.isUsable(player, ignoreRange);
         } else {
-            player.sendStatusMessage(new TextComponentTranslation("advMode.notAllowed"), false);
+            player.addChatMessage(new TextComponentTranslation("advMode.notAllowed"));
             return true;
         }
     }
@@ -108,12 +108,12 @@ public class TileCommandComputer extends TileComputer {
         }
 
         @Override
-        public void sendMessage(ITextComponent component) {
+        public void addChatMessage(ITextComponent component) {
             m_outputTable.put(m_outputTable.size() + 1, component.getUnformattedText());
         }
 
         @Override
-        public boolean canUseCommand(int permLevel, String commandName) {
+        public boolean canCommandSenderUseCommand(int permLevel, String commandName) {
             return permLevel <= 2;
         }
 

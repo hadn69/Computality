@@ -21,7 +21,9 @@ import dan200.computercraft.shared.peripheral.common.BlockCableModemVariant;
 import dan200.computercraft.shared.peripheral.common.PeripheralItemFactory;
 import dan200.computercraft.shared.util.IDAssigner;
 import dan200.computercraft.shared.util.PeripheralUtil;
+import net.minecraft.block.BlockJukebox;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -264,14 +266,14 @@ public class TileCable extends TileModemBase
 
                 if (!Objects.equal(periphName, oldPeriphName)) {
                     if (oldPeriphName != null) {
-                        player.sendStatusMessage(
+                        player.addChatMessage(
                                 new TextComponentTranslation("gui.computercraft.wired_modem.peripheral_disconnected", oldPeriphName)
-                                , true);
+                        );
                     }
                     if (periphName != null) {
-                        player.sendStatusMessage(
+                        player.addChatMessage(
                                 new TextComponentTranslation("gui.computercraft.wired_modem.peripheral_connected", periphName)
-                                , true);
+                        );
                     }
                     return true;
                 }

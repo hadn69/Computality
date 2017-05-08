@@ -12,13 +12,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class PeripheralItemFactory {
-    @Nonnull
+    @Nullable
     public static ItemStack create(IPeripheralTile tile) {
         return create(tile.getPeripheralType(), tile.getLabel(), 1);
     }
-    @Nonnull
+    @Nullable
     public static ItemStack create(PeripheralType type, String label, int quantity) {
         ItemPeripheral peripheral = ((ItemPeripheral) Item.getItemFromBlock(ComputerCraft.Blocks.peripheral));
         ItemCable cable = ((ItemCable) Item.getItemFromBlock(ComputerCraft.Blocks.cable));
@@ -39,6 +40,6 @@ public class PeripheralItemFactory {
                 return advancedModem.create(type, label, quantity);
             }
         }
-        return ItemStack.EMPTY;
+        return null;
     }
 }

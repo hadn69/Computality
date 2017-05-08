@@ -15,7 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
+import java.util.List;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -153,7 +153,7 @@ public class ItemPrintout extends Item {
     }
 
     @Override
-    public void getSubItems(Item itemID, CreativeTabs tabs, NonNullList<ItemStack> list) {
+    public void getSubItems(Item itemID, CreativeTabs tabs, List<ItemStack> list) {
         list.add(createSingleFromTitleAndText(null, new String[LINES_PER_PAGE], new String[LINES_PER_PAGE]));
         list.add(createMultipleFromTitleAndText(null, new String[2 * LINES_PER_PAGE], new String[2 * LINES_PER_PAGE]));
         list.add(createBookFromTitleAndText(null, new String[2 * LINES_PER_PAGE], new String[2 * LINES_PER_PAGE]));
@@ -185,8 +185,7 @@ public class ItemPrintout extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-        ItemStack stack = player.getHeldItem(hand);
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         if (!world.isRemote) {
             ComputerCraft.openPrintoutGUI(player, hand);
         }

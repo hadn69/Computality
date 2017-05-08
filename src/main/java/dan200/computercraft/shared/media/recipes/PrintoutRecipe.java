@@ -12,9 +12,11 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.NonNullList;
+import java.util.List;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+
+import javax.annotation.Nonnull;
 
 public class PrintoutRecipe implements IRecipe {
     public PrintoutRecipe() {
@@ -118,12 +120,12 @@ public class PrintoutRecipe implements IRecipe {
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inventoryCrafting) {
-        NonNullList<ItemStack> list = NonNullList.create();
-        for (int i = 0; i < inventoryCrafting.getSizeInventory(); ++i) {
+    public ItemStack[] getRemainingItems(@Nonnull InventoryCrafting inventoryCrafting) {
+        ItemStack[] results = new ItemStack[inventoryCrafting.getSizeInventory()];
+        for (int i = 0; i < results.length; ++i) {
             ItemStack stack = inventoryCrafting.getStackInSlot(i);
-            list.add(ForgeHooks.getContainerItem(stack));
+            results[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(stack);
         }
-        return list;
+        return results;
     }
 }

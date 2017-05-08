@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class WorldUtil {
@@ -109,11 +110,11 @@ public class WorldUtil {
         return null;
     }
 
-    public static void dropItemStack(@Nonnull ItemStack stack, World world, BlockPos pos) {
+    public static void dropItemStack(@Nullable ItemStack stack, World world, BlockPos pos) {
         dropItemStack(stack, world, pos, null);
     }
 
-    public static void dropItemStack(@Nonnull ItemStack stack, World world, BlockPos pos, EnumFacing direction) {
+    public static void dropItemStack(@Nullable ItemStack stack, World world, BlockPos pos, EnumFacing direction) {
         double xDir;
         double yDir;
         double zDir;
@@ -143,6 +144,6 @@ public class WorldUtil {
         entityItem.motionY = yDir * 0.7 + world.rand.nextFloat() * 0.2 - 0.1;
         entityItem.motionZ = zDir * 0.7 + world.rand.nextFloat() * 0.2 - 0.1;
         entityItem.setDefaultPickupDelay();
-        world.spawnEntity(entityItem);
+        world.spawnEntityInWorld(entityItem);
     }
 }

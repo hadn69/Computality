@@ -19,6 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ContainerTurtle extends Container {
     private static final int PROGRESS_ID_SELECTED_SLOT = 0;
@@ -109,7 +110,7 @@ public class ContainerTurtle extends Container {
     public boolean canInteractWith(EntityPlayer player) {
         TileTurtle turtle = ((TurtleBrain) m_turtle).getOwner();
         if (turtle != null) {
-            return turtle.isUsableByPlayer(player);
+            return turtle.isUseableByPlayer(player);
         }
         return false;
     }
@@ -117,37 +118,37 @@ public class ContainerTurtle extends Container {
     @Nonnull
     protected ItemStack tryItemMerge(EntityPlayer player, int slotNum, int firstSlot, int lastSlot, boolean reverse) {
         Slot slot = inventorySlots.get(slotNum);
-        ItemStack originalStack = ItemStack.EMPTY;
+        ItemStack originalStack = null;
         if (slot != null && slot.getHasStack()) {
             ItemStack clickedStack = slot.getStack();
             originalStack = clickedStack.copy();
             if (!mergeItemStack(clickedStack, firstSlot, lastSlot, reverse)) {
-                return ItemStack.EMPTY;
+                return null;
             }
 
-            if (clickedStack.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+            if (clickedStack.stackSize == 0) {
+                slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }
 
-            if (clickedStack.getCount() != originalStack.getCount()) {
-                slot.onTake(player, clickedStack);
+            if (clickedStack.stackSize != originalStack.stackSize) {
+                slot.onPickupFromSlot(player, clickedStack);
             } else {
-                return ItemStack.EMPTY;
+                return null;
             }
         }
         return originalStack;
     }
 
     @Override
-    @Nonnull
+    @Nullable
     public ItemStack transferStackInSlot(EntityPlayer player, int slotNum) {
         if (slotNum >= 0 && slotNum < 16) {
             return tryItemMerge(player, slotNum, 16, 52, true);
         } else if (slotNum >= 16) {
             return tryItemMerge(player, slotNum, 0, 16, false);
         }
-        return ItemStack.EMPTY;
+        return null;
     }
 }

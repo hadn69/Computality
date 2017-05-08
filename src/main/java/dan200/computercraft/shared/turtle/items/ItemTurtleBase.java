@@ -22,7 +22,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
@@ -41,7 +40,7 @@ public abstract class ItemTurtleBase extends ItemComputerBase implements ITurtle
     public abstract ItemStack create(int id, String label, Colour colour, ITurtleUpgrade leftUpgrade, ITurtleUpgrade rightUpgrade, int fuelLevel, ResourceLocation overlay);
 
     @Override
-    public void getSubItems(Item itemID, CreativeTabs tabs, NonNullList<ItemStack> list) {
+    public void getSubItems(Item itemID, CreativeTabs tabs, List<ItemStack> list) {
         List<ItemStack> all = new ArrayList<ItemStack>();
         ComputerCraft.addAllUpgradedTurtles(all);
         for (ItemStack stack : all) {

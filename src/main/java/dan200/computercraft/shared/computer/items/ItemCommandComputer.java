@@ -13,7 +13,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
+
+import java.util.List;
 
 public class ItemCommandComputer extends ItemComputer {
     public ItemCommandComputer(Block block) {
@@ -45,7 +46,7 @@ public class ItemCommandComputer extends ItemComputer {
     }
 
     @Override
-    public void getSubItems(Item itemID, CreativeTabs tabs, NonNullList<ItemStack> list) {
+    public void getSubItems(Item itemID, CreativeTabs tabs, List<ItemStack> list) {
         list.add(ComputerItemFactory.create(-1, null, ComputerFamily.Command));
     }
 

@@ -139,11 +139,11 @@ public class ComputerCraft {
     }
 
     public static IPocketUpgrade getPocketUpgrade(ItemStack stack) {
-        if (stack.isEmpty()) return null;
+        if (stack == null) return null;
 
         for (IPocketUpgrade upgrade : pocketUpgrades.values()) {
             ItemStack craftingStack = upgrade.getCraftingItem();
-            if (!craftingStack.isEmpty() && InventoryUtil.areItemsStackable(stack, craftingStack)) {
+            if (craftingStack != null && InventoryUtil.areItemsStackable(stack, craftingStack)) {
                 return upgrade;
             }
         }

@@ -153,10 +153,10 @@ public class TurtlePlaceCommand implements ITurtleCommand {
 
         // Place on the entity
         boolean placed = false;
-        if (hitEntity.applyPlayerInteraction(turtlePlayer, hitPos, EnumHand.MAIN_HAND) == EnumActionResult.SUCCESS) {
+        if (hitEntity.applyPlayerInteraction(turtlePlayer, hitPos, stack,EnumHand.MAIN_HAND) == EnumActionResult.SUCCESS) {
             placed = true;
             turtlePlayer.loadInventory(stackCopy);
-        } else if (hitEntity.processInitialInteract(turtlePlayer, EnumHand.MAIN_HAND)) {
+        } else if (hitEntity.processInitialInteract(turtlePlayer, stack,EnumHand.MAIN_HAND)) {
             placed = true;
         } else if (hitEntity instanceof EntityLivingBase) {
             placed = item.itemInteractionForEntity(stackCopy, turtlePlayer, (EntityLivingBase) hitEntity, EnumHand.MAIN_HAND);
@@ -172,7 +172,7 @@ public class TurtlePlaceCommand implements ITurtleCommand {
         ItemStack remainder = turtlePlayer.unloadInventory(turtle);
         if (!placed && (remainder != null && ItemStack.areItemStacksEqual(stack, remainder))) {
             return stack;
-        } else if (remainder != null && remainder.getCount() > 0) {
+        } else if (remainder != null && remainder.stackSize > 0) {
             return remainder;
         } else {
             return null;
@@ -243,14 +243,14 @@ public class TurtlePlaceCommand implements ITurtleCommand {
 
         // Do the deploying (put everything in the players inventory)
         boolean placed = false;
-        if (item.onItemUseFirst(turtlePlayer, turtle.getWorld(), position, side, hitX, hitY, hitZ, EnumHand.MAIN_HAND) == EnumActionResult.SUCCESS) {
+        if (item.onItemUseFirst(stack,turtlePlayer, turtle.getWorld(), position, side, hitX, hitY, hitZ, EnumHand.MAIN_HAND) == EnumActionResult.SUCCESS) {
             placed = true;
             turtlePlayer.loadInventory(stackCopy);
-        } else if (item.onItemUse(turtlePlayer, turtle.getWorld(), position, EnumHand.MAIN_HAND, side, hitX, hitY, hitZ) == EnumActionResult.SUCCESS) {
+        } else if (item.onItemUse(stack,turtlePlayer, turtle.getWorld(), position, EnumHand.MAIN_HAND, side, hitX, hitY, hitZ) == EnumActionResult.SUCCESS) {
             placed = true;
             turtlePlayer.loadInventory(stackCopy);
         } else if (item instanceof ItemBucket || item instanceof ItemBoat || item instanceof ItemLilyPad || item instanceof ItemGlassBottle) {
-            ActionResult<ItemStack> result = item.onItemRightClick(turtle.getWorld(), turtlePlayer, EnumHand.MAIN_HAND);
+            ActionResult<ItemStack> result = item.onItemRightClick(stack,turtle.getWorld(), turtlePlayer, EnumHand.MAIN_HAND);
             if (result.getType() == EnumActionResult.SUCCESS && !ItemStack.areItemStacksEqual(stack, result.getResult())) {
                 placed = true;
                 turtlePlayer.loadInventory(result.getResult());
@@ -292,7 +292,7 @@ public class TurtlePlaceCommand implements ITurtleCommand {
         ItemStack remainder = turtlePlayer.unloadInventory(turtle);
         if (!placed && (remainder != null && ItemStack.areItemStacksEqual(stack, remainder))) {
             return stack;
-        } else if (remainder != null && remainder.getCount() > 0) {
+        } else if (remainder != null && remainder.stackSize > 0) {
             return remainder;
         } else {
             return null;
@@ -303,7 +303,7 @@ public class TurtlePlaceCommand implements ITurtleCommand {
     public TurtleCommandResult execute(ITurtleAccess turtle) {
         // Get thing to place
         ItemStack stack = turtle.getInventory().getStackInSlot(turtle.getSelectedSlot());
-        if (stack.isEmpty()) {
+        if (stack == null) {
             return TurtleCommandResult.failure("No items to place");
         }
 

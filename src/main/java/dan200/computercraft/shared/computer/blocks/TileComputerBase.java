@@ -99,7 +99,7 @@ public abstract class TileComputerBase extends TileGeneric
     @Override
     public boolean onActivate(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack currentItem = player.getHeldItem(EnumHand.MAIN_HAND);
-        if (!currentItem.isEmpty() && currentItem.getItem() == Items.NAME_TAG && canNameWithTag(player)) {
+        if (currentItem !=null && currentItem.getItem() == Items.NAME_TAG && canNameWithTag(player)) {
             // Label to rename computer
             if (!getWorld().isRemote) {
                 if (currentItem.hasDisplayName()) {
@@ -107,7 +107,7 @@ public abstract class TileComputerBase extends TileGeneric
                 } else {
                     setLabel(null);
                 }
-                currentItem.shrink(1);
+                currentItem.stackSize--;
             }
             return true;
         } else if (!player.isSneaking()) {

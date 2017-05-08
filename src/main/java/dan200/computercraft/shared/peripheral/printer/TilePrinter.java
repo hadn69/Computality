@@ -136,7 +136,7 @@ public class TilePrinter extends TilePeripheralBase
     public ItemStack removeStackFromSlot(int i) {
         synchronized (inventory) {
             ItemStack result = inventory.getStackInSlot(i);
-            inventory.setStackInSlot(i, ItemStack.EMPTY);
+            inventory.setStackInSlot(i, null);
             updateAnim();
             return result;
         }
@@ -145,21 +145,21 @@ public class TilePrinter extends TilePeripheralBase
     @Override
     public ItemStack decrStackSize(int i, int j) {
         synchronized (inventory) {
-            if (inventory.getStackInSlot(i).isEmpty()) {
-                return ItemStack.EMPTY;
+            if (inventory.getStackInSlot(i) == null) {
+                return null;
             }
 
-            if (inventory.getStackInSlot(i).getCount() <= j) {
+            if (inventory.getStackInSlot(i).stackSize <= j) {
                 ItemStack itemstack = inventory.getStackInSlot(i);
-                inventory.setStackInSlot(i, ItemStack.EMPTY);
+                inventory.setStackInSlot(i, null);
                 markDirty();
                 updateAnim();
                 return itemstack;
             }
 
             ItemStack part = inventory.getStackInSlot(i).splitStack(j);
-            if (inventory.getStackInSlot(i).getCount() == 0) {
-                inventory.setStackInSlot(i, ItemStack.EMPTY);
+            if (inventory.getStackInSlot(i).stackSize == 0) {
+                inventory.setStackInSlot(i, null);
                 updateAnim();
             }
             markDirty();
@@ -180,7 +180,7 @@ public class TilePrinter extends TilePeripheralBase
     public void clear() {
         synchronized (inventory) {
             for (int i = 0; i < inventory.getSlots(); ++i) {
-                inventory.setStackInSlot(i, ItemStack.EMPTY);
+                inventory.setStackInSlot(i, null);
             }
             markDirty();
             updateAnim();
@@ -230,7 +230,7 @@ public class TilePrinter extends TilePeripheralBase
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUseableByPlayer(EntityPlayer player) {
         return isUsable(player, false);
     }
 
@@ -312,8 +312,8 @@ public class TilePrinter extends TilePeripheralBase
     public int getInkLevel() {
         synchronized (inventory) {
             ItemStack inkStack = inventory.getStackInSlot(0);
-            if (!inkStack.isEmpty() && isInk(inkStack)) {
-                return inkStack.getCount();
+            if (inkStack != null && isInk(inkStack)) {
+                return inkStack.stackSize;
             }
         }
         return 0;
@@ -324,8 +324,8 @@ public class TilePrinter extends TilePeripheralBase
         synchronized (inventory) {
             for (int i = 1; i < 7; ++i) {
                 ItemStack paperStack = inventory.getStackInSlot(i);
-                if (!paperStack.isEmpty() && isPaper(paperStack)) {
-                    count += paperStack.getCount();
+                if (paperStack != null && isPaper(paperStack)) {
+                    count += paperStack.stackSize;
                 }
             }
         }
@@ -350,7 +350,7 @@ public class TilePrinter extends TilePeripheralBase
     private boolean canInputPage() {
         synchronized (inventory) {
             ItemStack inkStack = inventory.getStackInSlot(0);
-            if (inkStack.isEmpty() || !isInk(inkStack)) {
+            if (inkStack == null || !isInk(inkStack)) {
                 return false;
             }
             return getPaperLevel() > 0;
@@ -360,23 +360,23 @@ public class TilePrinter extends TilePeripheralBase
     private boolean inputPage() {
         synchronized (inventory) {
             ItemStack inkStack = inventory.getStackInSlot(0);
-            if (inkStack.isEmpty() || !isInk(inkStack)) {
+            if (inkStack == null || !isInk(inkStack)) {
                 return false;
             }
 
             for (int i = 1; i < 7; ++i) {
                 ItemStack paperStack = inventory.getStackInSlot(i);
-                if (!paperStack.isEmpty() && isPaper(paperStack)) {
+                if (paperStack!=null && isPaper(paperStack)) {
                     // Decrement ink
-                    inkStack.shrink(1);
-                    if (inkStack.getCount() <= 0) {
-                        inventory.setStackInSlot(0, ItemStack.EMPTY);
+                    inkStack.stackSize--;
+                    if (inkStack.stackSize <= 0) {
+                        inventory.setStackInSlot(0, null);
                     }
 
                     // Decrement paper
-                    paperStack.shrink(1);
-                    if (paperStack.getCount() <= 0) {
-                        inventory.setStackInSlot(i, ItemStack.EMPTY);
+                    paperStack.stackSize--;
+                    if (paperStack.stackSize <= 0) {
+                        inventory.setStackInSlot(i, null);
                         updateAnim();
                     }
 
@@ -436,7 +436,7 @@ public class TilePrinter extends TilePeripheralBase
         synchronized (inventory) {
             for (int i = 0; i < 13; ++i) {
                 ItemStack stack = inventory.getStackInSlot(i);
-                if (!stack.isEmpty()) {
+                if (stack != null) {
                     // Remove the stack from the inventory
                     setInventorySlotContents(i, null);
 
@@ -449,15 +449,10 @@ public class TilePrinter extends TilePeripheralBase
                     entityitem.motionX = getWorld().rand.nextFloat() * 0.2 - 0.1;
                     entityitem.motionY = getWorld().rand.nextFloat() * 0.2 - 0.1;
                     entityitem.motionZ = getWorld().rand.nextFloat() * 0.2 - 0.1;
-                    getWorld().spawnEntity(entityitem);
+                    getWorld().spawnEntityInWorld(entityitem);
                 }
             }
         }
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
     }
 
     private void updateAnim() {
@@ -465,14 +460,14 @@ public class TilePrinter extends TilePeripheralBase
             int anim = 0;
             for (int i = 1; i < 7; ++i) {
                 ItemStack stack = inventory.getStackInSlot(i);
-                if (!stack.isEmpty() && isPaper(stack)) {
+                if (stack != null && isPaper(stack)) {
                     anim += 1;
                     break;
                 }
             }
             for (int i = 7; i < 13; ++i) {
                 ItemStack stack = inventory.getStackInSlot(i);
-                if (!stack.isEmpty() && isPaper(stack)) {
+                if (stack != null && isPaper(stack)) {
                     anim += 2;
                     break;
                 }

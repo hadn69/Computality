@@ -215,7 +215,7 @@ public abstract class Widget extends Gui {
 
     protected void drawTooltip(String[] lines, int x, int y) {
         Minecraft mc = Minecraft.getMinecraft();
-        FontRenderer fontRenderer = mc.fontRenderer;
+        FontRenderer fontRenderer = mc.fontRendererObj;
 
         int width = 0;
         for (int i = 0; i < lines.length; ++i) {
@@ -277,7 +277,7 @@ public abstract class Widget extends Gui {
                 RenderItem renderItem = mc.getRenderItem();
                 if (renderItem != null) {
                     renderItem.renderItemAndEffectIntoGUI(stack, x, y);
-                    renderItem.renderItemOverlayIntoGUI(mc.fontRenderer, stack, x, y, null);
+                    renderItem.renderItemOverlayIntoGUI(mc.fontRendererObj, stack, x, y, null);
                 }
             } finally {
                 RenderHelper.disableStandardItemLighting();
@@ -293,7 +293,7 @@ public abstract class Widget extends Gui {
     protected void drawString(String s, int x, int y, int color) {
         Minecraft mc = Minecraft.getMinecraft();
         try {
-            mc.fontRenderer.drawString(s, x, y, color);
+            mc.fontRendererObj.drawString(s, x, y, color);
         } finally {
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         }
@@ -301,7 +301,7 @@ public abstract class Widget extends Gui {
 
     protected int getStringWidth(String s) {
         Minecraft mc = Minecraft.getMinecraft();
-        return mc.fontRenderer.getStringWidth(s);
+        return mc.fontRendererObj.getStringWidth(s);
     }
 
     protected void playClickSound() {

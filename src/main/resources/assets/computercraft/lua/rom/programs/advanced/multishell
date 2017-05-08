@@ -206,7 +206,7 @@ function multishell.launch( tProgramEnv, sProgramPath, ... )
     return nResult
 end
 
-function multishell.getCount()
+function multishell.stackSize
     return #tProcesses
 end
 

@@ -39,19 +39,19 @@ public class TurtlePlayer extends FakePlayer {
     public ItemStack unloadInventory(ITurtleAccess turtle) {
         // Get the item we placed with
         ItemStack results = inventory.getStackInSlot(0);
-        inventory.setInventorySlotContents(0, ItemStack.EMPTY);
+        inventory.setInventorySlotContents(0, null);
 
         // Store (or drop) anything else we found
         BlockPos dropPosition = turtle.getPosition();
         EnumFacing dropDirection = turtle.getDirection().getOpposite();
         for (int i = 0; i < inventory.getSizeInventory(); ++i) {
             ItemStack stack = inventory.getStackInSlot(i);
-            if (!stack.isEmpty()) {
+            if (stack != null) {
                 ItemStack remainder = InventoryUtil.storeItems(stack, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot());
-                if (!remainder.isEmpty()) {
+                if (remainder!=null) {
                     WorldUtil.dropItemStack(remainder, turtle.getWorld(), dropPosition, dropDirection);
                 }
-                inventory.setInventorySlotContents(i, ItemStack.EMPTY);
+                inventory.setInventorySlotContents(i, null);
             }
         }
         inventory.markDirty();

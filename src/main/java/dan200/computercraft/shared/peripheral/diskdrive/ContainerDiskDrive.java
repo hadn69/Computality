@@ -32,7 +32,7 @@ public class ContainerDiskDrive extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-        return m_diskDrive.isUsableByPlayer(player);
+        return m_diskDrive.isUseableByPlayer(player);
     }
 
     @Override
@@ -44,22 +44,22 @@ public class ContainerDiskDrive extends Container {
             itemstack = itemstack1.copy();
             if (i == 0) {
                 if (!mergeItemStack(itemstack1, 1, 37, true)) {
-                    return ItemStack.EMPTY;
+                    return null;
                 }
             } else if (!mergeItemStack(itemstack1, 0, 1, false)) {
-                return ItemStack.EMPTY;
+                return null;
             }
 
-            if (itemstack1.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+            if (itemstack1.stackSize == 0) {
+                slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }
 
-            if (itemstack1.getCount() != itemstack.getCount()) {
-                slot.onTake(player, itemstack1);
+            if (itemstack1.stackSize != itemstack.stackSize) {
+                slot.onPickupFromSlot(player, itemstack1);
             } else {
-                return ItemStack.EMPTY;
+                return null;
             }
         }
         return itemstack;

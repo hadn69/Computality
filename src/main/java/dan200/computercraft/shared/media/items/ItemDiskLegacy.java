@@ -15,7 +15,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import java.util.List;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -44,7 +44,7 @@ public class ItemDiskLegacy extends Item
     }
 
     @Override
-    public void getSubItems(Item itemID, CreativeTabs tabs, NonNullList<ItemStack> list) {
+    public void getSubItems(Item itemID, CreativeTabs tabs, List<ItemStack> list) {
         for (int colour = 0; colour < 16; ++colour) {
             ItemStack stack = createFromIDAndColour(-1, null, Colour.values()[colour].getHex());
             if (stack.getItem() == this) {

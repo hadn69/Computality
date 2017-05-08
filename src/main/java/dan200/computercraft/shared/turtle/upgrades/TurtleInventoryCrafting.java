@@ -13,7 +13,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
@@ -85,15 +84,15 @@ public class TurtleInventoryCrafting extends InventoryCrafting {
                 int minStackSize = 0;
                 for (int n = 0; n < size; ++n) {
                     ItemStack stack = getStackInSlot(n);
-                    if (stack != null && (minStackSize == 0 || minStackSize > stack.getCount())) {
-                        minStackSize = stack.getCount();
+                    if (stack != null && (minStackSize == 0 || minStackSize > stack.stackSize)) {
+                        minStackSize = stack.stackSize;
                     }
                 }
 
                 if (minStackSize > 1) {
-                    numToCraft = Math.min(minStackSize, result.getMaxStackSize() / result.getCount());
+                    numToCraft = Math.min(minStackSize, result.getMaxStackSize() / result.stackSize);
                     numToCraft = Math.min(numToCraft, maxCount);
-                    result.setCount(result.getCount() * numToCraft);
+                    result.stackSize=(result.stackSize * numToCraft);
                 }
             }
 
@@ -103,16 +102,16 @@ public class TurtleInventoryCrafting extends InventoryCrafting {
             results.add(result);
 
             // Consume resources from the inventory
-            NonNullList<ItemStack> remainingItems = CraftingManager.getInstance().getRemainingItems(this, world);
+            ItemStack[] remainingItems = CraftingManager.getInstance().getRemainingItems(this, world);
             for (int n = 0; n < size; ++n) {
                 ItemStack stack = getStackInSlot(n);
                 if (stack != null) {
                     decrStackSize(n, numToCraft);
 
-                    ItemStack replacement = remainingItems.get(n);
-                    if (!replacement.isEmpty()) {
+                    ItemStack replacement = remainingItems[n];
+                    if (replacement !=null) {
                         if (!(replacement.isItemStackDamageable() && replacement.getItemDamage() >= replacement.getMaxDamage())) {
-                            replacement.setCount(Math.min(numToCraft, replacement.getMaxStackSize()));
+                            replacement.stackSize=(Math.min(numToCraft, replacement.getMaxStackSize()));
                             if (getStackInSlot(n) == null) {
                                 setInventorySlotContents(n, replacement);
                             } else {
@@ -213,7 +212,7 @@ public class TurtleInventoryCrafting extends InventoryCrafting {
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUseableByPlayer(EntityPlayer player) {
         return true;
     }
 

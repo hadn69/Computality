@@ -11,10 +11,10 @@ import dan200.computercraft.api.pocket.IPocketUpgrade;
 import dan200.computercraft.shared.computer.core.ComputerFamily;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class PocketComputerItemFactory {
-    @Nonnull
+    @Nullable
     public static ItemStack create(int id, String label, ComputerFamily family, IPocketUpgrade upgrade) {
         ItemPocketComputer computer = ComputerCraft.Items.pocketComputer;
         switch (family) {
@@ -23,6 +23,6 @@ public class PocketComputerItemFactory {
                 return computer.create(id, label, family, upgrade);
             }
         }
-        return ItemStack.EMPTY;
+        return null;
     }
 }

@@ -31,7 +31,7 @@ public class RedstoneUtil {
             IBlockState state = world.getBlockState(pos);
             if (block == Blocks.REDSTONE_WIRE) {
                 if (side != EnumFacing.UP) {
-                    power = state.getValue(BlockRedstoneWire.POWER).intValue();
+                    power = state.getValue(BlockRedstoneWire.POWER);
                 } else {
                     power = 0;
                 }
@@ -67,7 +67,7 @@ public class RedstoneUtil {
         BlockPos neighbourPos = pos.offset(side);
         Block neighbour = getBlock(world, neighbourPos);
         if (neighbour != null && neighbour != Blocks.AIR) {
-            world.notifyNeighborsOfStateChange(neighbourPos, block, true);
+            world.notifyNeighborsOfStateChange(neighbourPos, block);
             if (neighbour.isNormalCube(world.getBlockState(neighbourPos), world, neighbourPos)) {
                 world.notifyNeighborsOfStateExcept(neighbourPos, neighbour, side.getOpposite());
             }

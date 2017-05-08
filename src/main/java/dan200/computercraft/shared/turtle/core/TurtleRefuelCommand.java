@@ -58,7 +58,7 @@ public class TurtleRefuelCommand implements ITurtleCommand {
 
         if (!testOnly) {
             // Determine fuel to give and replacement item to leave behind
-            int fuelToGive = fuelPerItem * stack.getCount();
+            int fuelToGive = fuelPerItem * stack.stackSize;
             ItemStack replacementStack = stack.getItem().getContainerItem(stack);
 
             // Update fuel level

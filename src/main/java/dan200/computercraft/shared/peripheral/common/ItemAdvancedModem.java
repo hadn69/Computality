@@ -12,7 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import java.util.List;
 
 public class ItemAdvancedModem extends ItemPeripheralBase {
     public ItemAdvancedModem(Block block) {
@@ -40,7 +40,7 @@ public class ItemAdvancedModem extends ItemPeripheralBase {
     }
 
     @Override
-    public void getSubItems(Item itemID, CreativeTabs tabs, NonNullList<ItemStack> list) {
+    public void getSubItems(Item itemID, CreativeTabs tabs, List<ItemStack> list) {
         list.add(PeripheralItemFactory.create(PeripheralType.AdvancedModem, null, 1));
     }
 

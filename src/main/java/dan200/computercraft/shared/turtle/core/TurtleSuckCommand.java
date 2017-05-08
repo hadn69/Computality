@@ -89,7 +89,7 @@ public class TurtleSuckCommand implements ITurtleCommand {
                         ItemStack stack = entityItem.getEntityItem().copy();
                         ItemStack storeStack;
                         ItemStack leaveStack;
-                        if (stack.getCount() > m_quantity) {
+                        if (stack.stackSize > m_quantity) {
                             storeStack = stack.splitStack(m_quantity);
                             leaveStack = stack;
                         } else {
@@ -106,7 +106,7 @@ public class TurtleSuckCommand implements ITurtleCommand {
                             } else if (leaveStack == null) {
                                 entityItem.setEntityItemStack(remainder);
                             } else {
-                                leaveStack.grow(remainder.getCount());
+                                leaveStack.stackSize+=(remainder.stackSize);
                                 entityItem.setEntityItemStack(leaveStack);
                             }
                             break;

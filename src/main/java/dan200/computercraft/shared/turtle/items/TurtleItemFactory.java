@@ -20,9 +20,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class TurtleItemFactory {
-    @Nonnull
+    @Nullable
     public static ItemStack create(ITurtleTile turtle) {
         ITurtleUpgrade leftUpgrade = turtle.getAccess().getUpgrade(TurtleSide.Left);
         ITurtleUpgrade rightUpgrade = turtle.getAccess().getUpgrade(TurtleSide.Right);
@@ -43,7 +44,7 @@ public class TurtleItemFactory {
         return create(-1, null, turtle.getColour(), turtle.getFamily(), leftUpgrade, rightUpgrade, 0, turtle.getOverlay());
     }
 
-    @Nonnull
+    @Nullable
     public static ItemStack create(int id, String label, Colour colour, ComputerFamily family, ITurtleUpgrade leftUpgrade, ITurtleUpgrade rightUpgrade, int fuelLevel, ResourceLocation overlay) {
         switch (family) {
             case Normal: {
@@ -72,9 +73,9 @@ public class TurtleItemFactory {
                     ItemTurtleBase beginnersItem = ((ItemTurtleBase) Item.getItemFromBlock(beginnersBlock));
                     return beginnersItem.create(id, label, colour, leftUpgrade, rightUpgrade, fuelLevel, overlay);
                 }
-                return ItemStack.EMPTY;
+                return null;
             }
         }
-        return ItemStack.EMPTY;
+        return null;
     }
 }

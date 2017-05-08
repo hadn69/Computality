@@ -42,6 +42,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class TileTurtle extends TileComputerBase
@@ -108,7 +109,7 @@ public class TileTurtle extends TileComputerBase
                 int size = getSizeInventory();
                 for (int i = 0; i < size; ++i) {
                     ItemStack stack = getStackInSlot(i);
-                    if (!stack.isEmpty()) {
+                    if (stack != null) {
                         WorldUtil.dropItemStack(stack, getWorld(), getPos());
                     }
                 }
@@ -148,7 +149,7 @@ public class TileTurtle extends TileComputerBase
 
         // Apply dye
         ItemStack currentItem = player.getHeldItem(EnumHand.MAIN_HAND);
-        if (!currentItem.isEmpty()) {
+        if (currentItem != null) {
             if (currentItem.getItem() == Items.DYE) {
                 // Dye to change turtle colour
                 if (!getWorld().isRemote) {
@@ -156,7 +157,7 @@ public class TileTurtle extends TileComputerBase
                     if (m_brain.getDyeColour() != dye) {
                         m_brain.setDyeColour(dye);
                         if (!player.capabilities.isCreativeMode) {
-                            currentItem.shrink(1);
+                            currentItem.stackSize--;
                         }
                     }
                 }
@@ -333,21 +334,21 @@ public class TileTurtle extends TileComputerBase
     }
 
     @Override
-    @Nonnull
+    @Nullable
     public ItemStack getStackInSlot(int slot) {
         if (slot >= 0 && slot < INVENTORY_SIZE) {
             synchronized (inventory) {
                 return inventory.getStackInSlot(slot);
             }
         }
-        return ItemStack.EMPTY;
+        return null;
     }
 
     @Override
     public ItemStack removeStackFromSlot(int slot) {
         synchronized (inventory) {
             ItemStack result = getStackInSlot(slot);
-            setInventorySlotContents(slot, ItemStack.EMPTY);
+            setInventorySlotContents(slot, null);
             return result;
         }
     }
@@ -355,17 +356,17 @@ public class TileTurtle extends TileComputerBase
     @Override
     public ItemStack decrStackSize(int slot, int count) {
         if (count == 0) {
-            return ItemStack.EMPTY;
+            return null;
         }
 
         synchronized (inventory) {
             ItemStack stack = getStackInSlot(slot);
-            if (stack.isEmpty()) {
-                return ItemStack.EMPTY;
+            if (stack == null) {
+                return null;
             }
 
-            if (stack.getCount() <= count) {
-                setInventorySlotContents(slot, ItemStack.EMPTY);
+            if (stack.stackSize <= count) {
+                setInventorySlotContents(slot, null);
                 return stack;
             }
 
@@ -392,8 +393,8 @@ public class TileTurtle extends TileComputerBase
         synchronized (inventory) {
             boolean changed = false;
             for (int i = 0; i < INVENTORY_SIZE; ++i) {
-                if (!inventory.getStackInSlot(i).isEmpty()) {
-                    inventory.setStackInSlot(i, ItemStack.EMPTY);
+                if (inventory.getStackInSlot(i) != null) {
+                    inventory.setStackInSlot(i, null);
                     changed = true;
                 }
             }
@@ -470,7 +471,7 @@ public class TileTurtle extends TileComputerBase
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUseableByPlayer(EntityPlayer player) {
         return isUsable(player, false);
     }
 
@@ -495,11 +496,6 @@ public class TileTurtle extends TileComputerBase
     public void onInventoryDefinitelyChanged() {
         super.markDirty();
         m_inventoryChanged = true;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
     }
 
     public void onTileEntityChange() {

@@ -83,12 +83,12 @@ public class ContainerPrinter extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-        return m_printer.isUsableByPlayer(player);
+        return m_printer.isUseableByPlayer(player);
     }
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int i) {
-        ItemStack itemstack = ItemStack.EMPTY;
+        ItemStack itemstack = null;
         Slot slot = inventorySlots.get(i);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
@@ -96,32 +96,32 @@ public class ContainerPrinter extends Container {
             if (i < 13) {
                 // Transfer from printer to inventory
                 if (!mergeItemStack(itemstack1, 13, 49, true)) {
-                    return ItemStack.EMPTY;
+                    return null;
                 }
             } else {
                 // Transfer from inventory to printer
                 if (itemstack1.getItem() == Items.DYE) {
                     if (!mergeItemStack(itemstack1, 0, 1, false)) {
-                        return ItemStack.EMPTY;
+                        return null;
                     }
                 } else //if is paper
                 {
                     if (!mergeItemStack(itemstack1, 1, 13, false)) {
-                        return ItemStack.EMPTY;
+                        return null;
                     }
                 }
             }
 
-            if (itemstack1.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+            if (itemstack1.stackSize == 0) {
+                slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }
 
-            if (itemstack1.getCount() != itemstack.getCount()) {
-                slot.onTake(par1EntityPlayer, itemstack1);
+            if (itemstack1.stackSize != itemstack.stackSize) {
+                slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
             } else {
-                return ItemStack.EMPTY;
+                return null;
             }
         }
         return itemstack;

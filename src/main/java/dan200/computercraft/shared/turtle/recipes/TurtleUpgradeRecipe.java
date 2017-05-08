@@ -17,12 +17,11 @@ import dan200.computercraft.shared.util.Colour;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class TurtleUpgradeRecipe implements IRecipe {
     public TurtleUpgradeRecipe() {
@@ -34,78 +33,78 @@ public class TurtleUpgradeRecipe implements IRecipe {
     }
 
     @Override
-    @Nonnull
+    @Nullable
     public ItemStack getRecipeOutput() {
         return TurtleItemFactory.create(-1, null, null, ComputerFamily.Normal, null, null, 0, null);
     }
 
     @Override
     public boolean matches(@Nonnull InventoryCrafting inventory, @Nonnull World world) {
-        return (!getCraftingResult(inventory).isEmpty());
+        return (getCraftingResult(inventory) != null);
     }
 
     @Override
-    @Nonnull
+    @Nullable
     public ItemStack getCraftingResult(@Nonnull InventoryCrafting inventory) {
         // Scan the grid for a row containing a turtle and 1 or 2 items
-        ItemStack leftItem = ItemStack.EMPTY;
-        ItemStack turtle = ItemStack.EMPTY;
-        ItemStack rightItem = ItemStack.EMPTY;
+        ItemStack leftItem = null;
+        ItemStack turtle = null;
+        ItemStack rightItem = null;
 
         for (int y = 0; y < inventory.getHeight(); ++y) {
-            if (turtle.isEmpty()) {
+            if (turtle == null) {
                 // Search this row for potential turtles
                 boolean finishedRow = false;
                 for (int x = 0; x < inventory.getWidth(); ++x) {
                     ItemStack item = inventory.getStackInRowAndColumn(x, y);
-                    if (!item.isEmpty()) {
+                    if (item != null) {
                         if (finishedRow) {
-                            return ItemStack.EMPTY;
+                            return null;
                         }
 
                         if (item.getItem() instanceof ITurtleItem) {
                             // Item is a turtle
-                            if (turtle.isEmpty()) {
+                            if (turtle == null) {
                                 turtle = item;
                             } else {
-                                return ItemStack.EMPTY;
+                                return null;
                             }
                         } else {
                             // Item is not a turtle
-                            if (turtle.isEmpty() && leftItem.isEmpty()) {
+                            if (turtle == null && leftItem == null) {
                                 leftItem = item;
-                            } else if (!turtle.isEmpty() && rightItem.isEmpty()) {
+                            } else if (turtle != null && rightItem == null) {
                                 rightItem = item;
                             } else {
-                                return ItemStack.EMPTY;
+                                return null;
                             }
                         }
                     } else {
                         // Item is empty
-                        if (!leftItem.isEmpty() || !turtle.isEmpty()) {
+                        if (leftItem != null || turtle != null) {
                             finishedRow = true;
                         }
                     }
                 }
 
                 // If we found anything, check we found a turtle too
-                if (turtle.isEmpty() && (!leftItem.isEmpty() || !rightItem.isEmpty())) {
-                    return ItemStack.EMPTY;
+                if (turtle == null && (leftItem != null || rightItem != null)) {
+                    return null;
                 }
             } else {
                 // Turtle is already found, just check this row is empty
                 for (int x = 0; x < inventory.getWidth(); ++x) {
                     ItemStack item = inventory.getStackInRowAndColumn(x, y);
-                    if (!item.isEmpty()) {
-                        return ItemStack.EMPTY;
+                    if (item != null) {
+                        return null;
                     }
                 }
             }
         }
 
         // See if we found a turtle + one or more items
-        if (turtle.isEmpty() || (leftItem.isEmpty() && rightItem.isEmpty())) {
-            return ItemStack.EMPTY;
+        if (turtle == null || (leftItem == null && rightItem == null)) {
+            return null;
         }
 
         // At this point we have a turtle + 1 or 2 items
@@ -123,13 +122,13 @@ public class TurtleUpgradeRecipe implements IRecipe {
             if (items[i] != null) {
                 ITurtleUpgrade itemUpgrade = ComputerCraft.getTurtleUpgrade(items[i]);
                 if (itemUpgrade == null) {
-                    return ItemStack.EMPTY;
+                    return null;
                 }
                 if (upgrades[i] != null) {
-                    return ItemStack.EMPTY;
+                    return null;
                 }
                 if (!CCTurtleProxyCommon.isUpgradeSuitableForFamily(family, itemUpgrade)) {
-                    return ItemStack.EMPTY;
+                    return null;
                 }
                 upgrades[i] = itemUpgrade;
             }
@@ -146,12 +145,12 @@ public class TurtleUpgradeRecipe implements IRecipe {
 
     @Override
     @Nonnull
-    public NonNullList<ItemStack> getRemainingItems(@Nonnull InventoryCrafting inventoryCrafting) {
-        NonNullList<ItemStack> list = NonNullList.create();
-        for (int i = 0; i < inventoryCrafting.getSizeInventory(); ++i) {
+    public ItemStack[] getRemainingItems(@Nonnull InventoryCrafting inventoryCrafting) {
+        ItemStack[] results = new ItemStack[inventoryCrafting.getSizeInventory()];
+        for (int i = 0; i < results.length; ++i) {
             ItemStack stack = inventoryCrafting.getStackInSlot(i);
-            list.add(ForgeHooks.getContainerItem(stack));
+            results[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(stack);
         }
-        return list;
+        return results;
     }
 }

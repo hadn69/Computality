@@ -4,9 +4,11 @@ import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.core.computer.IComputerEnvironment;
 import dan200.computercraft.core.terminal.Terminal;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.WrongMinecraftVersionException;
 import org.luaj.vm2.ast.Str;
 
 import java.util.List;
@@ -58,7 +60,8 @@ public class MinecraftAPI implements ILuaAPI {
     public Object[] callMethod(ILuaContext context, int method, Object[] arguments) throws LuaException, InterruptedException {
         switch (method) {
             case 0:
-                return new Object[]{"1.11.2"};
+
+                return new Object[]{Loader.MC_VERSION};
             case 1:
                 if (arguments.length < 1 || !(arguments[0] instanceof String))
                     throw new LuaException("Expected String");

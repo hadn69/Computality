@@ -104,10 +104,9 @@ public class TurtleUpgradeRecipe implements IRecipe {
         }
 
         // See if we found a turtle + one or more items
-        if (turtle.isEmpty() || (leftItem.isEmpty() && rightItem.isEmpty())) {
+        if (turtle.isEmpty()||(leftItem.isEmpty()&&rightItem.isEmpty())) {
             return ItemStack.EMPTY;
         }
-
         // At this point we have a turtle + 1 or 2 items
         // Get the turtle we already have
         ITurtleItem itemTurtle = (ITurtleItem) turtle.getItem();
@@ -120,7 +119,7 @@ public class TurtleUpgradeRecipe implements IRecipe {
         // Get the upgrades for the new items
         ItemStack[] items = new ItemStack[]{rightItem, leftItem};
         for (int i = 0; i < 2; ++i) {
-            if (items[i] != null) {
+            if (items[i] != ItemStack.EMPTY) {
                 ITurtleUpgrade itemUpgrade = ComputerCraft.getTurtleUpgrade(items[i]);
                 if (itemUpgrade == null) {
                     return ItemStack.EMPTY;

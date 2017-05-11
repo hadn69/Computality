@@ -68,7 +68,6 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy {
 
     @Override
     public void preInit() {
-        EntityRegistry.registerModEntity(new ResourceLocation("computercraft", "turtle_player"), TurtlePlayer.class, "turtle_player", 0, ComputerCraft.instance, Integer.MAX_VALUE, Integer.MAX_VALUE, false);
         registerItems();
     }
 

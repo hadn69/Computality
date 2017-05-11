@@ -20,6 +20,7 @@ import org.luaj.vm2.lib.OneArgFunction;
 import org.luaj.vm2.lib.VarArgFunction;
 import org.luaj.vm2.lib.ZeroArgFunction;
 import org.luaj.vm2.lib.jse.JsePlatform;
+import org.lwjgl.Sys;
 
 import java.io.*;
 import java.util.HashMap;

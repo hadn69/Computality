@@ -9,7 +9,7 @@ if _VERSION == "Lua 5.1" then
         if mode ~= nil and mode ~= "t" then
             error( "Binary chunk loading prohibited", 2 )
         end
-        local ok, p1, p2 = pcall( function()        
+        local ok, p1, p2 = pcall( function()
             if type(x) == "string" then
                 local result, err = nativeloadstring( x, name )
                 if result then

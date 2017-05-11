@@ -11,6 +11,7 @@ import dan200.computercraft.shared.util.IEntityDropConsumer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public interface ICCTurtleProxy {
@@ -24,7 +25,7 @@ public interface ICCTurtleProxy {
 
     ITurtleUpgrade getTurtleUpgrade(int legacyId);
 
-    ITurtleUpgrade getTurtleUpgrade(ItemStack item);
+    ITurtleUpgrade getTurtleUpgrade(@Nonnull ItemStack item);
 
     void addAllUpgradedTurtles(List<ItemStack> list);
 

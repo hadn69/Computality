@@ -508,7 +508,7 @@ public class ComputerCraft {
         return turtleProxy.getTurtleUpgrade(legacyID);
     }
 
-    public static ITurtleUpgrade getTurtleUpgrade(ItemStack item) {
+    public static ITurtleUpgrade getTurtleUpgrade(@Nonnull ItemStack item) {
         return turtleProxy.getTurtleUpgrade(item);
     }
 

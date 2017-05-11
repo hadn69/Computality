@@ -53,10 +53,10 @@ public class TurtleSuckCommand implements ITurtleCommand {
         if (inventory != null) {
             // Take from inventory of thing in front
             ItemStack stack = InventoryUtil.takeItems(m_quantity, inventory, side);
-            if (stack != null) {
+            if (!stack.isEmpty()) {
                 // Try to place into the turtle
                 ItemStack remainder = InventoryUtil.storeItems(stack, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot());
-                if (remainder != null) {
+                if (!remainder.isEmpty()) {
                     // Put the remainder back in the inventory
                     InventoryUtil.storeItems(remainder, inventory, side);
                 }
@@ -94,16 +94,16 @@ public class TurtleSuckCommand implements ITurtleCommand {
                             leaveStack = stack;
                         } else {
                             storeStack = stack;
-                            leaveStack = null;
+                            leaveStack = ItemStack.EMPTY;
                         }
                         ItemStack remainder = InventoryUtil.storeItems(storeStack, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot());
                         if (remainder != storeStack) {
                             storedItems = true;
-                            if (remainder == null && leaveStack == null) {
+                            if (remainder.isEmpty() && leaveStack.isEmpty()) {
                                 entityItem.setDead();
-                            } else if (remainder == null) {
+                            } else if (remainder.isEmpty()) {
                                 entityItem.setEntityItemStack(leaveStack);
-                            } else if (leaveStack == null) {
+                            } else if (leaveStack.isEmpty()) {
                                 entityItem.setEntityItemStack(remainder);
                             } else {
                                 leaveStack.grow(remainder.getCount());

@@ -33,6 +33,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.annotation.Nonnull;
+
 public class TurtlePlaceCommand implements ITurtleCommand {
     private final InteractDirection m_direction;
     private final Object[] m_extraArguments;
@@ -42,6 +44,7 @@ public class TurtlePlaceCommand implements ITurtleCommand {
         m_extraArguments = arguments;
     }
 
+    @Nonnull
     public static ItemStack deploy(ItemStack stack, ITurtleAccess turtle, EnumFacing direction, Object[] extraArguments, String[] o_errorMessage) {
         // Create a fake player, and orient it appropriately
         BlockPos playerPosition = WorldUtil.moveCoords(turtle.getPosition(), direction);
@@ -121,6 +124,7 @@ public class TurtlePlaceCommand implements ITurtleCommand {
         turtlePlayer.prevRotationYawHead = turtlePlayer.rotationYawHead;
     }
 
+    @Nonnull
     private static ItemStack deployOnEntity(ItemStack stack, final ITurtleAccess turtle, TurtlePlayer turtlePlayer, EnumFacing direction, Object[] extraArguments, String[] o_errorMessage) {
         // See if there is an entity present
         final World world = turtle.getWorld();
@@ -145,7 +149,7 @@ public class TurtlePlaceCommand implements ITurtleCommand {
             @Override
             public void consumeDrop(Entity entity, ItemStack drop) {
                 ItemStack remainder = InventoryUtil.storeItems(drop, turtle.getInventory(), 0, turtle.getInventory().getSizeInventory(), turtle.getSelectedSlot());
-                if (remainder != null) {
+                if (!remainder.isEmpty()) {
                     WorldUtil.dropItemStack(remainder, world, position, turtle.getDirection().getOpposite());
                 }
             }
@@ -175,7 +179,7 @@ public class TurtlePlaceCommand implements ITurtleCommand {
         } else if (remainder != null && remainder.getCount() > 0) {
             return remainder;
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
@@ -217,6 +221,7 @@ public class TurtlePlaceCommand implements ITurtleCommand {
         return false;
     }
 
+    @Nonnull
     private static ItemStack deployOnBlock(ItemStack stack, ITurtleAccess turtle, TurtlePlayer turtlePlayer, BlockPos position, EnumFacing side, Object[] extraArguments, boolean allowReplace, String[] o_errorMessage) {
         // Check if there's something suitable to place onto
         if (!canDeployOnBlock(stack, turtle, turtlePlayer, position, side, allowReplace, o_errorMessage)) {
@@ -295,7 +300,7 @@ public class TurtlePlaceCommand implements ITurtleCommand {
         } else if (remainder != null && remainder.getCount() > 0) {
             return remainder;
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 

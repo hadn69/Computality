@@ -376,7 +376,7 @@ public class TileTurtle extends TileComputerBase
     }
 
     @Override
-    public void setInventorySlotContents(int i, ItemStack stack) {
+    public void setInventorySlotContents(int i, @Nonnull ItemStack stack) {
         if (i >= 0 && i < INVENTORY_SIZE) {
             synchronized (inventory) {
                 if (!InventoryUtil.areItemsEqual(stack, inventory.getStackInSlot(i))) {

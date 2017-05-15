@@ -572,6 +572,10 @@ public class ComputerCraft {
         prop.setComment("Make monitors ignore light level and render at full brightness at all times");
         Config.monitorFullbright = prop.getBoolean();
 
+        prop = Config.config.get(Configuration.CATEGORY_GENERAL, "enableEnergyAPI", Config.enableEnergyAPI);
+        prop.setComment("Make any ForgeEnergy provider be a peripheral and have an API attached");
+        Config.enableEnergyAPI = prop.getBoolean();
+
         prop = Config.config.get(Configuration.CATEGORY_GENERAL, "computerSpaceLimit", Config.computerSpaceLimit);
         prop.setComment("The disk space limit for computers and turtles, in bytes");
         Config.computerSpaceLimit = prop.getInt();
@@ -659,6 +663,7 @@ public class ComputerCraft {
         public static int floppySpaceLimit = 125 * 1000;
         public static int maximumFilesOpen = 128;
         public static boolean monitorFullbright = true;
+        public static boolean enableEnergyAPI = true;
         public static Configuration config;
     }
 

@@ -36,6 +36,7 @@ import dan200.computercraft.shared.peripheral.commandblock.CommandBlockPeriphera
 import dan200.computercraft.shared.peripheral.common.*;
 import dan200.computercraft.shared.peripheral.diskdrive.ContainerDiskDrive;
 import dan200.computercraft.shared.peripheral.diskdrive.TileDiskDrive;
+import dan200.computercraft.shared.peripheral.energy.EnergyPeripheralProvider;
 import dan200.computercraft.shared.peripheral.modem.BlockAdvancedModem;
 import dan200.computercraft.shared.peripheral.modem.TileAdvancedModem;
 import dan200.computercraft.shared.peripheral.modem.TileCable;
@@ -478,9 +479,10 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy {
 
         // Register peripheral providers
         ComputerCraftAPI.registerPeripheralProvider(new DefaultPeripheralProvider());
-        if (ComputerCraft.Config.enableCommandBlock) {
+        if (ComputerCraft.Config.enableCommandBlock)
             ComputerCraftAPI.registerPeripheralProvider(new CommandBlockPeripheralProvider());
-        }
+        if (ComputerCraft.Config.enableEnergyAPI)
+            ComputerCraftAPI.registerPeripheralProvider(new EnergyPeripheralProvider());
 
         // Register bundled power providers
         ComputerCraftAPI.registerBundledRedstoneProvider(new DefaultBundledRedstoneProvider());

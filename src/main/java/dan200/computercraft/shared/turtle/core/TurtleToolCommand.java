@@ -23,6 +23,11 @@ public class TurtleToolCommand implements ITurtleCommand {
     @Override
     public TurtleCommandResult execute(ITurtleAccess turtle) {
         TurtleCommandResult firstFailure = null;
+
+        if (turtle.isFuelNeeded() && turtle.getFuelLevel() < 1) {
+            return TurtleCommandResult.failure("Out of fuel");
+        }
+
         for (TurtleSide side : TurtleSide.values()) {
             if (!m_side.isPresent() || m_side.get() == side) {
                 ITurtleUpgrade upgrade = turtle.getUpgrade(side);

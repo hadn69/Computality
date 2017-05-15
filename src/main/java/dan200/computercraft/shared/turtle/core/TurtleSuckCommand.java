@@ -35,6 +35,9 @@ public class TurtleSuckCommand implements ITurtleCommand {
     @Override
     public TurtleCommandResult execute(ITurtleAccess turtle) {
         // Sucking nothing is easy
+        if (turtle.isFuelNeeded() && turtle.getFuelLevel() < 1) {
+            return TurtleCommandResult.failure("Out of fuel");
+        }
         if (m_quantity == 0) {
             turtle.playAnimation(TurtleAnimation.Wait);
             return TurtleCommandResult.success();

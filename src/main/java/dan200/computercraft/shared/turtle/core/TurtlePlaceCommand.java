@@ -312,6 +312,10 @@ public class TurtlePlaceCommand implements ITurtleCommand {
             return TurtleCommandResult.failure("No items to place");
         }
 
+        if (turtle.isFuelNeeded() && turtle.getFuelLevel() < 1) {
+            return TurtleCommandResult.failure("Out of fuel");
+        }
+
         // Remember old block
         EnumFacing direction = m_direction.toWorldDir(turtle);
         World world = turtle.getWorld();

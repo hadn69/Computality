@@ -28,6 +28,11 @@ public class TurtleCraftCommand implements ITurtleCommand {
     @Override
     public TurtleCommandResult execute(ITurtleAccess turtle) {
         // Craft the item
+
+        if (turtle.isFuelNeeded() && turtle.getFuelLevel() < 1) {
+            return TurtleCommandResult.failure("Out of fuel");
+        }
+
         TurtleInventoryCrafting crafting = new TurtleInventoryCrafting(turtle);
         ArrayList<ItemStack> results = crafting.doCrafting(turtle.getWorld(), m_limit);
         if (results != null) {

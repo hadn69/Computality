@@ -21,6 +21,9 @@ public class TurtleTurnCommand implements ITurtleCommand {
 
     @Override
     public TurtleCommandResult execute(ITurtleAccess turtle) {
+        if (turtle.isFuelNeeded() && turtle.getFuelLevel() < 1) {
+            return TurtleCommandResult.failure("Out of fuel");
+        }
         switch (m_direction) {
             case Left: {
                 turtle.setDirection(DirectionUtil.rotateLeft(turtle.getDirection()));

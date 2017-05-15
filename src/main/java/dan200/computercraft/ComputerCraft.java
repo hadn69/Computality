@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of ComputerCraft - http://www.computercraft.info
  * Copyright Daniel Ratcliffe, 2011-2016. Do not distribute without permission.
  * Send enquiries to dratcliffe@gmail.com
@@ -325,8 +325,7 @@ public class ComputerCraft {
         // Try the handlers in order:
         for (IPeripheralProvider peripheralProvider : peripheralProviders) {
             try {
-                IPeripheralProvider handler = peripheralProvider;
-                IPeripheral peripheral = handler.getPeripheral(world, pos, side);
+                IPeripheral peripheral = peripheralProvider.getPeripheral(world, pos, side);
                 if (peripheral != null) {
                     return peripheral;
                 }

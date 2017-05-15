@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of ComputerCraft - http://www.computercraft.info
  * Copyright Daniel Ratcliffe, 2011-2016. Do not distribute without permission.
  * Send enquiries to dratcliffe@gmail.com
@@ -159,12 +159,7 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy {
             if (listener.isCallingFromMinecraftThread()) {
                 processPacket(packet, player);
             } else {
-                listener.addScheduledTask(new Runnable() {
-                    @Override
-                    public void run() {
-                        processPacket(packet, player);
-                    }
-                });
+                listener.addScheduledTask(() -> processPacket(packet, player));
             }
         }
     }
@@ -271,7 +266,7 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy {
         RecipeSorter.register("computercraft:impostor_shapeless", ImpostorShapelessRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
         RecipeSorter.register("computercraft:disk", DiskRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
         RecipeSorter.register("computercraft:printout", PrintoutRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
-        //RecipeSorter.register("computercraft:pocket_computer_upgrade", PocketComputerUpgradeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+        RecipeSorter.register("computercraft:pocket_computer_upgrade", PocketComputerUpgradeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 
         // Recipes
         // Computer

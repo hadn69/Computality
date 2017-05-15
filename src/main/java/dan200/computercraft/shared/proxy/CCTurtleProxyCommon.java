@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of ComputerCraft - http://www.computercraft.info
  * Copyright Daniel Ratcliffe, 2011-2016. Do not distribute without permission.
  * Send enquiries to dratcliffe@gmail.com
@@ -8,14 +8,12 @@ package dan200.computercraft.shared.proxy;
 
 import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
-import dan200.computercraft.api.turtle.TurtleUpgradeType;
 import dan200.computercraft.shared.computer.core.ComputerFamily;
 import dan200.computercraft.shared.computer.items.ComputerItemFactory;
 import dan200.computercraft.shared.turtle.blocks.BlockTurtle;
 import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 import dan200.computercraft.shared.turtle.blocks.TileTurtleAdvanced;
 import dan200.computercraft.shared.turtle.blocks.TileTurtleExpanded;
-import dan200.computercraft.shared.turtle.core.TurtlePlayer;
 import dan200.computercraft.shared.turtle.items.ItemTurtleAdvanced;
 import dan200.computercraft.shared.turtle.items.ItemTurtleLegacy;
 import dan200.computercraft.shared.turtle.items.ItemTurtleNormal;
@@ -39,10 +37,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.RecipeSorter;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public abstract class CCTurtleProxyCommon implements ICCTurtleProxy {
@@ -100,7 +98,7 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy {
     }
 
     @Override
-    public ITurtleUpgrade getTurtleUpgrade(ItemStack stack) {
+    public ITurtleUpgrade getTurtleUpgrade(@Nonnull ItemStack stack) {
         for (ITurtleUpgrade upgrade : m_turtleUpgrades.values()) {
             try {
                 ItemStack upgradeStack = upgrade.getCraftingItem();

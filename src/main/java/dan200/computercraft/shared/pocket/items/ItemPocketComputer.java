@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of ComputerCraft - http://www.computercraft.info
  * Copyright Daniel Ratcliffe, 2011-2016. Do not distribute without permission.
  * Send enquiries to dratcliffe@gmail.com
@@ -10,7 +10,6 @@ import com.google.common.base.Objects;
 import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.api.filesystem.IMount;
 import dan200.computercraft.api.media.IMedia;
-import dan200.computercraft.api.pocket.IPocketAccess;
 import dan200.computercraft.api.pocket.IPocketUpgrade;
 import dan200.computercraft.shared.computer.blocks.ComputerState;
 import dan200.computercraft.shared.computer.core.ClientComputer;
@@ -33,7 +32,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
 import java.util.List;
 
 public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
@@ -100,7 +98,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
     }
 
     @Override
-    public void getSubItems(Item itemID, CreativeTabs tabs, NonNullList<ItemStack> list) {
+    public void getSubItems(@Nonnull Item itemID, CreativeTabs tabs, NonNullList<ItemStack> list) {
         getSubItems(list, ComputerFamily.Normal);
         getSubItems(list, ComputerFamily.Advanced);
     }
@@ -148,17 +146,12 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
                     upgrade.update(computer, computer.getPeripheral(2));
                 }
             }
-        } else {
-            // Client side
-            ClientComputer computer = createClientComputer(stack);
-            if (computer != null) {
-                // Todo: things here?
-            }
         }
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    @Nonnull
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player,@Nonnull EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (!world.isRemote) {
             PocketServerComputer computer = createServerComputer(world, player.inventory, player, stack);
@@ -179,6 +172,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
     }
 
     @Override
+    @Nonnull
     public String getUnlocalizedName(@Nonnull ItemStack stack) {
         switch (getFamily(stack)) {
             case Normal:
@@ -192,10 +186,12 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
     }
 
     @Override
+    @Nonnull
     public String getItemStackDisplayName(@Nonnull ItemStack stack) {
         String baseString = getUnlocalizedName(stack);
         IPocketUpgrade upgrade = getUpgrade(stack);
         if (upgrade != null) {
+
             return I18n.translateToLocalFormatted(
                     baseString + ".upgraded.name",
                     I18n.translateToLocal(upgrade.getUnlocalisedAdjective())
@@ -206,7 +202,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia {
     }
 
     @Override
-    public void addInformation(@Nonnull ItemStack stack, EntityPlayer player, List list, boolean debug) {
+    public void addInformation(@Nonnull ItemStack stack, EntityPlayer player, List<String> list, boolean debug) {
         if (debug) {
             int id = getComputerID(stack);
             if (id >= 0) {

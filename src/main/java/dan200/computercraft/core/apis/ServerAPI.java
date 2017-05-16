@@ -6,8 +6,10 @@ import dan200.computercraft.core.computer.IComputerEnvironment;
 import dan200.computercraft.core.terminal.Terminal;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import org.luaj.vm2.ast.Str;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ServerAPI implements ILuaAPI {
     private Terminal m_terminal;
@@ -69,7 +71,10 @@ public class ServerAPI implements ILuaAPI {
                 }
                 return playerNames;
             case 2:
-                return null;
+                if (arguments.length < 1 || !(arguments[0] instanceof String))
+                    throw new LuaException("Expected String");
+                String name = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(UUID.fromString((String) arguments[0])).getDisplayName().getFormattedText();
+                return new Object[]{name};
         }
         return new Object[0];
     }

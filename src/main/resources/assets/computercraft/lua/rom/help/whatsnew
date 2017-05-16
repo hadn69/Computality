@@ -1,5 +1,8 @@
 New Features in Computality 1.82:
 
-*
+* More turtle features use fuel instead of just move
+* Added Server API
+* Monitor Touch Event now tells you who touched
+* Fixed a bunch of turtle related bugs
 
 Type "help changelog" to see the full version history.

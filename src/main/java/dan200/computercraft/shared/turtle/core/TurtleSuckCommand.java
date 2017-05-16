@@ -66,6 +66,7 @@ public class TurtleSuckCommand implements ITurtleCommand {
 
                 // Return true if we consumed anything
                 if (remainder != stack) {
+                    turtle.consumeFuel(1);
                     turtle.playAnimation(TurtleAnimation.Wait);
                     return TurtleCommandResult.success();
                 } else {

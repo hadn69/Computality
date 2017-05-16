@@ -344,6 +344,7 @@ public class TurtlePlaceCommand implements ITurtleCommand {
 
             // Animate and return success
             turtle.playAnimation(TurtleAnimation.Wait);
+            turtle.consumeFuel(1);
             return TurtleCommandResult.success();
         } else {
             if (errorMessage[0] != null) {

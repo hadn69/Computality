@@ -34,6 +34,7 @@ public class TurtleToolCommand implements ITurtleCommand {
                 if (upgrade != null && upgrade.getType().isTool()) {
                     TurtleCommandResult result = upgrade.useTool(turtle, side, m_verb, m_direction.toWorldDir(turtle));
                     if (result.isSuccess()) {
+                        turtle.consumeFuel(1);
                         switch (side) {
                             case Left: {
                                 turtle.playAnimation(TurtleAnimation.SwingLeftTool);

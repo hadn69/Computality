@@ -46,6 +46,7 @@ public class TurtleCraftCommand implements ITurtleCommand {
                 }
             }
 
+            turtle.consumeFuel(1);
             if (results.size() > 0) {
                 // Animate
                 turtle.playAnimation(TurtleAnimation.Wait);

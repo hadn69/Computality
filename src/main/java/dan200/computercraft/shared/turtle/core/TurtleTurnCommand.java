@@ -28,11 +28,13 @@ public class TurtleTurnCommand implements ITurtleCommand {
             case Left: {
                 turtle.setDirection(DirectionUtil.rotateLeft(turtle.getDirection()));
                 turtle.playAnimation(TurtleAnimation.TurnLeft);
+                turtle.consumeFuel(1);
                 return TurtleCommandResult.success();
             }
             case Right: {
                 turtle.setDirection(DirectionUtil.rotateRight(turtle.getDirection()));
                 turtle.playAnimation(TurtleAnimation.TurnRight);
+                turtle.consumeFuel(1);
                 return TurtleCommandResult.success();
             }
             default: {

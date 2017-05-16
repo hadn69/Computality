@@ -46,10 +46,7 @@ public class TurtleMoveCommand implements ITurtleCommand {
 
         // Check existing block is air or replaceable
         Block block = oldWorld.getBlockState(newPosition).getBlock();
-        if (block != null &&
-                !oldWorld.isAirBlock(newPosition) &&
-                !WorldUtil.isLiquidBlock(oldWorld, newPosition) &&
-                !block.isReplaceable(oldWorld, newPosition)) {
+        if (!oldWorld.isAirBlock(newPosition) && !WorldUtil.isLiquidBlock(oldWorld, newPosition) && !block.isReplaceable(oldWorld, newPosition)) {
             return TurtleCommandResult.failure("Movement obstructed");
         }
 

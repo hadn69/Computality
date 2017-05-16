@@ -73,7 +73,7 @@ public class ServerAPI implements ILuaAPI {
             case 2:
                 if (arguments.length < 1 || !(arguments[0] instanceof String))
                     throw new LuaException("Expected String");
-                String name = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(UUID.fromString((String) arguments[0])).getDisplayName().getFormattedText();
+                String name = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(UUID.fromString((String) arguments[0])).getName();
                 return new Object[]{name};
         }
         return new Object[0];
